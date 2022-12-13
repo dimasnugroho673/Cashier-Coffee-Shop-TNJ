@@ -1,7 +1,12 @@
 <?php
 
 use App\Models\RoleUser;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Backend\HomeController;
+use App\Http\Controllers\Backend\CategoryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,7 +37,7 @@ Route::get('/', function () {
     echo "</br>";
     echo "==================";
     echo "</br>";
-    echo "User Login: " . auth()->user()->name;  
+    echo "User Login: " . auth()->user()->name;
 
     $roleUsers = RoleUser::get();
 
@@ -51,13 +56,14 @@ function isActive($id) {
 
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\Backend\HomeController::class, 'index'])->name('home')->middleware('can:admin');
+Route::get('/home', [HomeController::class, 'index'])->name('home')->middleware('can:admin');
 
 Route::middleware('can:admin,cashier')->group(function () {
     Route::view('about', 'about')->name('about');
 
-    Route::get('users', [\App\Http\Controllers\UserController::class, 'index'])->name('users.index');
+    Route::get('users', [UserController::class, 'index'])->name('users.index');
 
-    Route::get('profile', [\App\Http\Controllers\ProfileController::class, 'show'])->name('profile.show');
-    Route::put('profile', [\App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
+    Route::get('profile', [ProfileController::class, 'show'])->name('profile.show');
+    Route::put('profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::resource('/category', CategoryController::class);
 });
