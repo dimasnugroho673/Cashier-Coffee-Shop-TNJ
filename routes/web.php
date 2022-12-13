@@ -6,10 +6,7 @@ use App\Http\Controllers\Backend\ProfileController;
 use App\Http\Controllers\Backend\UserController;
 use App\Http\Controllers\Frontend\OrderController;
 use App\Models\RoleUser;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-// use App\Http\Controllers\Backend\HomeController;
-use App\Http\Controllers\Backend\CategoryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -40,7 +37,7 @@ Route::get('/test', function () {
     echo "</br>";
     echo "==================";
     echo "</br>";
-    echo "User Login: " . auth()->user()->name;
+    echo "User Login: " . auth()->user()->name;  
 
     $roleUsers = RoleUser::get();
 
