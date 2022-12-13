@@ -68,6 +68,7 @@ Route::middleware('can:admin')->group(function () {
     Route::group(['prefix' => 'backend'], function(){
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('backend.dasboard');
         Route::get('/menu', [MenuController::class, 'index'])->name('backend.dasboard');
+        Route::resource('/backend/ketegori',CategoryController::class)->except('show');
     });
 
 });

@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Categories;
 use Illuminate\Http\Request;
 use Datatables;
-use Yajra\DataTables\Facades\DataTables;
+// use Yajra\DataTables\Facades\DataTables;
 
 class CategoryController extends Controller
 {
@@ -18,12 +18,19 @@ class CategoryController extends Controller
     public function index()
     {
         if (request()->ajax()){
-        $categories = Categories::query()->latest();
-        return Datatables::of($categories)
-        ->addColumns([])
-        ->toJson();
-       }
-       return view('');
+        $categories = Categories::latest()->get();
+        return Datatables::eloquent($categories)
+        ->addIndexColum()
+        ->addColumn('aksi', function ($data){
+            return Blade::render(
+                '<a href="{{route(""ketegori.edit, $data)}}" class="btn btn-warning " >Edit</a>',
+                '<a href ="">Delete</a>'
+                , $data);
+        })
+        ->rawColummn('aksi')
+        ->make(true);
+    }
+       return view('backend.categories.index');
     }
 
     /**
@@ -33,7 +40,7 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        //
+        return view('backend.categories.create')
     }
 
     /**
