@@ -1,4 +1,4 @@
-@extends('layouts.guest')
+@extends('guest.layouts.app')
 
 @section('content')
     <form class="card card-md" action="{{ route('login') }}" method="post" autocomplete="off">

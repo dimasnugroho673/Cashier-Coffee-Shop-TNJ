@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\RoleUser;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
@@ -26,7 +27,7 @@ class LoginController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = RouteServiceProvider::HOME;
+    // protected $redirectTo = RouteServiceProvider::DASHBOARD;
 
     /**
      * Create a new controller instance.
@@ -36,5 +37,19 @@ class LoginController extends Controller
     public function __construct()
     {
         $this->middleware('guest')->except('logout');
+    }
+
+    protected function redirectTo()
+    {
+        $getRole = RoleUser::join('roles', 'roles.id', '=', 'role_users.role_id')->where('role_users.user_id', auth()->user()->id)->first();
+
+        switch ($getRole->name) {
+            case 'admin':
+                return RouteServiceProvider::DASHBOARD;
+                break;
+            case 'cashier':
+                return RouteServiceProvider::ORDER;
+                break;
+        }
     }
 }

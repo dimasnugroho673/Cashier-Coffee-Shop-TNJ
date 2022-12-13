@@ -1,5 +1,10 @@
 <?php
 
+use App\Http\Controllers\Backend\DashboardController;
+use App\Http\Controllers\Backend\MenuController;
+use App\Http\Controllers\Backend\ProfileController;
+use App\Http\Controllers\Backend\UserController;
+use App\Http\Controllers\Frontend\OrderController;
 use App\Models\RoleUser;
 use Illuminate\Support\Facades\Route;
 
@@ -14,7 +19,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
+Route::get('/test', function () {
     // return view('welcome');
     // $datas = RoleUser::join('users', 'users.id', '=', 'role_users.user_id')
     // ->join('roles', 'roles.id', '=', 'role_users.role_id')
@@ -51,13 +56,28 @@ function isActive($id) {
 
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\Backend\HomeController::class, 'index'])->name('home')->middleware('can:admin');
-
-Route::middleware('can:admin,cashier')->group(function () {
-    Route::view('about', 'about')->name('about');
-
-    Route::get('users', [\App\Http\Controllers\UserController::class, 'index'])->name('users.index');
-
-    Route::get('profile', [\App\Http\Controllers\ProfileController::class, 'show'])->name('profile.show');
-    Route::put('profile', [\App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
+Route::get('/', function()
+{
+    return redirect('/login');
 });
+
+Route::middleware('can:admin')->group(function () {
+    Route::group(['prefix' => 'backend'], function(){
+        Route::get('/dashboard', [DashboardController::class, 'index'])->name('backend.dasboard');
+        Route::get('/menu', [MenuController::class, 'index'])->name('backend.dasboard');
+    });
+
+});
+
+Route::middleware('can:cashier')->group(function () {
+    Route::get('/order', [OrderController::class, 'index'])->name('frontend.order');
+});
+
+// Route::middleware('auth')->group(function () {
+//     Route::view('about', 'about')->name('about');
+
+//     Route::get('users', [UserController::class, 'index'])->name('users.index');
+
+//     Route::get('profile', [ProfileController::class, 'show'])->name('profile.show');
+//     Route::put('profile', [ProfileController::class, 'update'])->name('profile.update');
+// });
