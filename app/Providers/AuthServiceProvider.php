@@ -30,44 +30,18 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-
         $roles = Role::get();
 
-        // foreach ($roleUsers as $ru) {
-        //     Gate::define($ru->role->name, function($ru) {
-        //         return $ru->role->name;
-        //     });
-        // }
+        foreach ($roles as $ru) {
+            Gate::define($ru->name, function() use ($ru) {
+                $getLoggedinAccountRole = RoleUser::join('roles', 'roles.id', '=', 'role_users.role_id')->where('role_users.user_id', auth()->user()->id)->first();
 
-        Gate::define('admin', function () {
-            $roleUsers = RoleUser::get();
-
-            foreach ($roleUsers as $ru) {
-                if ((auth()->user()->id == $ru->user->id) && ($ru->role->name == 'admin')) {
+                if ($ru->name == $getLoggedinAccountRole->name) {
                     return true;
                 } else {
                     return false;
                 }
-            }
-        });
-
-        Gate::define('cashier', function () {
-            $roleUsers = RoleUser::get();
-            $policies = RoleUser::where(['user_id' => auth()->user()->id, 'role_id' => 2])->first();
-
-            if (!empty($policies)) {
-                return true;
-            } else {
-                return false;
-            }
-
-            // foreach ($roleUsers as $ru) {
-            //     if ((auth()->user()->id == $ru->user->id) && ($ru->role->name == 'cashier')) {
-            //         return true;
-            //     } else {
-            //         return false;
-            //     }
-            // }
-        });
+            });
+        }
     }
 }
