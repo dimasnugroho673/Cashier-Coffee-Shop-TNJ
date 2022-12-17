@@ -6,19 +6,16 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
-<<<<<<< HEAD
-    {{-- <title>{{ 'Admin -' . $title ?? 'Cashier App' }}</title> --}}
-    <title>Admin @yield('title')</title>
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs5/dt-1.13.1/datatables.min.css"/>
-=======
     <title>{{ 'Admin - ' . $title ?? 'Cashier App' }}</title>
 
->>>>>>> 2b3688d991cdf1ec8de84cd281845b7acaa0a9ee
     @vite('resources/sass/app.scss')
 
     <!-- Custom styles for this Page-->
     @yield('custom_styles')
+    <script src="https://code.jquery.com/jquery-3.6.2.min.js" integrity="sha256-2krYZKh//PcchRtd+H+VyyQoZ/e3EcrkxhM8ycwASPA=" crossorigin="anonymous"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
 
 <body class="theme-light">
@@ -228,7 +225,7 @@
                             <div class="dropdown-menu show">
                                 <div class="dropdown-menu-columns">
                                     <div class="dropdown-menu-column">
-                                        <a class="dropdown-item" href="./layout-horizontal.html">
+                                        <a class="dropdown-item" href="/backend/users">
                                             List User
                                         </a>
                                         <a class="dropdown-item" href="./layout-boxed.html">
@@ -341,7 +338,7 @@
                                 Admin
                             </div>
                             <h2 class="page-title">
-                                {{-- {{ $title }} --}}
+                                {{ $title }}
                             </h2>
                         </div>
                         <!-- Page title actions -->

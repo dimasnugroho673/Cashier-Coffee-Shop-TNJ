@@ -1,12 +1,14 @@
 <?php
 
-use App\Http\Controllers\Backend\DashboardController;
+use App\Models\User;
+use App\Models\RoleUser;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Backend\MenuController;
-use App\Http\Controllers\Backend\ProfileController;
 use App\Http\Controllers\Backend\UserController;
 use App\Http\Controllers\Frontend\OrderController;
-use App\Models\RoleUser;
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Backend\ProfileController;
+use App\Http\Controllers\Backend\DashboardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -66,12 +68,33 @@ Route::middleware('can:admin')->group(function () {
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('backend.dasboard');
         Route::get('/menu', [MenuController::class, 'index'])->name('backend.dasboard');
         Route::resource('/backend/ketegori',CategoryController::class)->except('show');
+        Route::get('/users', [UserController::class, 'index'])->name('backend.users');
+        Route::get('/users/json', [UserController::class, 'json'])->name('backend.users.json');
+        Route::delete('/user/destroy/{id}', [UserController::class, 'destroy'])->name('backend.users.destroy');
+        Route::post('/user', [UserController::class, 'create'])->name('backend.users.create');
     });
 
 });
 
 Route::middleware('can:cashier')->group(function () {
     Route::get('/order', [OrderController::class, 'index'])->name('frontend.order');
+});
+
+Route::get('/seeder', function()
+{
+    for ($i=0; $i < 1000000; $i++) { 
+        User::create([
+            'name' => "User Dummy $i",
+            'email' => "dummy$i@gmail.com",
+            'password' => bcrypt('12345678'),
+            'photo' => ''
+        ]);
+    }
+});
+
+Route::get('/truncate', function()
+{
+    DB::table('users')->delete();
 });
 
 // Route::middleware('auth')->group(function () {

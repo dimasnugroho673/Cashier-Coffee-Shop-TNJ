@@ -12,4 +12,8 @@ class Role extends Model
     protected $fillable =[
         'name',
     ];
+
+    public function roleUser() {
+        return $this->belongsTo(RoleUser::class, "role_id", "id");
+    }
 }
