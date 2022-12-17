@@ -9,6 +9,7 @@ use App\Http\Controllers\Backend\UserController;
 use App\Http\Controllers\Frontend\OrderController;
 use App\Http\Controllers\Backend\ProfileController;
 use App\Http\Controllers\Backend\DashboardController;
+use App\Http\Controllers\Backend\TableController;
 
 /*
 |--------------------------------------------------------------------------
@@ -67,13 +68,22 @@ Route::middleware('can:admin')->group(function () {
     Route::group(['prefix' => 'backend'], function(){
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('backend.dasboard');
         Route::get('/menu', [MenuController::class, 'index'])->name('backend.dasboard');
+
         Route::resource('/backend/ketegori',CategoryController::class)->except('show');
+
         Route::get('/users', [UserController::class, 'index'])->name('backend.users');
-        Route::get('/users/json', [UserController::class, 'json'])->name('backend.users.json');
         Route::post('/user', [UserController::class, 'create'])->name('backend.users.create');
         Route::get('/user/{id}', [UserController::class, 'show'])->name('backend.users.show');
         Route::put('/user/{id}', [UserController::class, 'update'])->name('backend.users.update');
         Route::delete('/user/destroy/{id}', [UserController::class, 'delete'])->name('backend.users.destroy');
+        
+        Route::get('/tables', [TableController::class, 'index'])->name('backend.tables');
+        Route::post('/table', [TableController::class, 'create'])->name('backend.tables.create');
+        Route::post('/table-increase', [TableController::class, 'increaseTable'])->name('backend.tables.table-increase');
+        Route::put('/table-decrease', [TableController::class, 'decreaseTable'])->name('backend.tables.table-decrease');
+        Route::get('/table/{id}', [TableController::class, 'show'])->name('backend.tables.show');
+        Route::put('/table/{id}', [TableController::class, 'update'])->name('backend.tables.update');
+        Route::delete('/table/destroy/{id}', [TableController::class, 'delete'])->name('backend.tables.destroy');
     });
 
 });

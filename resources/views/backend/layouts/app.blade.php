@@ -156,8 +156,8 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="./form-elements.html">
-                                <span class="nav-link-icon d-md-none d-lg-inline-block">
+                            <a class="nav-link {{ Request::is('backend/tables') ? 'active' : '' }}" href="/backend/tables">
+                                <span class="nav-link-icon d-md-none d-lg-inline-block {{ Request::is('backend/tables') ? 'text-white' : '' }}">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-airtable" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                         <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                                         <path d="M3 10v8l7 -3v-2.6z"></path>
@@ -225,7 +225,7 @@
                             <div class="dropdown-menu show">
                                 <div class="dropdown-menu-columns">
                                     <div class="dropdown-menu-column">
-                                        <a class="dropdown-item" href="/backend/users">
+                                        <a class="dropdown-item {{ Request::is('backend/users') ? 'text-white' : '' }}" href="/backend/users">
                                             List User
                                         </a>
                                     </div>
