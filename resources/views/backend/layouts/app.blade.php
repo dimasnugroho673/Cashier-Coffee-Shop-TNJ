@@ -228,9 +228,6 @@
                                         <a class="dropdown-item" href="/backend/users">
                                             List User
                                         </a>
-                                        <a class="dropdown-item" href="./layout-boxed.html">
-                                            Roles
-                                        </a>
                                     </div>
                                 </div>
                             </div>

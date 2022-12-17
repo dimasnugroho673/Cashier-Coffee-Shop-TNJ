@@ -70,8 +70,10 @@ Route::middleware('can:admin')->group(function () {
         Route::resource('/backend/ketegori',CategoryController::class)->except('show');
         Route::get('/users', [UserController::class, 'index'])->name('backend.users');
         Route::get('/users/json', [UserController::class, 'json'])->name('backend.users.json');
-        Route::delete('/user/destroy/{id}', [UserController::class, 'destroy'])->name('backend.users.destroy');
         Route::post('/user', [UserController::class, 'create'])->name('backend.users.create');
+        Route::get('/user/{id}', [UserController::class, 'show'])->name('backend.users.show');
+        Route::put('/user/{id}', [UserController::class, 'update'])->name('backend.users.update');
+        Route::delete('/user/destroy/{id}', [UserController::class, 'delete'])->name('backend.users.destroy');
     });
 
 });

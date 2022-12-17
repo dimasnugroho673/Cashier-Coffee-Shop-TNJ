@@ -31,7 +31,7 @@
             <div class="col-md-4">
                 <div class="card">
                     <div class="card-header">
-                        <div class="card-title">Buat user (belum kelar)</div>
+                        <div class="card-title" id="text-card-title"></div>
                     </div>
                     <div class="card-body">
                         <form id="form-add-user">
@@ -44,14 +44,25 @@
                                 <input type="email" class="form-control" id="email" placeholder="Alamat email valid" aria-describedby="emailHelp" required>
                             </div>
                             <div class="mb-3">
+                                <label for="role" class="form-label">Akses level</label>
+                                <select class="form-select" aria-label="Akses level" id="role_id" required>
+                                    <option selected disabled>Pilih akses</option>
+                                    @foreach($roles as $role)
+                                    <option value="{{ $role->id }}">{{ ucfirst($role->name) }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="mb-3">
                                 <label for="password" class="form-label">Password</label>
                                 <input type="password" class="form-control" id="password" placeholder="Password" required>
+                                <div id="passwordHelp" class="form-text" hidden>Isi hanya jika ingiin merubah password.</div>
                             </div>
                             <div class="mb-3 form-check">
                                 <input type="checkbox" class="form-check-input" id="checkbox-showPassword">
-                                <label class="form-check-label text-muted" for="checkbox-showPassword">Tampilkan password</label>
+                                <label class="form-check-label text-gray" for="checkbox-showPassword">Tampilkan password</label>
                             </div>
-                            <button type="button" class="btn btn-primary" id="btn-submit-form-add-user">Buat user</button>
+                            <button type="button" class="btn btn-primary" id="btn-submit-form-add-user"></button>
+                            <button type="reset" class="btn btn-warning ms-1" id="btn-reset-form-add-user">Reset</button>
                         </form>
                     </div>
                 </div>
@@ -62,53 +73,108 @@
 
 <script>
     $(document).ready(function() {
+        let formMode = 'create'
+        let tmpID = ''
         showData()
+        manipulateForm()
 
-        $('#btn-submit-add-form').on('click', function() {
+        $('#btn-reset-form-add-user').on('click', function() {
+            formMode = 'create'
+            manipulateForm()
+        })
+
+        $('#btn-submit-form-add-user').on('click', function() {
             let name = $('#name').val()
             let email = $('#email').val()
             let password = $('#password').val()
+            let roleID = $('#role_id').val()
             let token = $("meta[name='csrf-token']").attr("content")
 
-            $.ajax({
-                        url: "{{ url('backend/user') }}",
-                        data: {
-                            "_token": token,
-                            name: name,
-                            email: email,
-                            password: password
-                        },
-                        type: 'POST',
-                        dataType: "JSON",
-                        success: function(response) {
-                            if (response.status) {
-                                Swal.fire(
-                                    'Berhasil dibuat!',
-                                    'Data berhasil dibuat',
-                                    'success'
-                                )
-                            }
+            if (formMode == 'create') {
+                $.ajax({
+                    url: "{{ url('backend/user') }}",
+                    data: {
+                        "_token": token,
+                        name: name,
+                        email: email,
+                        password: password,
+                        role_id: roleID
+                    },
+                    type: 'POST',
+                    dataType: "JSON",
+                    success: function(response) {
+                        if (response.status) {
+                            Swal.fire(
+                                'Berhasil dibuat!',
+                                'Data berhasil dibuat',
+                                'success'
+                            )
 
-                            $('#userTable').DataTable().ajax.reload();
-                        },
-                        error: function(response) {
-                            console.log(response)
+                            $("#form-add-user").trigger('reset');
                         }
-                    })
 
+                        $('#userTable').DataTable().ajax.reload();
+                    },
+                    error: function(response) {
+                        console.log(response)
+                    }
+                })
+            } else if (formMode == 'edit') {
 
-        })
+                $.ajax({
+                    url: "{{ url('backend/user') }}" + "/" + tempID,
+                    data: {
+                        "_method": "PUT",
+                        "_token": token,
+                        name: name,
+                        email: email,
+                        password: password,
+                        role_id: roleID
+                    },
+                    type: 'POST',
+                    dataType: "JSON",
+                    success: function(response) {
+                        if (response.status) {
+                            Swal.fire(
+                                'Berhasil diubah!',
+                                'Data berhasil diubah',
+                                'success'
+                            )
 
-        $('#checkbox-showPassword').on('click', function() {
-            if ($('#password').attr('type') == 'password') {
-                $('#password').attr('type','text')
-            } else {
-                $('#password').attr('type','password')
+                            $("#form-add-user").trigger('reset');
+                        }
+
+                        $('#userTable').DataTable().ajax.reload();
+                        formMode = 'create'
+                        manipulateForm()
+                    },
+                    error: function(response) {
+                        console.log(response)
+                    }
+                })
             }
         })
 
         $('#userTable').on('click', '.btn-edit', function() {
-            alert("edit")
+            let id = $(this).data("id")
+
+            $.ajax({
+                url: "{{ url('backend/user') }}/" + id,
+                type: 'GET',
+                dataType: "JSON",
+                success: function(response) {
+                    $('#name').val(response.data.name)
+                    $('#email').val(response.data.email)
+                    $('#role_id').val(response.data.role_id)
+
+                    formMode = 'edit'
+                    tempID = response.data.id
+                    manipulateForm()
+                },
+                error: function(response) {
+                    console.log(response)
+                }
+            })
         })
 
         $('#userTable').on('click', '.btn-delete', function() {
@@ -117,7 +183,7 @@
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#d33',
-                cancelButtonColor: '#3085d6',
+                cancelButtonColor: '#6D7A91',
                 confirmButtonText: 'Ya, hapus!',
                 cancelButtonText: 'Batal'
             }).then((result) => {
@@ -126,7 +192,7 @@
                     let token = $("meta[name='csrf-token']").attr("content")
 
                     $.ajax({
-                        url: "{{ url('backend/user/destroy') }}/" + id,
+                        url: "{{ url('backend/user/destroy') }}" + "/" + id,
                         data: {
                             "_token": token
                         },
@@ -151,16 +217,23 @@
             })
         })
 
+        $('#checkbox-showPassword').on('click', function() {
+            if ($('#password').attr('type') == 'password') {
+                $('#password').attr('type', 'text')
+            } else {
+                $('#password').attr('type', 'password')
+            }
+        })
 
         function showData() {
             $('#userTable').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: "{{ url('backend/users/json') }}",
+                ajax: "{{ url('backend/users') }}",
                 lengthMenu: [50, 100, 200, 500],
                 columns: [{
-                        data: 'id',
-                        name: 'id'
+                        data: 'DT_RowIndex',
+                        name: 'DT_RowIndex'
                     },
                     {
                         data: 'name',
@@ -175,13 +248,28 @@
                         name: 'role'
                     },
                     {
-                        data: 'aksi',
-                        name: 'aksi',
+                        data: 'action',
+                        name: 'action',
                         orderable: false,
                         searchable: false
                     },
                 ]
             })
+        }
+
+        function manipulateForm() {
+            if (formMode == 'create') {
+                $('#text-card-title').text('Buat user')
+                $('#btn-submit-form-add-user').text('Buat user')
+                $('#password').attr('required', true)
+                $('#passwordHelp').attr('hidden', true)
+            } else if (formMode == 'edit') {
+                $('#text-card-title').text('Edit data user')
+                $('#btn-submit-form-add-user').text('Edit data user')
+                $('#password').attr('required', false)
+                $('#passwordHelp').attr('hidden', false)
+            }
+
         }
 
     })
