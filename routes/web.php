@@ -1,20 +1,16 @@
 <?php
-
-<<<<<<< HEAD
-use App\Http\Controllers\Backend\CategoryController;
-use App\Http\Controllers\Backend\DashboardController;
-=======
 use App\Models\User;
 use App\Models\RoleUser;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
->>>>>>> f6262c84cd5a81e2a4f7bf98c0944d77d538a28e
+
 use App\Http\Controllers\Backend\MenuController;
 use App\Http\Controllers\Backend\UserController;
 use App\Http\Controllers\Frontend\OrderController;
 use App\Http\Controllers\Backend\ProfileController;
 use App\Http\Controllers\Backend\DashboardController;
 use App\Http\Controllers\Backend\TableController;
+use App\Http\Controllers\Backend\CategoryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -73,19 +69,21 @@ Route::middleware('can:admin')->group(function () {
     Route::group(['prefix' => 'backend'], function(){
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('backend.dasboard');
         Route::get('/menu', [MenuController::class, 'index'])->name('backend.dasboard');
-<<<<<<< HEAD
-        // Route::resource('/kategori',CategoryController::class)->except('show');
-        Route::resource('/kategori',CategoryController::class)->except('show');
-=======
 
-        Route::resource('/backend/ketegori',CategoryController::class)->except('show');
+        // Route::resource('/kategori',CategoryController::class)->except('show');
+
+        Route::get('/kategori',[CategoryController::class,'index'])->name('backend.kategori');
+        Route::post('/kategori/create',[CategoryController::class,'create'])->name('backend.kategori.create');
+        Route::get('/kategori/{id}',[CategoryController::class,'edit'])->name('backend.kategori.edit');
+        Route::put('kategori/{id}',[CategoryController::class,'update'])->name('backend.kategori.update');
+        Route::delete('/kategori/destroy/{id}',[CategoryController::class,'destroy'])->name('backend.kategori.destroy');
 
         Route::get('/users', [UserController::class, 'index'])->name('backend.users');
         Route::post('/user', [UserController::class, 'create'])->name('backend.users.create');
         Route::get('/user/{id}', [UserController::class, 'show'])->name('backend.users.show');
         Route::put('/user/{id}', [UserController::class, 'update'])->name('backend.users.update');
         Route::delete('/user/destroy/{id}', [UserController::class, 'delete'])->name('backend.users.destroy');
-        
+
         Route::get('/tables', [TableController::class, 'index'])->name('backend.tables');
         Route::post('/table', [TableController::class, 'create'])->name('backend.tables.create');
         Route::post('/table-increase', [TableController::class, 'increaseTable'])->name('backend.tables.table-increase');
@@ -93,7 +91,6 @@ Route::middleware('can:admin')->group(function () {
         Route::get('/table/{id}', [TableController::class, 'show'])->name('backend.tables.show');
         Route::put('/table/{id}', [TableController::class, 'update'])->name('backend.tables.update');
         Route::delete('/table/destroy/{id}', [TableController::class, 'delete'])->name('backend.tables.destroy');
->>>>>>> f6262c84cd5a81e2a4f7bf98c0944d77d538a28e
     });
 
 });
@@ -104,7 +101,7 @@ Route::middleware('can:cashier')->group(function () {
 
 Route::get('/seeder', function()
 {
-    for ($i=0; $i < 1000000; $i++) { 
+    for ($i=0; $i < 1000000; $i++) {
         User::create([
             'name' => "User Dummy $i",
             'email' => "dummy$i@gmail.com",

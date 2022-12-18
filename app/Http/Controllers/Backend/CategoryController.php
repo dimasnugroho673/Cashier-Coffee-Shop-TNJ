@@ -5,10 +5,8 @@ namespace App\Http\Controllers\Backend;
 use App\Models\Categories;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Blade;
-// use Yajra\DataTables\Contracts\DataTable;
-use Yajra\DataTables\Facades\DataTables;
-// use DataTables;
+use Illuminate\Support\Facades\Response;
+use Yajra\DataTables\Facades\DataTables as DataTables;
 
 class CategoryController extends Controller
 {
@@ -19,22 +17,19 @@ class CategoryController extends Controller
      */
     public function index(Request $request)
     {
-        $data['title'] = 'Kategori Table';
-        dd(Categories::latest()->get());
         if ($request->ajax()) {
-            $data = Categories::latest()->get();
-            return Datatables::of($data)
-                    ->addIndexColumn()
-                    ->addColumn('aksi', function($row){
-                        $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Edit" class="edit btn btn-primary btn-sm editProduct">Edit</a>';
-
-                        $btn = $btn.' <a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Delete" class="btn btn-danger btn-sm deleteProduct">Delete</a>';
-                        return $btn;
-                    })
-                    ->rawColumns(['aksi'])
-                    ->make(true);
+            $categori = Categories::latest()->get();
+            return DataTables::of($categori)
+                ->addIndexColumn()
+                ->addColumn('action',function($row) {
+                    $btn = '<a href="javascript:void(0)" class="btn btn-outline-primary btn-sm btn-edit me-1" data-id=' . $row->id . '>Edit</a>
+                            <a href="javascript:void(0)" class="btn btn-outline-danger btn-sm btn-delete" data-id=' . $row->id . '>Delete</a>';
+                    return $btn;
+                })
+                ->rawColumn('action')
+                ->make('true');
         }
-
+        $data['title'] = 'Kategori Table';
         return view('backend.categories.index',$data);
     }
 
@@ -57,15 +52,18 @@ class CategoryController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|min:5|max:20',
+            'name' => 'required',
         ]);
-        Categories::create([
-            'name'=>$request->name
+        $categori = Categories::create([
+            'name' => $request->name,
         ]);
 
-        // toast('Kategori berhasil Ditambahkan','Success');
-        toastr()->success('Data has been saved successfully!');
-        return redirect()->route('kategori.index');
+        $response = [
+            "message" => "Data berhasil dibuat",
+            "status" => true
+        ];
+
+        return Response::json($response,201);
     }
 
     /**
@@ -87,7 +85,14 @@ class CategoryController extends Controller
      */
     public function edit($id)
     {
-        //
+        $categori = Categories::findorFail($id);
+
+        $response = [
+            'status'=>true,
+            'message'=>"",
+            'data' => $categori
+        ];
+        return Response::json($response,200);
     }
 
     /**
@@ -99,7 +104,18 @@ class CategoryController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'name' => 'required',
+        ]);
+        $categori = Categories::findorFail($id);
+        $categori->name =$request->name;
+        $categori->save();
+        $response = [
+            "message" => "Data berhasil diubah",
+            "status" => true
+        ];
+
+        return Response::json($response,201);
     }
 
     /**
@@ -110,6 +126,11 @@ class CategoryController extends Controller
      */
     public function destroy($id)
     {
-        //
+        Categories::destroy($id);
+        $response = [
+            "message" => "Data berhasil dihapus",
+            "status" =>true
+        ];
+        return Response::json($response,201);
     }
 }
