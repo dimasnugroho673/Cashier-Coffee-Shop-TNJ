@@ -64,7 +64,7 @@ Route::get('/', function()
     return redirect('/login');
 });
 
-Route::middleware('can:admin')->group(function () {
+Route::middleware(['can:admin', 'auth'])->group(function () {
     Route::group(['prefix' => 'backend'], function(){
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('backend.dasboard');
         Route::get('/menu', [MenuController::class, 'index'])->name('backend.dasboard');
@@ -85,10 +85,9 @@ Route::middleware('can:admin')->group(function () {
         Route::put('/table/{id}', [TableController::class, 'update'])->name('backend.tables.update');
         Route::delete('/table/destroy/{id}', [TableController::class, 'delete'])->name('backend.tables.destroy');
     });
-
 });
 
-Route::middleware('can:cashier')->group(function () {
+Route::middleware(['can:cashier', 'auth'])->group(function () {
     Route::get('/order', [OrderController::class, 'index'])->name('frontend.order');
 });
 
