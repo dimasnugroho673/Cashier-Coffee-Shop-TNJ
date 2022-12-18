@@ -8,7 +8,7 @@
         <div class="card-header">
             <h2 class="h2">Tambah Data Kategori</h2>
         </div>
-        <form action="{{ route('ketegori.store') }}" method="post" >
+        <form action="{{ route('kategori.store') }}" method="post" >
             <div class="card-body">
 
             </div>

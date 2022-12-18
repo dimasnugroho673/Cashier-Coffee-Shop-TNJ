@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\Backend;
 
-use App\Http\Controllers\Controller;
 use App\Models\Categories;
 use Illuminate\Http\Request;
-use Datatables;
-// use Yajra\DataTables\Facades\DataTables;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Blade;
+// use Yajra\DataTables\Contracts\DataTable;
+use Yajra\DataTables\Facades\DataTables;
+// use DataTables;
 
 class CategoryController extends Controller
 {
@@ -15,22 +17,25 @@ class CategoryController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        if (request()->ajax()){
-        $categories = Categories::latest()->get();
-        return Datatables::eloquent($categories)
-        ->addIndexColum()
-        ->addColumn('aksi', function ($data){
-            return Blade::render(
-                '<a href="{{route(""ketegori.edit, $data)}}" class="btn btn-warning " >Edit</a>',
-                '<a href ="">Delete</a>'
-                , $data);
-        })
-        ->rawColummn('aksi')
-        ->make(true);
-    }
-       return view('backend.categories.index');
+        $data['title'] = 'Kategori Table';
+        dd(Categories::latest()->get());
+        if ($request->ajax()) {
+            $data = Categories::latest()->get();
+            return Datatables::of($data)
+                    ->addIndexColumn()
+                    ->addColumn('aksi', function($row){
+                        $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Edit" class="edit btn btn-primary btn-sm editProduct">Edit</a>';
+
+                        $btn = $btn.' <a href="javascript:void(0)" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Delete" class="btn btn-danger btn-sm deleteProduct">Delete</a>';
+                        return $btn;
+                    })
+                    ->rawColumns(['aksi'])
+                    ->make(true);
+        }
+
+        return view('backend.categories.index',$data);
     }
 
     /**
@@ -40,7 +45,7 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        return view('backend.categories.create')
+        //
     }
 
     /**
@@ -51,7 +56,16 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name' => 'required|min:5|max:20',
+        ]);
+        Categories::create([
+            'name'=>$request->name
+        ]);
+
+        // toast('Kategori berhasil Ditambahkan','Success');
+        toastr()->success('Data has been saved successfully!');
+        return redirect()->route('kategori.index');
     }
 
     /**

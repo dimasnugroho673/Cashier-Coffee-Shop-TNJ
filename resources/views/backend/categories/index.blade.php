@@ -1,48 +1,65 @@
 @extends('backend.layouts.app')
-
-{{-- @section('Kategori',{{ $title }}) --}}
-@section('title','Kategori')
-
-{{-- @endsection --}}
 @section('content')
-    <div class="container-fluid">
-        <div class="card">
-            <div class="card-header">
-                Kategori List
-                <a href="{{ route('ketegori.create') }}" class="btn btn-primary text-white">Tambah Data</a>
+   <div class="container">
+        <div class="row">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="">Table Kategori</h2>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-bordered table-condensed" id="categories">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Kategori</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                    <div class="card-footer"></div>
+                </div>
             </div>
-            <div class="card-body">
-                <table class=" table" id="categories">
-                    <thead>
-                        <tr>
-                            <th>No</th>
-                            <th>Kategori</th>
-                            <th>Aksi</th>
-                            {{-- <th></th> --}}
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
+            <div class="col-md-4">
+                <div class="card shadow">
+                    <div class="card-header">
+                        <h2>Tambah Data Kategori</h2>
+                    </div>
+                    <form action="{{ route('kategori.store') }}" method="post">
+                        @csrf
+                        <div class="card-body">
+                            <div class="form-group">
+                                    <label for="" class=" fw-semibold font-monospace fs-3">Nama Kategori:</label>
+                                    <input type="text" name="name" class="form-control" placeholder="Masukkan Nama Kategori ...">
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <button type="submit" class=" btn btn-primary">Submit</button>
+                        </div>
+                    </form>
+                </div>
             </div>
-            <div class="card-footer"></div>
         </div>
-    </div>
-@push('script')
-<script>
-    $($document).ready(function () {
-        var categories = $('categories').DataTable({
-            processing :true,
-            serverSide :true,
-            ajax : "{{ route('ketegori.index') }}",
-            columns :[
-                {data : 'id',name :'id'},
-                {data : 'name',name :'name'},
-                {data : 'aksi',name :'aksi', orderable: false, searchable: false},
-            ]
-        })
+   </div>
 
-    })
-</script>
-@endpush
+   <script ype="text/javascript">
+   $(document).ready(function () {
 
+   })
+   $(function () {
+      var table = $('.categories').DataTable({
+          processing: true,
+          serverSide: true,
+          ajax: "{{ route('kategori.index') }}",
+          columns: [
+              {data: 'id', name: 'id'},
+              {data: 'name', name: 'name'},
+            //   {data: 'email', name: 'email'},
+            //   {data: 'action', name: 'action', orderable: false, searchable: false},
+          ]
+      });
+    });
+   </script>
 @endsection

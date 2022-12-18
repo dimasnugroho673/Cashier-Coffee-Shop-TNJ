@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Backend\CategoryController;
 use App\Http\Controllers\Backend\DashboardController;
 use App\Http\Controllers\Backend\MenuController;
 use App\Http\Controllers\Backend\ProfileController;
@@ -37,7 +38,7 @@ Route::get('/test', function () {
     echo "</br>";
     echo "==================";
     echo "</br>";
-    echo "User Login: " . auth()->user()->name;  
+    echo "User Login: " . auth()->user()->name;
 
     $roleUsers = RoleUser::get();
 
@@ -65,7 +66,8 @@ Route::middleware('can:admin')->group(function () {
     Route::group(['prefix' => 'backend'], function(){
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('backend.dasboard');
         Route::get('/menu', [MenuController::class, 'index'])->name('backend.dasboard');
-        Route::resource('/backend/ketegori',CategoryController::class)->except('show');
+        // Route::resource('/kategori',CategoryController::class)->except('show');
+        Route::resource('/kategori',CategoryController::class)->except('show');
     });
 
 });

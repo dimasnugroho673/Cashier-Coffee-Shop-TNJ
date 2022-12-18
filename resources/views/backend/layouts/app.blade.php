@@ -6,14 +6,13 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
-<<<<<<< HEAD
-    {{-- <title>{{ 'Admin -' . $title ?? 'Cashier App' }}</title> --}}
-    <title>Admin @yield('title')</title>
+    <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs5/dt-1.13.1/datatables.min.css"/>
-=======
+    <script type="text/javascript" src="https://cdn.datatables.net/v/bs5/dt-1.13.1/datatables.min.js"></script>
+
+
     <title>{{ 'Admin - ' . $title ?? 'Cashier App' }}</title>
 
->>>>>>> 2b3688d991cdf1ec8de84cd281845b7acaa0a9ee
     @vite('resources/sass/app.scss')
 
     <!-- Custom styles for this Page-->
@@ -128,7 +127,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="./form-elements.html">
+                            <a class="nav-link" href="{{ route('kategori.index') }}">
                                 <span class="nav-link-icon d-md-none d-lg-inline-block">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-category-2" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                         <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
@@ -144,7 +143,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href=" {{ route('ketegori.index') }}">
+                            <a class="nav-link" href=" {{ route('kategori.index') }}">
                                 <span class="nav-link-icon d-md-none d-lg-inline-block">
                                     <!-- Download SVG icon from http://tabler-icons.io/i/checkbox -->
                                     <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -341,7 +340,7 @@
                                 Admin
                             </div>
                             <h2 class="page-title">
-                                {{-- {{ $title }} --}}
+                                {{ $title }}
                             </h2>
                         </div>
                         <!-- Page title actions -->
@@ -398,6 +397,8 @@
 
         <!-- Core plugin JavaScript-->
         @vite('resources/js/app.js')
+        {{-- @vite('resources/js/jquery') --}}
+
 
         <!-- Page level custom scripts -->
         @yield('custom_scripts')
@@ -405,6 +406,9 @@
 </body>
 
 
-<script type="text/javascript" src="https://cdn.datatables.net/v/bs5/dt-1.13.1/datatables.min.js"></script
+
+{{-- <script src="{{ asset('jquery-3.6.2.min.js') }}"></script> --}}
+{{-- <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script> --}}
+
 
 </html>
