@@ -44,22 +44,11 @@
         </div>
    </div>
 
-   <script ype="text/javascript">
+   <script>
    $(document).ready(function () {
 
    })
-   $(function () {
-      var table = $('.categories').DataTable({
-          processing: true,
-          serverSide: true,
-          ajax: "{{ route('kategori.index') }}",
-          columns: [
-              {data: 'id', name: 'id'},
-              {data: 'name', name: 'name'},
-            //   {data: 'email', name: 'email'},
-            //   {data: 'action', name: 'action', orderable: false, searchable: false},
-          ]
-      });
-    });
+
+    })
    </script>
 @endsection

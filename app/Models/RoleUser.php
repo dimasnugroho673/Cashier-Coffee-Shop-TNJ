@@ -10,6 +10,7 @@ class RoleUser extends Model
     use HasFactory;
 
     protected $table = "role_users";
+    protected $guarded = [];
 
     public function user() {
         return $this->belongsTo(User::class);

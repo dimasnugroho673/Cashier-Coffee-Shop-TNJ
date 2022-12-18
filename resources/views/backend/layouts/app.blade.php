@@ -6,18 +6,24 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
+<<<<<<< HEAD
     <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs5/dt-1.13.1/datatables.min.css"/>
     <script type="text/javascript" src="https://cdn.datatables.net/v/bs5/dt-1.13.1/datatables.min.js"></script>
 
 
+=======
+>>>>>>> f6262c84cd5a81e2a4f7bf98c0944d77d538a28e
     <title>{{ 'Admin - ' . $title ?? 'Cashier App' }}</title>
 
     @vite('resources/sass/app.scss')
 
     <!-- Custom styles for this Page-->
     @yield('custom_styles')
+    <script src="https://code.jquery.com/jquery-3.6.2.min.js" integrity="sha256-2krYZKh//PcchRtd+H+VyyQoZ/e3EcrkxhM8ycwASPA=" crossorigin="anonymous"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
 
 <body class="theme-light">
@@ -158,8 +164,8 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="./form-elements.html">
-                                <span class="nav-link-icon d-md-none d-lg-inline-block">
+                            <a class="nav-link {{ Request::is('backend/tables') ? 'active' : '' }}" href="/backend/tables">
+                                <span class="nav-link-icon d-md-none d-lg-inline-block {{ Request::is('backend/tables') ? 'text-white' : '' }}">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-brand-airtable" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                         <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                                         <path d="M3 10v8l7 -3v-2.6z"></path>
@@ -227,11 +233,8 @@
                             <div class="dropdown-menu show">
                                 <div class="dropdown-menu-columns">
                                     <div class="dropdown-menu-column">
-                                        <a class="dropdown-item" href="./layout-horizontal.html">
+                                        <a class="dropdown-item {{ Request::is('backend/users') ? 'text-white' : '' }}" href="/backend/users">
                                             List User
-                                        </a>
-                                        <a class="dropdown-item" href="./layout-boxed.html">
-                                            Roles
                                         </a>
                                     </div>
                                 </div>
