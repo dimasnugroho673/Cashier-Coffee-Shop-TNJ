@@ -145,4 +145,29 @@ class UserController extends Controller
 
         return Response::json($response, 201);
     }
+
+    public function emailValidator(Request $request)
+    {
+        // $request->validate([
+        //     'email' => 'email'
+        // ]);
+
+        $user = User::where('email', $request->email)->get();
+
+        $request = Array();
+
+        if (count($user) >= 1) {
+            $response = [
+                "message" => "Email tersebut telah dipakai. Coba dengan email lain.",
+                "status" => false
+            ];
+        } else {
+            $response = [
+                "message" => "Email tersebut dapat digunakan",
+                "status" => true
+            ];
+        }
+
+        return Response::json($response, 201);
+    }
 }

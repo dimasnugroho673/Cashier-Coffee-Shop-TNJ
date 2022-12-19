@@ -73,6 +73,7 @@ Route::middleware(['can:admin', 'auth'])->group(function () {
         Route::resource('/backend/ketegori',CategoryController::class)->except('show');
 
         Route::get('/users', [UserController::class, 'index'])->name('backend.users');
+        Route::post('/user/email-validator', [UserController::class, 'emailValidator'])->name('backend.users.email-validator');
         Route::post('/user', [UserController::class, 'create'])->name('backend.users.create');
         Route::get('/user/{id}', [UserController::class, 'show'])->name('backend.users.show');
         Route::put('/user/{id}', [UserController::class, 'update'])->name('backend.users.update');

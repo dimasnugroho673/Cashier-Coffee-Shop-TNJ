@@ -34,7 +34,7 @@
                         <div class="card-title" id="text-card-title"></div>
                     </div>
                     <div class="card-body">
-                        <form id="form-add-user">
+                        <form id="form-add-user" class="needs-validation">
                             <div class="mb-3">
                                 <label for="name" class="form-label">Nama</label>
                                 <input type="text" class="form-control" id="name" placeholder="Nama" required>
@@ -42,6 +42,7 @@
                             <div class="mb-3">
                                 <label for="email" class="form-label">Alamat email</label>
                                 <input type="email" class="form-control" id="email" placeholder="Alamat email valid" aria-describedby="emailHelp" required>
+                                <div id="email-feedback"></div>
                             </div>
                             <div class="mb-3">
                                 <label for="role" class="form-label">Akses level</label>
@@ -61,7 +62,7 @@
                                 <input type="checkbox" class="form-check-input" id="checkbox-showPassword">
                                 <label class="form-check-label text-gray" for="checkbox-showPassword">Tampilkan password</label>
                             </div>
-                            <button type="button" class="btn btn-primary" id="btn-submit-form-add-user"></button>
+                            <button type="submit" class="btn btn-primary" id="btn-submit-form-add-user"></button>
                             <button type="reset" class="btn btn-warning ms-1" id="btn-reset-form-add-user">Reset</button>
                         </form>
                     </div>
@@ -83,7 +84,9 @@
             manipulateForm()
         })
 
-        $('#btn-submit-form-add-user').on('click', function() {
+        $('#form-add-user').on('submit', function(e) {
+            e.preventDefault()
+
             let name = $('#name').val()
             let email = $('#email').val()
             let password = $('#password').val()
@@ -205,6 +208,49 @@
             })
         })
 
+        let timeout;
+        $('#email').keyup(function() {
+            var elem = $(this)
+            if (elem.val().length >= 4) {
+                clearTimeout(timeout)
+                timeout = setTimeout(function() {
+                    let token = $("meta[name='csrf-token']").attr("content")
+
+                    $('#email').removeClass('is-valid')
+                    $('#email').removeClass('is-invalid')
+                    $('#email-feedback').attr('class', '')
+                    
+                    $.ajax({
+                        url: "{{ url('backend/user/email-validator') }}",
+                        data: {
+                            "_token": token,
+                            "email": elem.val()
+                        },
+                        type: 'POST',
+                        dataType: "JSON",
+                        success: function(response) {
+                            if (response.status) {
+                                $('#email').removeClass('is-invalid')
+                                $('#email').addClass('is-valid')
+                                $('#email-feedback').removeClass('invalid-feedback')
+                                $('#email-feedback').addClass('valid-feedback')
+                            } else {
+                                $('#email').removeClass('is-valid')
+                                $('#email').addClass('is-invalid')
+                                $('#email-feedback').removeClass('valid-feedback')
+                                $('#email-feedback').addClass('invalid-feedback')
+                            }
+                            $('#email-feedback').text(response.message)
+                        },
+                        error: function(response) {
+                            console.log(response)
+                        }
+                    })
+
+                }, 1000); // <-- choose some sensible value here                                      
+            }
+        })
+
         $('#checkbox-showPassword').on('click', function() {
             if ($('#password').attr('type') == 'password') {
                 $('#password').attr('type', 'text')
@@ -247,13 +293,13 @@
 
         function manipulateForm() {
             if (formMode == 'create') {
-                $('#text-card-title').text('Buat user')
-                $('#btn-submit-form-add-user').text('Buat user')
+                $('#text-card-title').text('Tambah user')
+                $('#btn-submit-form-add-user').text('Tambahkan')
                 $('#password').attr('required', true)
                 $('#passwordHelp').attr('hidden', true)
             } else if (formMode == 'edit') {
                 $('#text-card-title').text('Edit data user')
-                $('#btn-submit-form-add-user').text('Edit data user')
+                $('#btn-submit-form-add-user').text('Ubah')
                 $('#password').attr('required', false)
                 $('#passwordHelp').attr('hidden', false)
             }
