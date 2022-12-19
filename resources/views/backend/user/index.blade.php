@@ -104,11 +104,10 @@
                     dataType: "JSON",
                     success: function(response) {
                         if (response.status) {
-                            Swal.fire(
-                                'Berhasil dibuat!',
-                                'Data berhasil dibuat',
-                                'success'
-                            )
+                            Toast.fire({
+                                icon: 'success',
+                                title: 'Data berhasil dibuat'
+                            })
 
                             $("#form-add-user").trigger('reset');
                         }
@@ -135,11 +134,10 @@
                     dataType: "JSON",
                     success: function(response) {
                         if (response.status) {
-                            Swal.fire(
-                                'Berhasil diubah!',
-                                'Data berhasil diubah',
-                                'success'
-                            )
+                            Toast.fire({
+                                icon: 'success',
+                                title: 'Data berhasil diubah'
+                            })
 
                             $("#form-add-user").trigger('reset');
                         }
@@ -157,24 +155,15 @@
 
         $('#userTable').on('click', '.btn-edit', function() {
             let id = $(this).data("id")
+            let data = $(this).data("detail")
 
-            $.ajax({
-                url: "{{ url('backend/user') }}/" + id,
-                type: 'GET',
-                dataType: "JSON",
-                success: function(response) {
-                    $('#name').val(response.data.name)
-                    $('#email').val(response.data.email)
-                    $('#role_id').val(response.data.role_id)
+            $('#name').val(data.name)
+            $('#email').val(data.email)
+            $('#role_id').val(data.role_id)
 
-                    formMode = 'edit'
-                    tempID = response.data.id
-                    manipulateForm()
-                },
-                error: function(response) {
-                    console.log(response)
-                }
-            })
+            formMode = 'edit'
+            tempID = data.id
+            manipulateForm()
         })
 
         $('#userTable').on('click', '.btn-delete', function() {
@@ -192,7 +181,7 @@
                     let token = $("meta[name='csrf-token']").attr("content")
 
                     $.ajax({
-                        url: "{{ url('backend/user/destroy') }}" + "/" + id,
+                        url: "{{ url('backend/user') }}" + "/" + id,
                         data: {
                             "_token": token
                         },
@@ -200,11 +189,10 @@
                         dataType: "JSON",
                         success: function(response) {
                             if (response.status) {
-                                Swal.fire(
-                                    'Berhasil dihapus!',
-                                    'Data berhasil dihapus',
-                                    'success'
-                                )
+                                Toast.fire({
+                                    icon: 'success',
+                                    title: 'Data berhasil dihapus'
+                                })
                             }
 
                             $('#userTable').DataTable().ajax.reload();

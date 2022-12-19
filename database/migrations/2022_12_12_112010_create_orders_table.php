@@ -20,7 +20,7 @@ return new class extends Migration
             $table->unsignedBigInteger('menu_id');
             $table->integer('quantity');
             $table->float('total_price');
-            $table->text('desc');
+            $table->text('desc')->nullable(true);
 
             $table->foreign('table_id')->references('id')->on('tables')->onDelete('cascade');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');

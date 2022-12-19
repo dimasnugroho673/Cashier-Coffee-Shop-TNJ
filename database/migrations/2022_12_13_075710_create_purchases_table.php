@@ -13,14 +13,15 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('outcomes', function (Blueprint $table) {
+        Schema::create('purchases', function (Blueprint $table) {
             $table->id();
             $table->date('date');
-            $table->string('name');
+            $table->string('name_item');
             $table->string('quantity');
             $table->float('price');
             $table->unsignedBigInteger('user_id');
-            $table->text('desc');
+            $table->string('photo_invoice')->nullable(true);
+            $table->text('desc')->nullable(true);
 
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
