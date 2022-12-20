@@ -40,8 +40,8 @@ class UserController extends Controller
                 })
                 ->addColumn('action', function($row) {
                     $btn = '
-            <a href="javascript:void(0)" class="btn btn-outline-primary btn-sm btn-edit me-1" data-id=' . $row->id . '>Edit</a>
-            <a href="javascript:void(0)" class="btn btn-outline-danger btn-sm btn-delete" data-id=' . $row->id . '>Delete</a>
+            <a href="javascript:void(0)" class="btn btn-sm btn-edit me-1" data-detail="' . htmlspecialchars($row) . '"  data-id=' . $row->id . '>Edit</a>
+            <a href="javascript:void(0)" class="btn btn-outline-danger btn-sm btn-delete" data-detail="' . htmlspecialchars($row) . '"  data-id=' . $row->id . '>Delete</a>
             ';
                     return $btn;
                 })
@@ -142,6 +142,31 @@ class UserController extends Controller
             "message" => "Data berhasil dihapus",
             "status" => true
         ];
+
+        return Response::json($response, 201);
+    }
+
+    public function emailValidator(Request $request)
+    {
+        // $request->validate([
+        //     'email' => 'email'
+        // ]);
+
+        $user = User::where('email', $request->email)->get();
+
+        $request = Array();
+
+        if (count($user) >= 1) {
+            $response = [
+                "message" => "Email tersebut telah dipakai. Coba dengan email lain.",
+                "status" => false
+            ];
+        } else {
+            $response = [
+                "message" => "Email tersebut dapat digunakan",
+                "status" => true
+            ];
+        }
 
         return Response::json($response, 201);
     }

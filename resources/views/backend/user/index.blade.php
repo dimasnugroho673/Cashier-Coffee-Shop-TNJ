@@ -6,6 +6,8 @@
         <div class="row">
             <div class="col-md-8">
                 <div class="card">
+                    <div class="card-header" id="table-header-loading">
+                    </div>
                     <div class="card-body">
                         <div class="table-responsive">
                             <table class="table" id="userTable" width="100%" cellspacing="0">
@@ -16,8 +18,6 @@
                                         <th>{{ __('Email Address') }}</th>
                                         <th>{{ __('Level') }}</th>
                                         <th>{{ __('Aksi') }}</th>
-                                        <!-- <th>{{ __('Created at') }}</th>
-                            <th>{{ __('Updated in') }}</th> -->
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -34,7 +34,7 @@
                         <div class="card-title" id="text-card-title"></div>
                     </div>
                     <div class="card-body">
-                        <form id="form-add-user">
+                        <form id="form-add-user" class="needs-validation">
                             <div class="mb-3">
                                 <label for="name" class="form-label">Nama</label>
                                 <input type="text" class="form-control" id="name" placeholder="Nama" required>
@@ -42,6 +42,7 @@
                             <div class="mb-3">
                                 <label for="email" class="form-label">Alamat email</label>
                                 <input type="email" class="form-control" id="email" placeholder="Alamat email valid" aria-describedby="emailHelp" required>
+                                <div id="email-feedback"></div>
                             </div>
                             <div class="mb-3">
                                 <label for="role" class="form-label">Akses level</label>
@@ -55,13 +56,13 @@
                             <div class="mb-3">
                                 <label for="password" class="form-label">Password</label>
                                 <input type="password" class="form-control" id="password" placeholder="Password" required>
-                                <div id="passwordHelp" class="form-text" hidden>Isi hanya jika ingiin merubah password.</div>
+                                <div id="passwordHelp" class="form-text" hidden>Isi hanya jika ingin merubah password.</div>
                             </div>
                             <div class="mb-3 form-check">
                                 <input type="checkbox" class="form-check-input" id="checkbox-showPassword">
                                 <label class="form-check-label text-gray" for="checkbox-showPassword">Tampilkan password</label>
                             </div>
-                            <button type="button" class="btn btn-primary" id="btn-submit-form-add-user"></button>
+                            <button type="submit" class="btn btn-primary" id="btn-submit-form-add-user"></button>
                             <button type="reset" class="btn btn-warning ms-1" id="btn-reset-form-add-user">Reset</button>
                         </form>
                     </div>
@@ -83,7 +84,9 @@
             manipulateForm()
         })
 
-        $('#btn-submit-form-add-user').on('click', function() {
+        $('#form-add-user').on('submit', function(e) {
+            e.preventDefault()
+
             let name = $('#name').val()
             let email = $('#email').val()
             let password = $('#password').val()
@@ -104,12 +107,12 @@
                     dataType: "JSON",
                     success: function(response) {
                         if (response.status) {
-                            Swal.fire(
-                                'Berhasil dibuat!',
-                                'Data berhasil dibuat',
-                                'success'
-                            )
+                            Toast.fire({
+                                icon: 'success',
+                                title: 'Data berhasil dibuat'
+                            })
 
+                            normalizeEmailField()
                             $("#form-add-user").trigger('reset');
                         }
 
@@ -135,11 +138,10 @@
                     dataType: "JSON",
                     success: function(response) {
                         if (response.status) {
-                            Swal.fire(
-                                'Berhasil diubah!',
-                                'Data berhasil diubah',
-                                'success'
-                            )
+                            Toast.fire({
+                                icon: 'success',
+                                title: 'Data berhasil diubah'
+                            })
 
                             $("#form-add-user").trigger('reset');
                         }
@@ -157,24 +159,16 @@
 
         $('#userTable').on('click', '.btn-edit', function() {
             let id = $(this).data("id")
+            let data = $(this).data("detail")
 
-            $.ajax({
-                url: "{{ url('backend/user') }}/" + id,
-                type: 'GET',
-                dataType: "JSON",
-                success: function(response) {
-                    $('#name').val(response.data.name)
-                    $('#email').val(response.data.email)
-                    $('#role_id').val(response.data.role_id)
+            $('#name').val(data.name)
+            $('#email').val(data.email)
+            $('#role_id').val(data.role_id)
+            $('#password').val('')
 
-                    formMode = 'edit'
-                    tempID = response.data.id
-                    manipulateForm()
-                },
-                error: function(response) {
-                    console.log(response)
-                }
-            })
+            formMode = 'edit'
+            tempID = data.id
+            manipulateForm()
         })
 
         $('#userTable').on('click', '.btn-delete', function() {
@@ -192,7 +186,7 @@
                     let token = $("meta[name='csrf-token']").attr("content")
 
                     $.ajax({
-                        url: "{{ url('backend/user/destroy') }}" + "/" + id,
+                        url: "{{ url('backend/user') }}" + "/" + id,
                         data: {
                             "_token": token
                         },
@@ -200,11 +194,10 @@
                         dataType: "JSON",
                         success: function(response) {
                             if (response.status) {
-                                Swal.fire(
-                                    'Berhasil dihapus!',
-                                    'Data berhasil dihapus',
-                                    'success'
-                                )
+                                Toast.fire({
+                                    icon: 'success',
+                                    title: 'Data berhasil dihapus'
+                                })
                             }
 
                             $('#userTable').DataTable().ajax.reload();
@@ -215,6 +208,53 @@
                     })
                 }
             })
+        })
+
+        let timeout;
+        $('#email').keyup(function() {
+            var elem = $(this)
+            if (elem.val().length >= 4) {
+                clearTimeout(timeout)
+                timeout = setTimeout(function() {
+                    let token = $("meta[name='csrf-token']").attr("content")
+
+                    $('#email').removeClass('is-valid')
+                    $('#email').removeClass('is-invalid')
+                    $('#email-feedback').attr('class', '')
+
+                    if (elem.val().length == 0) {
+                        normalizeEmailField()
+                    } else {
+                        $.ajax({
+                            url: "{{ url('backend/user/email-validator') }}",
+                            data: {
+                                "_token": token,
+                                "email": elem.val()
+                            },
+                            type: 'POST',
+                            dataType: "JSON",
+                            success: function(response) {
+                                $('#email-feedback').show()
+                                if (response.status) {
+                                    $('#email').removeClass('is-invalid')
+                                    $('#email').addClass('is-valid')
+                                    $('#email-feedback').removeClass('invalid-feedback')
+                                    $('#email-feedback').addClass('valid-feedback')
+                                } else {
+                                    $('#email').removeClass('is-valid')
+                                    $('#email').addClass('is-invalid')
+                                    $('#email-feedback').removeClass('valid-feedback')
+                                    $('#email-feedback').addClass('invalid-feedback')
+                                }
+                                $('#email-feedback').text(response.message)
+                            },
+                            error: function(response) {
+                                console.log(response)
+                            }
+                        })
+                    }
+                }, 1000); // <-- choose some sensible value here                                      
+            }
         })
 
         $('#checkbox-showPassword').on('click', function() {
@@ -230,18 +270,20 @@
                 processing: true,
                 serverSide: true,
                 ajax: "{{ url('backend/users') }}",
-                lengthMenu: [50, 100, 200, 500],
+                lengthMenu: [20, 50, 100],
                 columns: [{
                         data: 'DT_RowIndex',
                         name: 'DT_RowIndex'
                     },
                     {
                         data: 'name',
-                        name: 'nama'
+                        name: 'nama',
+                        orderable: false,
                     },
                     {
                         data: 'email',
-                        name: 'email'
+                        name: 'email',
+                        orderable: false,
                     },
                     {
                         data: 'role',
@@ -257,15 +299,23 @@
             })
         }
 
+        function normalizeEmailField() {
+            $('#email').removeClass('is-invalid')
+            $('#email').removeClass('is-valid')
+            $('#email-feedback').removeClass('invalid-feedback')
+            $('#email-feedback').removeClass('valid-feedback')
+            $('#email-feedback').hide()
+        }
+
         function manipulateForm() {
             if (formMode == 'create') {
-                $('#text-card-title').text('Buat user')
-                $('#btn-submit-form-add-user').text('Buat user')
+                $('#text-card-title').text('Tambah user')
+                $('#btn-submit-form-add-user').text('Tambahkan')
                 $('#password').attr('required', true)
                 $('#passwordHelp').attr('hidden', true)
             } else if (formMode == 'edit') {
                 $('#text-card-title').text('Edit data user')
-                $('#btn-submit-form-add-user').text('Edit data user')
+                $('#btn-submit-form-add-user').text('Ubah')
                 $('#password').attr('required', false)
                 $('#passwordHelp').attr('hidden', false)
             }

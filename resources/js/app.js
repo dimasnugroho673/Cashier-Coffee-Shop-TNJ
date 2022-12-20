@@ -1,4 +1,3 @@
 import "@tabler/core/src/js/tabler.js";
 
-import "./bootstrap";
-php
+import './bootstrap';

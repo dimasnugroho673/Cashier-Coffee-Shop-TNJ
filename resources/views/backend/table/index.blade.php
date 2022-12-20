@@ -7,17 +7,15 @@
             <div class="col-md-8">
                 <div class="card">
                     <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="table" id="tableDatatable" width="100%" cellspacing="0">
-                                <thead>
-                                    <tr>
-                                        <th>{{ __('No. Meja') }}</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                </tbody>
-                            </table>
-                        </div>
+                        <table class="table" id="tableDatatable" width="100%" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>{{ __('No. Meja') }}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -37,7 +35,7 @@
                                         @endfor
                                 </select>
                             </div>
-                            <button type="button" class="btn btn-primary" id="btn-submit-form-add-table">Tambah meja</button>
+                            <button type="button" class="btn btn-primary" id="btn-submit-form-add-table">Tambahkan</button>
                             <button type="reset" class="btn btn-warning ms-1" id="btn-reset-form-add-table">Reset</button>
                         </form>
                     </div>
@@ -49,7 +47,7 @@
                     </div>
                     <div class="card-body">
                         <form id="form-decrease-table">
-                            <button type="button" class="btn btn-danger" id="btn-submit-form-decrese-table">- Kurangi meja</button>
+                            <button type="button" class="btn btn-danger" id="btn-submit-form-decrese-table">- Kurangi</button>
                         </form>
                     </div>
                 </div>

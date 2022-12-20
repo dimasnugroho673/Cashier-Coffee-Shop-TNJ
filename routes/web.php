@@ -9,6 +9,7 @@ use App\Http\Controllers\Backend\UserController;
 use App\Http\Controllers\Frontend\OrderController;
 use App\Http\Controllers\Backend\ProfileController;
 use App\Http\Controllers\Backend\DashboardController;
+use App\Http\Controllers\Backend\PurchaseController;
 use App\Http\Controllers\Backend\TableController;
 use App\Http\Controllers\Backend\CategoryController;
 
@@ -65,7 +66,7 @@ Route::get('/', function()
     return redirect('/login');
 });
 
-Route::middleware('can:admin')->group(function () {
+Route::middleware(['can:admin', 'auth'])->group(function () {
     Route::group(['prefix' => 'backend'], function(){
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('backend.dasboard');
         Route::get('/menu', [MenuController::class, 'index'])->name('backend.dasboard');
@@ -79,23 +80,29 @@ Route::middleware('can:admin')->group(function () {
         Route::delete('/category/destroy/{id}',[CategoryController::class,'destroy'])->name('backend.category.destroy');
 
         Route::get('/users', [UserController::class, 'index'])->name('backend.users');
+        Route::post('/user/email-validator', [UserController::class, 'emailValidator'])->name('backend.users.email-validator');
         Route::post('/user', [UserController::class, 'create'])->name('backend.users.create');
         Route::get('/user/{id}', [UserController::class, 'show'])->name('backend.users.show');
         Route::put('/user/{id}', [UserController::class, 'update'])->name('backend.users.update');
-        Route::delete('/user/destroy/{id}', [UserController::class, 'delete'])->name('backend.users.destroy');
-
+        Route::delete('/user/{id}', [UserController::class, 'delete'])->name('backend.users.destroy');
+        
         Route::get('/tables', [TableController::class, 'index'])->name('backend.tables');
         Route::post('/table', [TableController::class, 'create'])->name('backend.tables.create');
         Route::post('/table-increase', [TableController::class, 'increaseTable'])->name('backend.tables.table-increase');
         Route::put('/table-decrease', [TableController::class, 'decreaseTable'])->name('backend.tables.table-decrease');
         Route::get('/table/{id}', [TableController::class, 'show'])->name('backend.tables.show');
         Route::put('/table/{id}', [TableController::class, 'update'])->name('backend.tables.update');
-        Route::delete('/table/destroy/{id}', [TableController::class, 'delete'])->name('backend.tables.destroy');
-    });
+        Route::delete('/table/{id}', [TableController::class, 'delete'])->name('backend.tables.destroy');
 
+        Route::get('/finance/purchases', [PurchaseController::class, 'index'])->name('backend.purchases');
+        Route::post('/finance/purchase', [PurchaseController::class, 'create'])->name('backend.purchases.create');
+        Route::get('/finance/purchase/{id}', [PurchaseController::class, 'show'])->name('backend.purchases.show');
+        Route::put('/finance/purchase/{id}', [PurchaseController::class, 'update'])->name('backend.purchases.update');
+        Route::delete('/finance/purchase/{id}', [PurchaseController::class, 'delete'])->name('backend.purchases.destroy');
+    });
 });
 
-Route::middleware('can:cashier')->group(function () {
+Route::middleware(['can:cashier', 'auth'])->group(function () {
     Route::get('/order', [OrderController::class, 'index'])->name('frontend.order');
 });
 

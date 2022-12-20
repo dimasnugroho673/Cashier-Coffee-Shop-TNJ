@@ -14,6 +14,10 @@
     @yield('custom_styles')
     <script src="https://code.jquery.com/jquery-3.6.2.min.js" integrity="sha256-2krYZKh//PcchRtd+H+VyyQoZ/e3EcrkxhM8ycwASPA=" crossorigin="anonymous"></script>
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="{{ asset('/js/toast.js') }}"></script>
+    <script src="{{ asset('/js/helpers.js') }}"></script>
+    <script src="{{ asset('/js/fslightbox.js') }}"></script>
+    <link rel="stylesheet" href="{{ asset('/css/custom-styles.css') }}">
 
     <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
@@ -194,7 +198,7 @@
                                         <a class="dropdown-item" href="./layout-boxed.html">
                                             Pemasukan
                                         </a>
-                                        <a class="dropdown-item" href="./layout-boxed.html">
+                                        <a class="dropdown-item {{ Request::is('backend/finance/purchases') ? 'text-white' : '' }}" href="/backend/finance/purchases">
                                             Pengeluaran
                                         </a>
                                         <a class="dropdown-item" href="./layout-boxed.html">

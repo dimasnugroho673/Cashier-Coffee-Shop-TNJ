@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Backend;
 
-use App\Models\Tables;
+use App\Models\Table;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 use App\Http\Controllers\Controller;
@@ -13,7 +13,7 @@ class TableController extends Controller
     public function index()
     {
         if (request()->ajax()) {
-            $tables = Tables::all();
+            $tables = Table::all();
 
             return DataTables::of($tables)
                 ->addIndexColumn()
@@ -31,7 +31,7 @@ class TableController extends Controller
             'number' => 'required|numeric',
         ]);
 
-        Tables::create([
+        Table::create([
             'number' => $request->number,
             'desc' => $request->description
         ]);
@@ -48,11 +48,11 @@ class TableController extends Controller
     {
         $addTables = $request->addTablesCount;
 
-        $getLatest = Tables::orderBy('number', 'desc')->first();
+        $getLatest = Table::orderBy('number', 'desc')->first();
 
         $number = $getLatest->number + 1;
         for ($i = 1; $i <= $addTables; $i++) {
-            Tables::create([
+            Table::create([
                 'number' => $number++,
                 'desc' => ''
             ]);
@@ -68,11 +68,11 @@ class TableController extends Controller
 
     public function decreaseTable(Request $request)
     {
-        $getLatest = Tables::orderBy('number', 'desc')->first();
+        $getLatest = Table::orderBy('number', 'desc')->first();
 
         $number = $getLatest->number;
 
-        Tables::where('number', $number)->delete();
+        Table::where('number', $number)->delete();
 
         $response = [
             "message" => "Meja berhasil dikurangi",
@@ -84,7 +84,7 @@ class TableController extends Controller
 
     public function show($id)
     {
-        $table = Tables::where('id', $id)->first();
+        $table = Table::where('id', $id)->first();
 
         $response = [
             "status" => true,
@@ -101,7 +101,7 @@ class TableController extends Controller
             'number' => 'required|numeric',
         ]);
 
-        Tables::find($id)->update([
+        Table::find($id)->update([
             'number' => $request->number,
             'desc' => $request->description
         ]);
@@ -116,7 +116,7 @@ class TableController extends Controller
 
     public function delete($id)
     {
-        Tables::destroy($id);
+        Table::destroy($id);
 
         $response = [
             "message" => "Data berhasil dihapus",

@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('tables', function (Blueprint $table) {
             $table->id();
             $table->integer('number');
-            $table->text('desc');
+            $table->text('desc')->nullable(true);
             $table->timestamps();
         });
     }
