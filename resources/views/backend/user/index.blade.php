@@ -6,6 +6,8 @@
         <div class="row">
             <div class="col-md-8">
                 <div class="card">
+                    <div class="card-header" id="table-header-loading">
+                    </div>
                     <div class="card-body">
                         <div class="table-responsive">
                             <table class="table" id="userTable" width="100%" cellspacing="0">
@@ -16,8 +18,6 @@
                                         <th>{{ __('Email Address') }}</th>
                                         <th>{{ __('Level') }}</th>
                                         <th>{{ __('Aksi') }}</th>
-                                        <!-- <th>{{ __('Created at') }}</th>
-                            <th>{{ __('Updated in') }}</th> -->
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -56,7 +56,7 @@
                             <div class="mb-3">
                                 <label for="password" class="form-label">Password</label>
                                 <input type="password" class="form-control" id="password" placeholder="Password" required>
-                                <div id="passwordHelp" class="form-text" hidden>Isi hanya jika ingiin merubah password.</div>
+                                <div id="passwordHelp" class="form-text" hidden>Isi hanya jika ingin merubah password.</div>
                             </div>
                             <div class="mb-3 form-check">
                                 <input type="checkbox" class="form-check-input" id="checkbox-showPassword">
@@ -112,6 +112,7 @@
                                 title: 'Data berhasil dibuat'
                             })
 
+                            normalizeEmailField()
                             $("#form-add-user").trigger('reset');
                         }
 
@@ -163,6 +164,7 @@
             $('#name').val(data.name)
             $('#email').val(data.email)
             $('#role_id').val(data.role_id)
+            $('#password').val('')
 
             formMode = 'edit'
             tempID = data.id
@@ -219,34 +221,38 @@
                     $('#email').removeClass('is-valid')
                     $('#email').removeClass('is-invalid')
                     $('#email-feedback').attr('class', '')
-                    
-                    $.ajax({
-                        url: "{{ url('backend/user/email-validator') }}",
-                        data: {
-                            "_token": token,
-                            "email": elem.val()
-                        },
-                        type: 'POST',
-                        dataType: "JSON",
-                        success: function(response) {
-                            if (response.status) {
-                                $('#email').removeClass('is-invalid')
-                                $('#email').addClass('is-valid')
-                                $('#email-feedback').removeClass('invalid-feedback')
-                                $('#email-feedback').addClass('valid-feedback')
-                            } else {
-                                $('#email').removeClass('is-valid')
-                                $('#email').addClass('is-invalid')
-                                $('#email-feedback').removeClass('valid-feedback')
-                                $('#email-feedback').addClass('invalid-feedback')
-                            }
-                            $('#email-feedback').text(response.message)
-                        },
-                        error: function(response) {
-                            console.log(response)
-                        }
-                    })
 
+                    if (elem.val().length == 0) {
+                        normalizeEmailField()
+                    } else {
+                        $.ajax({
+                            url: "{{ url('backend/user/email-validator') }}",
+                            data: {
+                                "_token": token,
+                                "email": elem.val()
+                            },
+                            type: 'POST',
+                            dataType: "JSON",
+                            success: function(response) {
+                                $('#email-feedback').show()
+                                if (response.status) {
+                                    $('#email').removeClass('is-invalid')
+                                    $('#email').addClass('is-valid')
+                                    $('#email-feedback').removeClass('invalid-feedback')
+                                    $('#email-feedback').addClass('valid-feedback')
+                                } else {
+                                    $('#email').removeClass('is-valid')
+                                    $('#email').addClass('is-invalid')
+                                    $('#email-feedback').removeClass('valid-feedback')
+                                    $('#email-feedback').addClass('invalid-feedback')
+                                }
+                                $('#email-feedback').text(response.message)
+                            },
+                            error: function(response) {
+                                console.log(response)
+                            }
+                        })
+                    }
                 }, 1000); // <-- choose some sensible value here                                      
             }
         })
@@ -264,18 +270,20 @@
                 processing: true,
                 serverSide: true,
                 ajax: "{{ url('backend/users') }}",
-                lengthMenu: [50, 100, 200, 500],
+                lengthMenu: [20, 50, 100],
                 columns: [{
                         data: 'DT_RowIndex',
                         name: 'DT_RowIndex'
                     },
                     {
                         data: 'name',
-                        name: 'nama'
+                        name: 'nama',
+                        orderable: false,
                     },
                     {
                         data: 'email',
-                        name: 'email'
+                        name: 'email',
+                        orderable: false,
                     },
                     {
                         data: 'role',
@@ -289,6 +297,14 @@
                     },
                 ]
             })
+        }
+
+        function normalizeEmailField() {
+            $('#email').removeClass('is-invalid')
+            $('#email').removeClass('is-valid')
+            $('#email-feedback').removeClass('invalid-feedback')
+            $('#email-feedback').removeClass('valid-feedback')
+            $('#email-feedback').hide()
         }
 
         function manipulateForm() {

@@ -29,7 +29,12 @@ class Purchase extends Model
     {
         $path = $this->attributes['photo_invoice'];
 
-        return URL::to(Storage::url($path));
+        if ($path != null) {
+            return URL::to(Storage::url($path));
+        } else {
+            return null;
+        }
+        
     }
 
     public function getPhotoInvoiceRawAttribute()

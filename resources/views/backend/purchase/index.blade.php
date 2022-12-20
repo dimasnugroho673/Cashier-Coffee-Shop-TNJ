@@ -93,6 +93,12 @@
     </div>
 </div>
 
+<!-- <script>
+fsLightboxInstances["gallery"].props.onOpen = function () {
+	console.log("The first lightbox has opened.");
+}
+</script> -->
+
 <script>
     $(document).ready(function() {
         let token = $("meta[name='csrf-token']").attr("content")
@@ -103,7 +109,7 @@
 
         $('#purchaseDatatable').on('click', '.btn-edit', function() {
             let data = $(this).data("detail")
-            tmpID =  $(this).data("id")
+            tmpID = $(this).data("id")
             formMode = 'edit'
             manipulateForm()
 
@@ -135,18 +141,22 @@
                                 </tr>
                                 <tr>
                                     <td><strong>Harga</strong></td>
-                                    <td>${data.price}</td>
+                                    <td>${rupiahFormatter(data.price)}</td>
                                 </tr>
                                 <tr>
                                     <td><strong>Deskripsi</strong></td>
-                                    <td>${data.desc}</td>
+                                    <td>${data.desc == null ? `<span class="text-muted"><small>Tidak ada deskripsi.</small></span>` : data.desc}</td>
                                 </tr>
                                 <tr>
                                     <td><strong>Invoice</strong></td>
                                     <td>
+                                    ${data.photo_invoice != null ? `   
+                                        <a data-fslightbox href="${data.photo_invoice}" target="_blank" rel="noopener noreferrer">                                     
                                         <figure class="figure">
-                                            <img src="${data.photo_invoice}" width="200" height="200" class="figure-img img-fluid rounded" id="img-invoice-preview" alt="...">
-                                        </figure>
+                                            <img src="${data.photo_invoice}" width="200" height="200" class="figure-img img-fluid rounded img-zoomable" id="img-invoice-preview" alt="...">
+                                            <figcaption class="figure-caption">Klik untuk memperbesar.</figcaption>
+                                        </figure>` : `<span class="text-muted"><small>Tidak ada gambar.</small></span>`}
+                                        </a>
                                     </td>
                                 </tr>
                             </table>
@@ -283,7 +293,9 @@
                     },
                     {
                         data: 'price',
-                        name: 'price'
+                        render: function(data, type, row, meta) {
+                            return rupiahFormatter(data)
+                        }
                     },
                     {
                         data: 'action',

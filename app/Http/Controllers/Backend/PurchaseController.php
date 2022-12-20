@@ -24,8 +24,8 @@ class PurchaseController extends Controller
                 })
                 ->addColumn('action', function ($row) {
                     $btn = '
-                    <a href="javascript:void(0)" class="btn btn-outline-info btn-sm btn-detail me-1" data-detail="' . htmlspecialchars($row) . '" data-id=' . $row->id . ' data-bs-toggle="modal" data-bs-target="#detailModal">Detail</a>
-                    <a href="javascript:void(0)" class="btn btn-outline-primary btn-sm btn-edit me-1" data-detail="' . htmlspecialchars($row) . '" data-id=' . $row->id . '>Edit</a>
+                    <a href="javascript:void(0)" class="btn btn-sm btn-detail me-1" data-detail="' . htmlspecialchars($row) . '" data-id=' . $row->id . ' data-bs-toggle="modal" data-bs-target="#detailModal">Detail</a>
+                    <a href="javascript:void(0)" class="btn btn-sm btn-edit me-1" data-detail="' . htmlspecialchars($row) . '" data-id=' . $row->id . '>Edit</a>
                     <a href="javascript:void(0)" class="btn btn-outline-danger btn-sm btn-delete" data-id=' . $row->id . '>Delete</a>
             ';
                     return $btn;
