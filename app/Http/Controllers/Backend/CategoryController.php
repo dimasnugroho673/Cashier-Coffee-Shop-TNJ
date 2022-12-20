@@ -26,8 +26,8 @@ class CategoryController extends Controller
                             <a href="javascript:void(0)" class="btn btn-outline-danger btn-sm btn-delete" data-id=' . $row->id . '>Delete</a>';
                     return $btn;
                 })
-                ->rawColumn('action')
-                ->make('true');
+                ->rawColumns(['action'])
+                ->make(true);
         }
         $data['title'] = 'Kategori Table';
         return view('backend.categories.index',$data);

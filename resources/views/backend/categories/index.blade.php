@@ -174,7 +174,7 @@
         })
 
         function showData() {
-            $('#categoriTables').Datatable({
+            $('#categoriTable').DataTable({
                 processing: true,
                 serverSide: true,
                 ajax: "{{ url('backend/kategori') }}",
