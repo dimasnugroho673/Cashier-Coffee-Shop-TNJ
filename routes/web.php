@@ -72,11 +72,11 @@ Route::middleware('can:admin')->group(function () {
 
         // Route::resource('/kategori',CategoryController::class)->except('show');
 
-        Route::get('/kategori',[CategoryController::class,'index'])->name('backend.kategori');
-        Route::post('/kategori/create',[CategoryController::class,'create'])->name('backend.kategori.create');
-        Route::get('/kategori/{id}',[CategoryController::class,'edit'])->name('backend.kategori.edit');
-        Route::put('kategori/{id}',[CategoryController::class,'update'])->name('backend.kategori.update');
-        Route::delete('/kategori/destroy/{id}',[CategoryController::class,'destroy'])->name('backend.kategori.destroy');
+        Route::get('/category',[CategoryController::class,'index'])->name('backend.category');
+        Route::post('/category/create',[CategoryController::class,'create'])->name('backend.category.create');
+        Route::get('/category/{id}',[CategoryController::class,'edit'])->name('backend.category.edit');
+        Route::put('category/{id}',[CategoryController::class,'update'])->name('backend.category.update');
+        Route::delete('/category/destroy/{id}',[CategoryController::class,'destroy'])->name('backend.category.destroy');
 
         Route::get('/users', [UserController::class, 'index'])->name('backend.users');
         Route::post('/user', [UserController::class, 'create'])->name('backend.users.create');

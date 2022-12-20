@@ -64,7 +64,7 @@
 
             if (formData == 'create'){
                 $.ajax({
-                    url:"{{ url('backend/kategori/create') }}",
+                    url:"{{ url('backend/category/create') }}",
                     data:{
                         "_token": token,
                         name: name,
@@ -88,7 +88,7 @@
                 })
             } else if (formData == 'edit') {
                 $.ajax({
-                    url: "{{ url('backend/kategori') }}" + "/" + tmpID,
+                    url: "{{ url('backend/category') }}" + "/" + tmpID,
                     data: {
                         "_method": "PUT",
                         "_token": token,
@@ -120,7 +120,7 @@
             let id = $this().data("id")
 
             $.ajax({
-                url: "{{ url('backend/kategori') }}/" +id,
+                url: "{{ url('backend/category') }}/" +id,
                 type:"GET",
                 dataType:"JSON",
                 success: function(response) {
@@ -149,7 +149,7 @@
                     let id = $(this).data("id")
                     let token = $("meta[name='csrf-token']").attr("content")
                     $.ajax({
-                        url: "{{ url('backend/kategori/destroy') }}" + "/" + id,
+                        url: "{{ url('backend/category/destroy') }}" + "/" + id,
                         data: {
                             "_token": token
                         },
@@ -177,7 +177,7 @@
             $('#categoriTable').DataTable({
                 processing: true,
                 serverSide: true,
-                ajax: "{{ url('backend/kategori') }}",
+                ajax: "{{ url('backend/category') }}",
                 lengthMenu: [50, 100, 200, 500],
                 columns: [{
                         data: 'DT_RowIndex',
