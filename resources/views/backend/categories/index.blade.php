@@ -5,7 +5,7 @@
             <div class="col-md-8">
                 <div class="card">
                     <div class="card-header">
-                        <h2 class="">Table Kategori</h2>
+                        {{-- <h2 class="">Table Kategori</h2> --}}
                     </div>
                     <div class="card-body">
                         <table class="table table-bordered " id="categoriTable">
@@ -23,9 +23,9 @@
                 </div>
             </div>
             <div class="col-md-4">
-                <div class="card shadow">
+                <div  class="card shadow">
                     <div class="card-header">
-                        <h2>Tambah Data Kategori</h2>
+                        <div class=" card-title" id="text-card-title"></div>
                     </div>
                     <form id="form-add-category">
                         <div class="card-body">
@@ -60,7 +60,7 @@
         })
         $('#btn-submit-add-categori').on('click',function() {
             let name = $('#name').val()
-            let token = $("meta[name='csrf-toke']").attr("content")
+            let token = $("meta[name='csrf-token']").attr("content")
 
             if (formData == 'create'){
                 $.ajax({
@@ -177,8 +177,9 @@
             $('#categoriTable').DataTable({
                 processing: true,
                 serverSide: true,
+                // responsive: true,
                 ajax: "{{ url('backend/category') }}",
-                lengthMenu: [50, 100, 200, 500],
+                lengthMenu: [5, 10, 25, 50],
                 columns: [{
                         data: 'DT_RowIndex',
                         name: 'DT_RowIndex'
@@ -198,12 +199,12 @@
         }
 
         function manipulateForm() {
-            if (formMode == 'create') {
+            if (formData == 'create') {
                 $('#text-card-title').text('Tambah Katehori')
-                $('#btn-submit-form-add-user').text('Submit')
-            } else if (formMode == 'edit') {
+                $('#btn-submit-add-categori').text('Submit')
+            } else if (formData == 'edit') {
                 $('#text-card-title').text('Edit data Kategori')
-                $('#btn-submit-form-add-user').text('Update')
+                $('#btn-submit-add-categori').text('Update')
             }
         }
 

@@ -12,6 +12,7 @@ use App\Http\Controllers\Backend\DashboardController;
 use App\Http\Controllers\Backend\PurchaseController;
 use App\Http\Controllers\Backend\TableController;
 use App\Http\Controllers\Backend\CategoryController;
+use App\Http\Controllers\Backend\SettingController;
 
 /*
 |--------------------------------------------------------------------------
@@ -85,7 +86,7 @@ Route::middleware(['can:admin', 'auth'])->group(function () {
         Route::get('/user/{id}', [UserController::class, 'show'])->name('backend.users.show');
         Route::put('/user/{id}', [UserController::class, 'update'])->name('backend.users.update');
         Route::delete('/user/{id}', [UserController::class, 'delete'])->name('backend.users.destroy');
-        
+
         Route::get('/tables', [TableController::class, 'index'])->name('backend.tables');
         Route::post('/table', [TableController::class, 'create'])->name('backend.tables.create');
         Route::post('/table-increase', [TableController::class, 'increaseTable'])->name('backend.tables.table-increase');
@@ -99,6 +100,11 @@ Route::middleware(['can:admin', 'auth'])->group(function () {
         Route::get('/finance/purchase/{id}', [PurchaseController::class, 'show'])->name('backend.purchases.show');
         Route::put('/finance/purchase/{id}', [PurchaseController::class, 'update'])->name('backend.purchases.update');
         Route::delete('/finance/purchase/{id}', [PurchaseController::class, 'delete'])->name('backend.purchases.destroy');
+
+        Route::get('/setting',[SettingController::class,'index'])->name('backend.setting');
+        Route::put('/setting/update-general-data',[SettingController::class,'updateGeneralData'])->name('backend.setting.generaldata');
+        Route::put('setting/update-modal',[SettingController::class,'updateModal'])->name('backend.setting.updateModal');
+        Route::put('setting/update-icons',[SettingController::class,'updateLogo'])->name('backend.setting.updateLogo');
     });
 });
 
