@@ -11,4 +11,14 @@ class OrderedMenu extends Model
 
     protected $table = "ordered_menus";
     protected $guarded = [];
+
+    public function order()
+    {
+        return $this->belongsTo(Order::class, 'order_id', 'id');
+    }
+
+    public function menu()
+    {
+        return $this->belongsTo(Menu::class);
+    }
 }

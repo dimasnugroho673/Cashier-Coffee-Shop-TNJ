@@ -177,7 +177,7 @@
                             <div class="dropdown-menu show">
                                 <div class="dropdown-menu-columns">
                                     <div class="dropdown-menu-column">
-                                        <a class="dropdown-item" href="./layout-horizontal.html">
+                                        <a class="dropdown-item {{ Request::is('backend/finance/orders') ? 'text-white' : '' }}" href="/backend/finance/orders">
                                             List Orderan
                                         </a>
                                         <a class="dropdown-item" href="./layout-boxed.html">

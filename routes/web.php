@@ -6,8 +6,7 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\Backend\MenuController;
 use App\Http\Controllers\Backend\UserController;
-use App\Http\Controllers\Frontend\OrderController;
-use App\Http\Controllers\Backend\ProfileController;
+use App\Http\Controllers\Backend\OrderController;
 use App\Http\Controllers\Backend\DashboardController;
 use App\Http\Controllers\Backend\PurchaseController;
 use App\Http\Controllers\Backend\TableController;
@@ -24,47 +23,47 @@ use App\Http\Controllers\Backend\CategoryController;
 |
 */
 
-Route::get('/test', function () {
-    // return view('welcome');
-    // $datas = RoleUser::join('users', 'users.id', '=', 'role_users.user_id')
-    // ->join('roles', 'roles.id', '=', 'role_users.role_id')
-    // ->get();
+// Route::get('/test', function () {
+//     // return view('welcome');
+//     // $datas = RoleUser::join('users', 'users.id', '=', 'role_users.user_id')
+//     // ->join('roles', 'roles.id', '=', 'role_users.role_id')
+//     // ->get();
 
-    $datas = RoleUser::get();
+//     $datas = RoleUser::get();
 
-    foreach ($datas as $d) {
-        echo $d->user->name . " -> " . $d->role->name . isActive( $d->user->id) . "</br>";
-    }
+//     foreach ($datas as $d) {
+//         echo $d->user->name . " -> " . $d->role->name . isActive( $d->user->id) . "</br>";
+//     }
 
 
 
-    echo "</br>";
-    echo "</br>";
-    echo "==================";
-    echo "</br>";
-    echo "User Login: " . auth()->user()->name;
+//     echo "</br>";
+//     echo "</br>";
+//     echo "==================";
+//     echo "</br>";
+//     echo "User Login: " . auth()->user()->name;
 
-    $roleUsers = RoleUser::get();
+//     $roleUsers = RoleUser::get();
 
-    foreach ($roleUsers as $ru) {
-        if ((auth()->user()->id == $ru->user->id) && ($ru->role->name == 'cashier')) {
-            echo "true";
-        }
-    }
-});
+//     foreach ($roleUsers as $ru) {
+//         if ((auth()->user()->id == $ru->user->id) && ($ru->role->name == 'cashier')) {
+//             echo "true";
+//         }
+//     }
+// });
 
-function isActive($id) {
-    if ($id == auth()->user()->id) {
-        return ' - active';
-    }
-}
+// function isActive($id) {
+//     if ($id == auth()->user()->id) {
+//         return ' - active';
+//     }
+// }
 
 Auth::routes();
 
-Route::get('/', function()
-{
-    return redirect('/login');
-});
+// Route::get('/', function()
+// {
+//     return redirect('/login');
+// });
 
 Route::middleware(['can:admin', 'auth'])->group(function () {
     Route::group(['prefix' => 'backend'], function(){
@@ -99,6 +98,11 @@ Route::middleware(['can:admin', 'auth'])->group(function () {
         Route::get('/finance/purchase/{id}', [PurchaseController::class, 'show'])->name('backend.purchases.show');
         Route::put('/finance/purchase/{id}', [PurchaseController::class, 'update'])->name('backend.purchases.update');
         Route::delete('/finance/purchase/{id}', [PurchaseController::class, 'delete'])->name('backend.purchases.destroy');
+
+        Route::get('/finance/orders', [OrderController::class, 'index'])->name('backend.order.index');
+        Route::get('/finance/order/{orderNumber}/invoice', [OrderController::class, 'invoice'])->name('backend.order.invoice');
+
+
     });
 });
 
@@ -106,22 +110,25 @@ Route::middleware(['can:cashier', 'auth'])->group(function () {
     Route::get('/order', [OrderController::class, 'index'])->name('frontend.order');
 });
 
-Route::get('/seeder', function()
-{
-    for ($i=0; $i < 1000000; $i++) {
-        User::create([
-            'name' => "User Dummy $i",
-            'email' => "dummy$i@gmail.com",
-            'password' => bcrypt('12345678'),
-            'photo' => ''
-        ]);
-    }
-});
+// Route::middleware(['cors'])->group(function () {
+// });
 
-Route::get('/truncate', function()
-{
-    DB::table('users')->delete();
-});
+// Route::get('/seeder', function()
+// {
+//     for ($i=0; $i < 1000000; $i++) {
+//         User::create([
+//             'name' => "User Dummy $i",
+//             'email' => "dummy$i@gmail.com",
+//             'password' => bcrypt('12345678'),
+//             'photo' => ''
+//         ]);
+//     }
+// });
+
+// Route::get('/truncate', function()
+// {
+//     DB::table('users')->delete();
+// });
 
 // Route::middleware('auth')->group(function () {
 //     Route::view('about', 'about')->name('about');

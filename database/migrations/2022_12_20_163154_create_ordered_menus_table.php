@@ -16,7 +16,6 @@ return new class extends Migration
         Schema::create('ordered_menus', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('order_id');
-            $table->string('name_customer')->nullable(true);
             $table->integer('quantity');
             $table->unsignedBigInteger('menu_id');
             $table->timestamps();
