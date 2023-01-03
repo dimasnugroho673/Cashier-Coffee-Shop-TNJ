@@ -75,10 +75,18 @@ Route::middleware(['can:admin', 'auth'])->group(function () {
         // Route::resource('/kategori',CategoryController::class)->except('show');
 
         Route::get('/category',[CategoryController::class,'index'])->name('backend.category');
-        Route::post('/category/create',[CategoryController::class,'create'])->name('backend.category.create');
+        Route::post('/category/create',[CategoryController::class,'store'])->name('backend.category.store');
         Route::get('/category/{id}',[CategoryController::class,'edit'])->name('backend.category.edit');
         Route::put('category/{id}',[CategoryController::class,'update'])->name('backend.category.update');
         Route::delete('/category/destroy/{id}',[CategoryController::class,'destroy'])->name('backend.category.destroy');
+
+        Route::get('/menu',[MenuController::class,'index'])->name('backend.menu');
+        // Route::get('/menu/create',[MenuController::class,'create'])->name('backend.menu.create');
+        Route::post('/menu/store',[MenuController::class,'store'])->name('backend.menu.store');
+        Route::get('/menu/edit/{id}',[MenuController::class,'edit'])->name('backend.menu.edit');
+        Route::put('/menu/update/{id}',[MenuController::class,'update'])->name('backend.menu.update');
+        Route::delete('/menu/destroy/{id}',[MenuController::class,'destroy'])->name('backend.menu.destory');
+        Route::get('menu/change-status/{id}',[MenuController::class,'changeStatus'])->name('backend.menu.change-status');
 
         Route::get('/users', [UserController::class, 'index'])->name('backend.users');
         Route::post('/user/email-validator', [UserController::class, 'emailValidator'])->name('backend.users.email-validator');

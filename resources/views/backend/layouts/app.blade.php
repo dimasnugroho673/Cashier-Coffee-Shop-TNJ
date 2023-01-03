@@ -401,8 +401,9 @@
 
         <!-- Page level custom scripts -->
         @yield('custom_scripts')
-
+        @stack('scripts')
     </body>
+
     <script type="text/javascript" src="https://cdn.datatables.net/v/bs5/dt-1.13.1/datatables.min.js"></script>
 
 </html>

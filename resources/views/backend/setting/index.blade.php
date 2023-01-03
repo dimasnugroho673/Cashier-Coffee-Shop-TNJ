@@ -61,15 +61,15 @@
                         @csrf
                         @method('PUT')
                         <div class="card-body">
-                            {{-- @if ($setting->icons == null)
+                            @if ($setting->icons == null)
                                 <img src="{{ $setting->icons }}" alt="logo" width="256" class="mb-2 img-thumbnail">
                             @else
                                 <img src="{{ asset($setting->icons) }}" alt="logo" width="256" class="mb-2 img-thumbnail">
-                            @endif --}}
-                                <img src="{{ asset('/icons/',$setting->icons)}}" alt="logo" width="256" class="mb-2 img-thumbnail">
+                            @endif
+                                {{-- <img src="{{ asset($setting->icons)}}" alt="logo" width="256" class="mb-2 img-thumbnail"> --}}
                             <div class="form-group mb-3">
                                 <label for="" class=" form-label">Choose file</label>
-                                <input type="file" name="icons" id="" class="form-control" value="{{ $setting->icons }}">
+                                <input type="file" name="icons"  class="form-control" value="{{ $setting->icons }}">
                             </div>
                         </div>
                         <div class="card-footer d-flex justify-content-end">

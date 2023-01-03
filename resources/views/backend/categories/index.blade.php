@@ -8,16 +8,18 @@
                         {{-- <h2 class="">Table Kategori</h2> --}}
                     </div>
                     <div class="card-body">
-                        <table class="table table-bordered " id="categoriTable">
-                            <thead>
-                                <tr>
-                                    <th>{{ __('No') }}</th>
-                                    <th>{{ __('Kategori') }}</th>
-                                    <th>{{ __('Aksi') }}</th>
-                                </tr>
-                            </thead>
-                            <tbody></tbody>
-                        </table>
+                        <div class=" table-responsive">
+                            <table class="table" id="categoriTable">
+                                <thead>
+                                    <tr>
+                                        <th>{{ __('No') }}</th>
+                                        <th>{{ __('Kategori') }}</th>
+                                        <th>{{ __('Aksi') }}</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
                     </div>
                     <div class="card-footer"></div>
                 </div>
@@ -186,7 +188,7 @@
                     },
                     {
                         data: 'name',
-                        name: 'nama'
+                        name: 'name'
                     },
                     {
                         data: 'action',
