@@ -364,6 +364,7 @@
                                     <li class="list-inline-item"><a href="https://github.com/tabler/tabler" target="_blank" class="link-secondary" rel="noopener">Source code</a></li>
                                     <li class="list-inline-item">
                                         <a href="https://github.com/sponsors/codecalm" target="_blank" class="link-secondary" rel="noopener">
+                                            <script type="text/javascript" src="https://cdn.datatables.net/v/bs5/dt-1.13.1/datatables.min.js"></script>
                                             <!-- Download SVG icon from http://tabler-icons.io/i/heart -->
                                             <svg xmlns="http://www.w3.org/2000/svg" class="icon text-pink icon-filled icon-inline" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                                 <path stroke="none" d="M0 0h24v24H0z" fill="none" />
@@ -402,8 +403,11 @@
         <!-- Page level custom scripts -->
         @yield('custom_scripts')
         @stack('scripts')
+        @push('scripts')
+
+        @endpush
     </body>
 
-    <script type="text/javascript" src="https://cdn.datatables.net/v/bs5/dt-1.13.1/datatables.min.js"></script>
+
 
 </html>
