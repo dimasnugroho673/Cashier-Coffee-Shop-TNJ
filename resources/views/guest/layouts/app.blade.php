@@ -8,6 +8,8 @@
     <title>{{ config('app.name', 'Laravel') }}</title>
 
     @vite('resources/sass/app.scss')
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/core@latest/dist/css/tabler.min.css">
 </head>
 <body class="border-top-wide border-primary d-flex flex-column">
 

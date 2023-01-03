@@ -12,12 +12,13 @@
 
     <!-- Custom styles for this Page-->
     @yield('custom_styles')
-    <script src="https://code.jquery.com/jquery-3.6.2.min.js" integrity="sha256-2krYZKh//PcchRtd+H+VyyQoZ/e3EcrkxhM8ycwASPA=" crossorigin="anonymous"></script>
+    <script src="{{ asset('/js/jquery-3.6.2.min.js') }}"></script>
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="{{ asset('/js/toast.js') }}"></script>
     <script src="{{ asset('/js/helpers.js') }}"></script>
     <script src="{{ asset('/js/fslightbox.js') }}"></script>
     <link rel="stylesheet" href="{{ asset('/css/custom-styles.css') }}">
+    <link rel="stylesheet" href="{{ asset('/css/tabler.min.css') }}">
 
     <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
@@ -160,8 +161,8 @@
                             </a>
                         </li>
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#navbar-layout" data-bs-toggle="dropdown" data-bs-auto-close="false" role="button" aria-expanded="true">
-                                <span class="nav-link-icon d-md-none d-lg-inline-block">
+                            <a class="nav-link dropdown-toggle {{ Request::segment(2) == 'finance' ? 'active' : '' }}" href="#navbar-layout" data-bs-toggle="dropdown" data-bs-auto-close="false" role="button" aria-expanded="true">
+                                <span class="nav-link-icon d-md-none d-lg-inline-block {{ Request::segment(2) == 'finance' ? 'text-white' : '' }}">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-report-money" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                         <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                                         <path d="M9 5h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-12a2 2 0 0 0 -2 -2h-2"></path>
@@ -197,8 +198,8 @@
                             </div>
                         </li>
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#navbar-layout" data-bs-toggle="dropdown" data-bs-auto-close="false" role="button" aria-expanded="true">
-                                <span class="nav-link-icon d-md-none d-lg-inline-block">
+                            <a class="nav-link dropdown-toggle {{ Request::is('backend/users') ? 'active' : '' }}" href="#navbar-layout" data-bs-toggle="dropdown" data-bs-auto-close="false" role="button" aria-expanded="true">
+                                <span class="nav-link-icon d-md-none d-lg-inline-block {{ Request::is('backend/users') ? 'text-white' : '' }}">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-report-money" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                         <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                                         <path d="M9 5h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-12a2 2 0 0 0 -2 -2h-2"></path>
@@ -380,14 +381,15 @@
         </div>
 
         <!-- Core plugin JavaScript-->
-        @vite('resources/js/app.js')
+        <!-- @vite('resources/js/app.js') -->
         {{-- @vite('resources/js/jquery') --}}
 
+        <script src="{{ asset('/js/tabler.min.js') }}"></script>
+        <script src="{{ asset('/js/datatables.min.js') }}"></script>
 
         <!-- Page level custom scripts -->
         @yield('custom_scripts')
 
-    </body>
-    <script type="text/javascript" src="https://cdn.datatables.net/v/bs5/dt-1.13.1/datatables.min.js"></script>
+</body>
 
 </html>

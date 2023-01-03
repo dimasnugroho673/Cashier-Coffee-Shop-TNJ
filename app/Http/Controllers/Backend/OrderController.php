@@ -7,6 +7,7 @@ use App\Models\Order;
 use App\Models\OrderedMenu;
 use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 
 class OrderController extends Controller
@@ -14,8 +15,13 @@ class OrderController extends Controller
     public function index()
     {
         if (request()->ajax()) {
-            $orders = Order::join('ordered_menus', 'ordered_menus.order_id', '=', 'orders.id')->latest('orders.created_at')->get();
+            $orders = Order::latest('created_at');
 
+            if (request('date_from') != "" && request('date_to') != "") {
+                $orders = $orders->whereBetween(DB::raw('DATE(created_at)'), [request('date_from'), request('date_to')]);
+            }
+            
+            $orders = $orders->get();
             // $orders->map(function($order)     
             // {
             //     $order->ordered_menus = 

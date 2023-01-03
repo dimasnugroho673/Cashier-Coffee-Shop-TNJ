@@ -11,6 +11,8 @@ use App\Http\Controllers\Backend\DashboardController;
 use App\Http\Controllers\Backend\PurchaseController;
 use App\Http\Controllers\Backend\TableController;
 use App\Http\Controllers\Backend\CategoryController;
+use App\Http\Controllers\Frontend\CheckoutController;
+use App\Http\Controllers\Frontend\OrderController as FrontendOrderController;
 
 /*
 |--------------------------------------------------------------------------
@@ -58,12 +60,16 @@ use App\Http\Controllers\Backend\CategoryController;
 //     }
 // }
 
-Auth::routes();
+Auth::routes([
+    'register' => false, // Registration Routes...
+    'reset' => false, // Password Reset Routes...
+    'verify' => false, // Email Verification Routes...
+  ]);
 
-// Route::get('/', function()
-// {
-//     return redirect('/login');
-// });
+Route::get('/', function()
+{
+    return redirect('/login');
+});
 
 Route::middleware(['can:admin', 'auth'])->group(function () {
     Route::group(['prefix' => 'backend'], function(){
@@ -107,7 +113,10 @@ Route::middleware(['can:admin', 'auth'])->group(function () {
 });
 
 Route::middleware(['can:cashier', 'auth'])->group(function () {
-    Route::get('/order', [OrderController::class, 'index'])->name('frontend.order');
+    Route::group(['prefix' => 'frontend'], function() {
+        Route::get('/order', [FrontendOrderController::class, 'index'])->name('frontend.order');
+        Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
+    });
 });
 
 // Route::middleware(['cors'])->group(function () {

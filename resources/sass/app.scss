@@ -1,6 +1,8 @@
+// Fonts
+@import url('https://fonts.bunny.net/css?family=Nunito');
 
-// Tabler
+// Variables
+@import 'variables';
 
-$assets-base: "../../../dist" !default;
-
-@import '@tabler/core/src/scss/tabler';
+// Bootstrap
+@import 'bootstrap/scss/bootstrap';
