@@ -33,7 +33,7 @@ class MenuController extends Controller
             })
             ->addColumn('action', function ($row) {
                     return Blade::render('
-                    <a href="javascript:void(0)" class="btn btn-sm btn-edit me-1" data-detail="' . htmlspecialchars($row) . '" data-id=' . $row->id . '>Edit</a>
+                    <a href="javascript:void(0)" class="btn btn-sm btn-edit me-1" data-bs-toggle="modal" data-bs-target="#tambah-data-modal" data-detail="' . htmlspecialchars($row) . '" data-id=' . $row->id . '>Edit</a>
                     <a href="javascript:void(0)" class="btn btn-outline-danger btn-sm btn-delete" data-detail="' . htmlspecialchars($row) . '"  data-id= ' . $row->id . ' >Delete</a>',
                     ['row' => $row]);
             })
