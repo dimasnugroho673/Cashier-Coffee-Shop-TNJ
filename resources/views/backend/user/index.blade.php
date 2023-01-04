@@ -113,10 +113,10 @@
                             })
 
                             normalizeEmailField()
-                            $("#form-add-user").trigger('reset');
+                            $("#form-add-user").trigger('reset')
                         }
 
-                        $('#userTable').DataTable().ajax.reload();
+                        $('#userTable').DataTable().ajax.reload()
                     },
                     error: function(response) {
                         console.log(response)
@@ -143,10 +143,10 @@
                                 title: 'Data berhasil diubah'
                             })
 
-                            $("#form-add-user").trigger('reset');
+                            $("#form-add-user").trigger('reset')
                         }
 
-                        $('#userTable').DataTable().ajax.reload();
+                        $('#userTable').DataTable().ajax.reload()
                         formMode = 'create'
                         manipulateForm()
                     },
@@ -200,7 +200,7 @@
                                 })
                             }
 
-                            $('#userTable').DataTable().ajax.reload();
+                            $('#userTable').DataTable().ajax.reload()
                         },
                         error: function(response) {
                             console.log(response)

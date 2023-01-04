@@ -22,28 +22,28 @@ class MenuController extends Controller
         if ($request->ajax()) {
             $data = Menu::with('categories')->latest()->get();
             return DataTables::of($data)
-            ->addIndexColumn()
-            ->addColumn('status', function ($row){
-                $label = $row->status ? 'Tersedia' : 'Tidak Tersedia';
-                $class = $row->status ? 'btn-success' : 'btn-danger';
-                return Blade::render(
-                    '<a href="{{ route("backend.menu.change-status", $row->id) }}"  class="btn {{ $class }} btn-sm" >{{ $label }}</a>',
-                    ['row' => $row, 'class' => $class, 'label' => $label]
-                );
-            })
-            ->addColumn('action', function ($row) {
-                    return Blade::render('
+                ->addIndexColumn()
+                ->addColumn('status', function ($row) {
+                    $label = $row->status ? 'Tersedia' : 'Tidak Tersedia';
+                    $class = $row->status ? 'btn-success' : 'btn-danger';
+                    return Blade::render(
+                        '<a href="{{ route("backend.menu.change-status", $row->id) }}"  class="btn {{ $class }} btn-sm" >{{ $label }}</a>',
+                        ['row' => $row, 'class' => $class, 'label' => $label]
+                    );
+                })
+                ->addColumn('action', function ($row) {
+                    return Blade::render(
+                        '
                     <a href="javascript:void(0)" class="btn btn-sm btn-edit me-1" data-bs-toggle="modal" data-bs-target="#tambah-data-modal" data-detail="' . htmlspecialchars($row) . '" data-id=' . $row->id . '>Edit</a>
                     <a href="javascript:void(0)" class="btn btn-outline-danger btn-sm btn-delete" data-detail="' . htmlspecialchars($row) . '"  data-id= ' . $row->id . ' >Delete</a>',
-                    ['row' => $row]);
-            })
-            ->addColumn('categories', function ($row)
-            {
-                return $row->categories->name;
-            })
-            ->rawColumns(['action','categories','status'])
-            ->make(true);
-
+                        ['row' => $row]
+                    );
+                })
+                ->addColumn('categories', function ($row) {
+                    return $row->categories->name;
+                })
+                ->rawColumns(['action', 'categories', 'status'])
+                ->make(true);
         }
         $data['title'] = 'Menu';
         return view('backend.menu.index', $data);
@@ -58,7 +58,7 @@ class MenuController extends Controller
     {
         $data['title'] = 'Tambah Data Menu';
         $data['category'] = Categories::get();
-        return view('backend.menu.create',$data);
+        return view('backend.menu.create', $data);
     }
 
     /**
@@ -71,15 +71,14 @@ class MenuController extends Controller
     {
         // dd($request->all());
         $request->validate([
-            'name'=>'required',
-            'category_id'=>'required',
-            'price'=>'required|integer',
-            'desc'=>'required'
+            'name' => 'required',
+            'category_id' => 'required',
+            'price' => 'required|integer',
         ]);
 
         $menu = Menu::create([
-            'name'=> $request->name,
-            'category_id'=> $request->category_id,
+            'name' => $request->name,
+            'category_id' => $request->category_id,
             'status' => '1',
             'price' => $request->price,
             'desc' => $request->desc
@@ -90,8 +89,7 @@ class MenuController extends Controller
             "status" => true
         ];
         // return redirect()->route('backend.menu');
-        return Response::json($response,201);
-
+        return Response::json($response, 201);
     }
 
     /**
@@ -116,7 +114,7 @@ class MenuController extends Controller
         $data['title'] = 'edit data menu';
         $data['menu'] = Menu::findorFail($id);
         $data['category'] = Categories::all();
-        return view('backend.menu.edit',$data);
+        return view('backend.menu.edit', $data);
     }
 
     /**
@@ -126,29 +124,29 @@ class MenuController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id )
+    public function update(Request $request, $id)
     {
         $request->validate([
-            'name'=>'required',
-            'category_id'=>'required',
-            'price'=>'required|integer',
-            'desc'=>'required'
+            'name' => 'required',
+            'category_id' => 'required',
+            'price' => 'required|integer',
+            // 'desc'=>'required'
         ]);
-    $menu = Menu::find($id);
+        $menu = Menu::find($id);
 
-    $menu->update([
-        'name'=>$request->name,
-        'category_id'=>$request->category_id,
-        'price'=>$request->price,
-        'desc'=>$request->desc,
-    ]);
-    // toastr()->success('Data Menu Berhasil Diupdate !!!');
-    // return redirect()->route('backend.menu');
-    $response = [
-        "message" => "Data berhasil diubah",
-        "status" => true
-    ];
-    return Response::json($response, 201);
+        $menu->update([
+            'name' => $request->name,
+            'category_id' => $request->category_id,
+            'price' => $request->price,
+            'desc' => $request->desc,
+        ]);
+        // toastr()->success('Data Menu Berhasil Diupdate !!!');
+        // return redirect()->route('backend.menu');
+        $response = [
+            "message" => "Data berhasil diubah",
+            "status" => true
+        ];
+        return Response::json($response, 201);
     }
 
     /**
@@ -167,7 +165,8 @@ class MenuController extends Controller
         return Response::json($response, 201);
     }
 
-    public function changeStatus($id) {
+    public function changeStatus($id)
+    {
         $menu = Menu::find($id);
         $menu->status = ($menu->status == 1) ? 0 : 1;
         $menu->save();

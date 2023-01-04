@@ -43,6 +43,10 @@
         showData()
         manipulateForm()
 
+        const modal = new bootstrap.Modal(document.querySelector('#tambah-data-modal'), {
+            backdrop: 'static'
+        })
+
         function showData() {
             $('#menuTable').DataTable({
                 processing: true,
@@ -83,44 +87,43 @@
 
         $('#modalMenu').on('submit', function(e) {
             e.preventDefault()
-            let formData = new FormData()
-            if (formMode == 'edit') {
-                formData.append('_token', token);
-                formData.append('name', $('#name').val());
-                formData.append('category_id', $('#category_id').val());
-                formData.append('price', $('#price').val());
-                formData.append('desc', $('#desc').val());
 
-                $.ajax({
-                    url: formMode == 'create' ? "{{ url('backend/menu/store') }}" : "{{ url('backend/menu/update') }}" + "/" + tmpID,
-                    data: formData,
-                    type: POST,
-                    contentType: false,
-                    processData: false,
-                    success: function(response) {
-                        if (formMode == 'create') {
-                            Toast.fire({
-                                icon: success,
-                                title: "Data menu berhasil ditambahkan",
-                            })
-                        } else if (formMode == 'edit') {
-                            Toast.fire({
-                                icon: success,
-                                title: "Data menu berhasil di update",
-                            })
-                        }
-
-                        $("#modalMenu").triger('reset')
-                        $('#menuTable').DataTable().ajax.reload()
-                        manipulateForm()
-                    },
-                    error: function(error) {
-                        console.log(error)
+            $.ajax({
+                url: formMode == 'create' ? "{{ url('backend/menu/store') }}" : "{{ url('backend/menu/update') }}" + "/" + tmpID,
+                data: {
+                    "_method": formMode == 'create' ? "POST" : "PUT",
+                    "_token": token,
+                    name: $('#name').val(),
+                    category_id: $('#category_id').val(),
+                    price: $('#price').val(),
+                    desc: $('#desc').val(),
+                },
+                type: 'POST',
+                success: function(response) {
+                    if (formMode == 'create') {
+                        Toast.fire({
+                            icon: 'success',
+                            title: "Data menu berhasil ditambahkan",
+                        })
+                    } else if (formMode == 'edit') {
+                        Toast.fire({
+                            icon: 'success',
+                            title: "Data menu berhasil di update",
+                        })
                     }
-                })
-            }
+
+                    modal.hide()
+                    $("#modalMenu").trigger('reset')
+                    $('#menuTable').DataTable().ajax.reload()
+
+                    manipulateForm()
+                },
+                error: function(error) {
+                    console.log(error)
+                }
+            })
         })
-   
+
         // Delete Ajax
         $('#menuTable').on('click', '.btn-delete', function() {
             Swal.fire({
@@ -159,8 +162,17 @@
             })
         })
 
-    
+
         $('#menuTable').on('click', '.btn-edit', function() {
+            let id = $(this).data("id")
+            let data = $(this).data("detail")
+
+            tmpID = id
+            $('#name').val(data.name)
+            $('#category_id').val(data.category_id)
+            $('#price').val(data.price)
+            $('#desc').val(data.desc)
+
             formMode = 'edit'
             manipulateForm()
         })
