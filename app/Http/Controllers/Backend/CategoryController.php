@@ -22,7 +22,7 @@ class CategoryController extends Controller
             return DataTables::of($categori)
                 ->addIndexColumn()
                 ->addColumn('action',function($row) {
-                    $btn = '<a href="javascript:void(0)" class="btn btn-outline-primary btn-sm btn-edit me-1" id ="btn-edit" data-id=' .$row->id. '>Edit</a>
+                    $btn = '<a href="javascript:void(0)" class="btn btn-outline-primary btn-sm btn-edit me-1" data-detail="' . htmlspecialchars($row) . '"  data-id=' . $row->id . '>Edit</a>
                             <a href="javascript:void(0)" class="btn btn-outline-danger btn-sm btn-delete" data-id=' . $row->id . '>Delete</a>';
                     return $btn;
                 })
