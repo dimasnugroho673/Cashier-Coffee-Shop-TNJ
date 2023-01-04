@@ -3,12 +3,14 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Models\Categories;
+use App\Models\TypeIncome;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Response;
-use Yajra\DataTables\Facades\DataTables as DataTables;
+use Yajra\DataTables\Facades\DataTables;
 
-class CategoryController extends Controller
+class TypeIncomeController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -18,19 +20,19 @@ class CategoryController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $categori = Categories::latest()->get();
-            return DataTables::of($categori)
-                ->addIndexColumn()
-                ->addColumn('action',function($row) {
-                    $btn = '<a href="javascript:void(0)" class="btn btn-outline-primary btn-sm btn-edit me-1" id ="btn-edit" data-id=' .$row->id. '>Edit</a>
+            $data = TypeIncome::latest()->get();
+            return DataTables::of($data)
+            ->addIndexColumn()
+            ->addColumn('action', function($row){
+                $btn = '<a href="javascript:void(0)" class="btn btn-outline-primary btn-sm btn-edit me-1" data-id=' . $row->id . '>Edit</a>
                             <a href="javascript:void(0)" class="btn btn-outline-danger btn-sm btn-delete" data-id=' . $row->id . '>Delete</a>';
                     return $btn;
-                })
-                ->rawColumns(['action'])
-                ->make(true);
+            })
+            ->rawColumns(['action'])
+            ->make('true');
         }
-        $data['title'] = 'Kategori';
-        return view('backend.categories.index',$data);
+        $data['title'] = 'Tipe Pemasukan';
+        return view('backend.typeincome.index',$data);
     }
 
     /**
@@ -54,16 +56,15 @@ class CategoryController extends Controller
         $request->validate([
             'name' => 'required',
         ]);
-        $categori = Categories::create([
-            'name' => $request->name,
+        $typeincome = TypeIncome::create([
+            'name' => $request->name
         ]);
-
         $response = [
             "message" => "Data berhasil dibuat",
             "status" => true
         ];
-
         return Response::json($response,201);
+
     }
 
     /**
@@ -85,13 +86,11 @@ class CategoryController extends Controller
      */
     public function edit($id)
     {
-        $categori = Categories::find($id);
-        // dd($categori);
-
+        $typeincome = TypeIncome::findorFails($id);
         $response = [
             'status'=>true,
             'message'=>"",
-            'data' => $categori
+            'data' => $typeincome
         ];
         return Response::json($response,200);
     }
@@ -108,9 +107,9 @@ class CategoryController extends Controller
         $request->validate([
             'name' => 'required',
         ]);
-        $categori = Categories::find($id);
-        $categori->name =$request->name;
-        $categori->save();
+        $typeincome = TypeIncome::find($id);
+        $typeincome->name = $request->name;
+        $typeincome->save();
         $response = [
             "message" => "Data berhasil diubah",
             "status" => true
@@ -127,7 +126,7 @@ class CategoryController extends Controller
      */
     public function destroy($id)
     {
-        Categories::destroy($id);
+        TypeIncome::destroy($id);
         $response = [
             "message" => "Data berhasil dihapus",
             "status" =>true

@@ -61,6 +61,7 @@
             manipulateForm()
         })
         $('#btn-submit-add-categori').on('click',function() {
+            e.preventDefault()
             let name = $('#name').val()
             let token = $("meta[name='csrf-token']").attr("content")
 
@@ -90,7 +91,7 @@
                 })
             } else if (formData == 'edit') {
                 $.ajax({
-                    url: "{{ url('backend/category') }}" + "/" + tmpID,
+                    url: "{{ url('backend/category/update') }}" + "/" + tmpID,
                     data: {
                         "_method": "PUT",
                         "_token": token,
@@ -118,25 +119,42 @@
             }
         })
 
-        $('#categoriTable').on('click', function() {
-            let id = $this().data("id")
-
+        // $('#categoriTable').on('click','.btn-edit', function() {
+        //     let id = $(this).data("id")
+        //     $.ajax({
+        //         url: "{{ url('backend/category/') }}" +id,
+        //         type:"GET",
+        //         dataType:"JSON",
+        //         success: function(response) {
+        //             $('#name').val(response.data.name)
+        //             formData = 'edit'
+        //             tempID = response.data.id
+        //             manipulateForm()
+        //         },
+        //         // error: function(response) {
+        //         //     console.log(response);
+        //         // }
+        //     })
+        // })
+        $('#categoriTable').on('click','#btn-edit', function() {
+            let id = $(this).data('id')
             $.ajax({
-                url: "{{ url('backend/category') }}/" +id,
-                type:"GET",
-                dataType:"JSON",
+                url : " {{ url('/backend/category/edit') }}/" + id,
+                type : "GET",
+                dataType : "JSON",
                 success: function(response) {
-                    $('#name').val(response.data.name)
-
+                    $('#name').val(response.name);
                     formData = 'edit'
-                    tempID = response.data.id
+                    tmpID = response.data.id
                     manipulateForm()
+                    // console.log('helloe')
                 },
-                error:function(response) {
-                    console.error(response);
+                error: function (response) {
+                    console.log(response)
                 }
-            })
-        })
+            });
+        });
+
         $('#categoriTable').on('click', '.btn-delete', function() {
             Swal.fire({
                 title: 'Hapus data?',

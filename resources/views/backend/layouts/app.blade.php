@@ -193,6 +193,9 @@
                                         <a class="dropdown-item" href="./layout-boxed.html">
                                             Rekap Penjualan
                                         </a>
+                                        <a class="dropdown-item {{ Request::is('backend/finance/typeincome') ? 'text-white' : '' }}" href="{{  route('backend.typeincome') }}">
+                                            Tipe Tipe Pemasukan
+                                        </a>
                                     </div>
                                 </div>
                             </div>
