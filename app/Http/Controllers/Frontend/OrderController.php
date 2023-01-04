@@ -46,6 +46,11 @@ class OrderController extends Controller
        
     }
 
+    public function listOrder()
+    {
+        
+    }
+
     // public function index()
     // {
     //     $data['title'] = 'Order';

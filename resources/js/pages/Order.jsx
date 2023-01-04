@@ -1,10 +1,12 @@
 import { toNumber } from "lodash";
-import { InertiaLink, usePage, Link} from '@inertiajs/inertia-react';
+import { InertiaLink, usePage, Link } from '@inertiajs/inertia-react';
 import React, { Fragment, useState, useEffect } from "react";
 import Layout from "../layouts/app";
 
 const Order = (menus) => {
 
+    const [menusData, setMenusData] = useState(menus)
+    const [filtertedData, setFiltertedData] = useState(menus.menus)
     const [orderMenuModal, setOrderMenuModal] = useState([])
     const [cartModal, setCartModal] = useState([])
     const [quantityCount, setQuantityCount] = useState(1)
@@ -29,6 +31,8 @@ const Order = (menus) => {
         // Get the value of "some_key" in eg "https://example.com/?some_key=some_value"
         //   let value = params.some_key; // "some_value"
 
+        // setMenusData(menus)
+
         if (params.ordered_menus) {
             let data = JSON.parse(params.ordered_menus)
 
@@ -45,10 +49,37 @@ const Order = (menus) => {
 
         }
 
-        window.onbeforeunload = function() {
+        window.onbeforeunload = function () {
             return "Leave this page ?";
         }
+
+        if (document.getElementById('input-search-mobile') == null) {
+            const input = document.createElement('input');
+
+            input.className = 'form-control mt-3 mb-2';
+            input.id = 'input-search-mobile'
+            input.placeholder = "Cari menu..."
+    
+            const navbarContainer = document.getElementById('navbar-container')
+            navbarContainer.append(input)
+        }
+
+        handleOnSearchTyping()
     }, [])
+
+    const handleOnSearchTyping = () => {
+        const inputMobile = document.getElementById('input-search-mobile')
+        inputMobile.addEventListener('keyup', function () {
+            let data = menusData.menus.filter(menu => menu.name.toLowerCase().includes(inputMobile.value.toLowerCase()))
+            setFiltertedData(data)
+        })
+
+        const inputDesktop = document.getElementById('input-search-desktop')
+        inputDesktop.addEventListener('keyup', function () {
+            let data = menusData.menus.filter(menu => menu.name.toLowerCase().includes(inputDesktop.value.toLowerCase()))
+            setFiltertedData(data)
+        })
+    }
 
 
     const handleSelectMenu = (menu) => {
@@ -63,18 +94,11 @@ const Order = (menus) => {
     const handleCancelSelectMenu = () => {
         setMenuTmp({})
 
-        // var galleryModal = new bootstrap.Modal(document.getElementById('modalQuantity'), {
-        //     keyboard: false
-        // })
-        // galleryModal.hide()
         orderMenuModal.hide()
         setQuantityCount(1)
     }
 
     const addToOrderedMenus = () => {
-        // var galleryModal = new bootstrap.Modal(document.getElementById('modalQuantity'), {
-        //     keyboard: false
-        // })
         orderMenuModal.hide()
 
         setOrderedMenus([...orderedMenus,
@@ -96,9 +120,9 @@ const Order = (menus) => {
 
         setOrderedMenus([
             ...orderedMenus.slice(0, findObjectIndex),
-             ...orderedMenus.slice(findObjectIndex   + 1, orderedMenus.length)
+            ...orderedMenus.slice(findObjectIndex + 1, orderedMenus.length)
         ])
-        
+
         console.log(orderedMenus)
     }
 
@@ -115,7 +139,7 @@ const Order = (menus) => {
     const decreaseQuantityOnOrderedMenu = (menu) => {
         let decreaseQuantity = orderedMenus.map(item => {
             if (item.menu_id == menu.menu_id) {
-                return { ...item, quantity: item.quantity != 1 ? item.quantity - 1 : item.quantity}
+                return { ...item, quantity: item.quantity != 1 ? item.quantity - 1 : item.quantity }
             }
 
             return item
@@ -127,7 +151,7 @@ const Order = (menus) => {
     const increaseQuantityOnOrderedMenu = (menu) => {
         let increaseQuantity = orderedMenus.map(item => {
             if (item.menu_id == menu.menu_id) {
-                return { ...item, quantity: item.quantity + 1}
+                return { ...item, quantity: item.quantity + 1 }
             }
 
             return item
@@ -149,9 +173,16 @@ const Order = (menus) => {
         <Fragment>
             <div>
                 <div className="container">
-                    <div className="row">
-                        <div className="col-md-12">
-                            <table class="table">
+                    <div className="row my-5">
+
+                        <div className="row mt-5">
+                            <div className="col-md-6 offset-md-3">
+                                <input type="text" className="form-control mb-4" id="input-search-desktop" placeholder="Cari menu..." />
+                            </div>
+                        </div>
+
+                        <div className="col-md-12 mt-5">
+                            <table class="table" id="menuFrontendTable">
                                 <thead>
                                     <tr>
                                         <th>No</th>
@@ -160,11 +191,11 @@ const Order = (menus) => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {menus.menus.map((menu, index) => (
+                                    {filtertedData.map((menu, index) => (
                                         <tr key={menu.id} onClick={() => handleSelectMenu(menu)}>
                                             <td>{index + 1}</td>
                                             <td>{menu.name}</td>
-                                            <td>{menu.price}</td>
+                                            <td>{rupiahFormatter(menu.price)}</td>
                                         </tr>
                                     ))}
                                 </tbody>
@@ -177,12 +208,15 @@ const Order = (menus) => {
                                             <h5 class="modal-title">Modal title</h5>
                                         </div>
                                         <div class="modal-body">
-
-                                            <div class="input-group mb-3">
-                                                <button class="btn btn-outline-secondary" type="button" id="button-addon2" onClick={() => setQuantityCount(quantityCount == 1 ? 1 : quantityCount - 1)}>-</button>
-                                                <input type="text" class="form-control" value={quantityCount} />
-                                                <button class="btn btn-outline-secondary" type="button" id="button-addon2" onClick={() => setQuantityCount(quantityCount + 1)}>+</button>
+                                            <div className="form-group">
+                                                <label htmlFor="">Quantity</label>
+                                                <div class="input-group mt-2 mb-3">
+                                                    <button class="btn btn-outline-secondary" type="button" id="button-addon2" onClick={() => setQuantityCount(quantityCount == 1 ? 1 : quantityCount - 1)}>-</button>
+                                                    <input type="text" class="form-control" value={quantityCount} />
+                                                    <button class="btn btn-outline-secondary" type="button" id="button-addon2" onClick={() => setQuantityCount(quantityCount + 1)}>+</button>
+                                                </div>
                                             </div>
+
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn btn-secondary" onClick={() => handleCancelSelectMenu()} >Batal</button>
@@ -232,7 +266,7 @@ const Order = (menus) => {
                                         </div>
                                         <div className="card-footer">
 
-                                        <div class="input-group mb-3">
+                                            <div class="input-group mb-3">
                                                 <button class="btn btn-outline-secondary" type="button" id="button-addon2" onClick={() => decreaseQuantityOnOrderedMenu(menu)}>-</button>
                                                 <input type="text" class="form-control" value={menu.quantity} />
                                                 <button class="btn btn-outline-secondary" type="button" id="button-addon2" onClick={() => increaseQuantityOnOrderedMenu(menu)}>+</button>
@@ -252,7 +286,7 @@ const Order = (menus) => {
                         Checkout
                         </InertiaLink> */}
                                 <Link className="btn btn-danger" onClick={() => cartModal.hide()} href={`/frontend/checkout?ordered_menus=${JSON.stringify(orderedMenus)}`}>Checkout</Link>
-                                  {/* <Link className="btn btn-danger" onClick={() => cartModal.hide()} href={`/checkout`} method="get" data={{ ordered_menus: `${JSON.stringify(orderedMenus)}` }}>Checkout</Link> */}
+                                {/* <Link className="btn btn-danger" onClick={() => cartModal.hide()} href={`/checkout`} method="get" data={{ ordered_menus: `${JSON.stringify(orderedMenus)}` }}>Checkout</Link> */}
                             </div>
                         </div>
                     </div>

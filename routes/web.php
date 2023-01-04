@@ -115,6 +115,7 @@ Route::middleware(['can:admin', 'auth'])->group(function () {
 Route::middleware(['can:cashier', 'auth'])->group(function () {
     Route::group(['prefix' => 'frontend'], function() {
         Route::get('/order', [FrontendOrderController::class, 'index'])->name('frontend.order');
+        Route::get('/list-order', [FrontendOrderController::class, 'listOrder'])->name('frontend.order');
         Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
     });
 });
