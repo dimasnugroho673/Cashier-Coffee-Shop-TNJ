@@ -13,6 +13,7 @@ use App\Http\Controllers\Backend\TableController;
 use App\Http\Controllers\Backend\CategoryController;
 use App\Http\Controllers\Frontend\CheckoutController;
 use App\Http\Controllers\Frontend\OrderController as FrontendOrderController;
+use App\Http\Controllers\Frontend\ProfileController;
 
 /*
 |--------------------------------------------------------------------------
@@ -107,16 +108,17 @@ Route::middleware(['can:admin', 'auth'])->group(function () {
 
         Route::get('/finance/orders', [OrderController::class, 'index'])->name('backend.order.index');
         Route::get('/finance/order/{orderNumber}/invoice', [OrderController::class, 'invoice'])->name('backend.order.invoice');
-
-
     });
 });
 
+Route::get('/backend/finance/order/{orderNumber}/invoice', [OrderController::class, 'invoice'])->name('backend.order.invoice');
+
 Route::middleware(['can:cashier', 'auth'])->group(function () {
     Route::group(['prefix' => 'frontend'], function() {
-        Route::get('/order', [FrontendOrderController::class, 'index'])->name('frontend.order');
-        Route::get('/list-order', [FrontendOrderController::class, 'listOrder'])->name('frontend.order');
-        Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
+        Route::get('/order', [FrontendOrderController::class, 'index'])->name('frontend.order.index');
+        Route::get('/order-history', [FrontendOrderController::class, 'historyOrder'])->name('frontend.order.history');
+        Route::get('/checkout', [CheckoutController::class, 'index'])->name('frontend.checkout.index');
+        Route::get('/profile', [ProfileController::class, 'index'])->name('frontend.profile.index');
     });
 });
 

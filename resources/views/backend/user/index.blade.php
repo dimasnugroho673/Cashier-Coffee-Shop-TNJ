@@ -93,10 +93,11 @@
             let roleID = $('#role_id').val()
             let token = $("meta[name='csrf-token']").attr("content")
 
-            if (formMode == 'create') {
+            // if (formMode == 'create') {
                 $.ajax({
-                    url: "{{ url('backend/user') }}",
+                    url: formMode == 'create' ? "{{ url('backend/user') }}" : "{{ url('backend/user') }}" + "/" + tempID,
                     data: {
+                    "_method": formMode == 'create' ? "POST" : "PUT",
                         "_token": token,
                         name: name,
                         email: email,
@@ -113,48 +114,48 @@
                             })
 
                             normalizeEmailField()
-                            $("#form-add-user").trigger('reset');
+                            $("#form-add-user").trigger('reset')
                         }
 
-                        $('#userTable').DataTable().ajax.reload();
+                        $('#userTable').DataTable().ajax.reload()
                     },
                     error: function(response) {
                         console.log(response)
                     }
                 })
-            } else if (formMode == 'edit') {
+            // } else if (formMode == 'edit') {
 
-                $.ajax({
-                    url: "{{ url('backend/user') }}" + "/" + tempID,
-                    data: {
-                        "_method": "PUT",
-                        "_token": token,
-                        name: name,
-                        email: email,
-                        password: password,
-                        role_id: roleID
-                    },
-                    type: 'POST',
-                    dataType: "JSON",
-                    success: function(response) {
-                        if (response.status) {
-                            Toast.fire({
-                                icon: 'success',
-                                title: 'Data berhasil diubah'
-                            })
+            //     $.ajax({
+            //         url: "{{ url('backend/user') }}" + "/" + tempID,
+            //         data: {
+            //             "_method": "PUT",
+            //             "_token": token,
+            //             name: name,
+            //             email: email,
+            //             password: password,
+            //             role_id: roleID
+            //         },
+            //         type: 'POST',
+            //         dataType: "JSON",
+            //         success: function(response) {
+            //             if (response.status) {
+            //                 Toast.fire({
+            //                     icon: 'success',
+            //                     title: 'Data berhasil diubah'
+            //                 })
 
-                            $("#form-add-user").trigger('reset');
-                        }
+            //                 $("#form-add-user").trigger('reset')
+            //             }
 
-                        $('#userTable').DataTable().ajax.reload();
-                        formMode = 'create'
-                        manipulateForm()
-                    },
-                    error: function(response) {
-                        console.log(response)
-                    }
-                })
-            }
+            //             $('#userTable').DataTable().ajax.reload()
+            //             formMode = 'create'
+            //             manipulateForm()
+            //         },
+            //         error: function(response) {
+            //             console.log(response)
+            //         }
+            //     })
+            // }
         })
 
         $('#userTable').on('click', '.btn-edit', function() {
@@ -200,7 +201,7 @@
                                 })
                             }
 
-                            $('#userTable').DataTable().ajax.reload();
+                            $('#userTable').DataTable().ajax.reload()
                         },
                         error: function(response) {
                             console.log(response)

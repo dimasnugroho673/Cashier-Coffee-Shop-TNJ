@@ -8,6 +8,7 @@ use Inertia\Inertia;
 use App\Models\Order;
 use App\Models\OrderedMenu;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Response;
 
@@ -46,9 +47,21 @@ class OrderController extends Controller
        
     }
 
+    public function historyOrder()
+    {
+        return Inertia::render('OrderHistory', []);
+    }
+
     public function listOrder()
     {
-        
+        $perPage = request('per_page') != null ? request('per_page') : 10;
+        $orders = Order::latest('created_at');
+        if (request('date_from') != "" && request('date_to') != "") {
+            $orders = $orders->whereBetween(DB::raw('DATE(created_at)'), [request('date_from'), request('date_to')]);
+        }
+        $orders = $orders->paginate($perPage);
+
+        return Response::json($orders, 200);
     }
 
     // public function index()

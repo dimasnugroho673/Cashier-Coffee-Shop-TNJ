@@ -32,7 +32,10 @@ const Layout = ({ children }) => {
                             <Link href="/frontend/order" className="nav-link active">Order</Link>
                         </div>
                         <div class="navbar-nav">
-                            <Link class="nav-link active" href="/frontend/list-order">Invoice</Link>
+                            <Link class="nav-link active" href="/frontend/order-history">Riwayat Order</Link>
+                        </div>
+                        <div class="navbar-nav">
+                            <Link class="nav-link active" href="/frontend/profile">Profile</Link>
                         </div>
                         <div class="navbar-nav">
                             <a class="nav-link text-danger" onClick={() => handleLogout()} href="#">Logout</a>
