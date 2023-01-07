@@ -1,9 +1,9 @@
 @extends('backend.layouts.app')
 @section('content')
 <div class="container">
-    <div class="row">
+    <div class="row g-3">
         <div class="col-md-8">
-            <div class="card">
+            <div class="card shadow-sm">
                 <div class="card-body">
                     <div class=" table-responsive">
                         <table class="table" id="categoriTable">
@@ -21,7 +21,7 @@
             </div>
         </div>
         <div class="col-md-4">
-            <div class="card shadow">
+            <div class="card shadow-sm">
                 <div class="card-header">
                     <div class=" card-title" id="text-card-title"></div>
                 </div>
@@ -54,7 +54,7 @@
             formMode = 'create'
             manipulateForm()
         })
-        
+
         $('#form-add-category').on('submit', function(e) {
             e.preventDefault()
 
@@ -120,7 +120,7 @@
                                     title: 'Data berhasil dihapus'
                                 })
                             }
-                            
+
                             $('#categoriTable').DataTable().ajax.reload()
                         },
                         error: function(response) {

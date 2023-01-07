@@ -16,4 +16,8 @@ class Income extends Model
         'price',
         'desc',
     ];
+
+    public function typeincome(){
+        return $this->hasMany(TypeIncome::class, 'id', 'TypeIcome_id' );
+    }
 }

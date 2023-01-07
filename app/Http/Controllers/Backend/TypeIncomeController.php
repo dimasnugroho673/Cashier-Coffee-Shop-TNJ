@@ -24,7 +24,7 @@ class TypeIncomeController extends Controller
             return DataTables::of($data)
             ->addIndexColumn()
             ->addColumn('action', function($row){
-                $btn = '<a href="javascript:void(0)" class="btn btn-outline-primary btn-sm btn-edit me-1" data-id=' . $row->id . '>Edit</a>
+                $btn = '<a href="javascript:void(0)" class="btn btn-outline-primary btn-sm btn-edit me-1" data-id='. $row->id . '>Edit</a>
                             <a href="javascript:void(0)" class="btn btn-outline-danger btn-sm btn-delete" data-id=' . $row->id . '>Delete</a>';
                     return $btn;
             })
@@ -32,6 +32,7 @@ class TypeIncomeController extends Controller
             ->make('true');
         }
         $data['title'] = 'Tipe Pemasukan';
+        // $data['typeincome'] = TypeIncome::first();
         return view('backend.typeincome.index',$data);
     }
 
@@ -75,7 +76,10 @@ class TypeIncomeController extends Controller
      */
     public function show($id)
     {
-        //
+        $typeincome = TypeIncome::find($id);
+        dd($typeincome);
+
+        return view('backend.typeincome.show');
     }
 
     /**
@@ -86,11 +90,11 @@ class TypeIncomeController extends Controller
      */
     public function edit($id)
     {
-        $typeincome = TypeIncome::findorFails($id);
+        $typeincome = TypeIncome::find($id);
         $response = [
             'status'=>true,
             'message'=>"",
-            'data' => $typeincome
+            'data' => $typeincome,
         ];
         return Response::json($response,200);
     }

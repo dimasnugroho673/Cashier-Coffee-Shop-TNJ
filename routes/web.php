@@ -14,6 +14,8 @@ use App\Http\Controllers\Backend\TableController;
 use App\Http\Controllers\Backend\CategoryController;
 use App\Http\Controllers\Backend\SettingController;
 use App\Http\Controllers\Backend\TypeIncomeController;
+use App\Http\Controllers\Backend\IncomesController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -82,7 +84,6 @@ Route::middleware(['can:admin', 'auth'])->group(function () {
         Route::delete('/category/destroy/{id}',[CategoryController::class,'destroy'])->name('backend.category.destroy');
 
         Route::get('/menu',[MenuController::class,'index'])->name('backend.menu');
-        // Route::get('/menu/create',[MenuController::class,'create'])->name('backend.menu.create');
         Route::post('/menu/store',[MenuController::class,'store'])->name('backend.menu.store');
         Route::get('/menu/edit/{id}',[MenuController::class,'edit'])->name('backend.menu.edit');
         Route::put('/menu/update/{id}',[MenuController::class,'update'])->name('backend.menu.update');
@@ -112,9 +113,13 @@ Route::middleware(['can:admin', 'auth'])->group(function () {
 
         Route::get('/finance/typeincome',[TypeIncomeController::class, 'index'])->name('backend.typeincome');
         Route::post('/finance/typeincome/create',[TypeIncomeController::class, 'store'])->name('backend.typeincome.create');
-        Route::get('/finance/typeincome/edit{id}',[TypeIncomeController::class,'edit'])->name('backend.typeincome.edit');
-        Route::put('/finance/typeincome/update{id}',[TypeIncomeController::class,'update'])->name('backend.typeincome.update');
+        Route::get('/finance/typeincome/edit{id}',[TypeIncomeController::class, 'edit'])->name('backend.typeincome.edit');
+        // Route::get('/finance/typeincome/show{id}',[TypeIncomeController::class, 'edit'])->name('backend.typeincome.show');
+        Route::put('/finance/typeincome/update{id}',[TypeIncomeController::class, 'update'])->name('backend.typeincome.update');
         Route::delete('/finance/typeincome/destroy/{id}',[TypeIncomeController::class,'destroy'])->name('backend.typeincome.destroy');
+
+        // Route::get('/finance/income',[IncomesController::class, 'index'])->name('backend.income');
+        Route::get('/finance/income',[IncomesController::class, 'index'])->name('backend.income');
 
         Route::get('/setting',[SettingController::class,'index'])->name('backend.setting');
         Route::put('/setting/update-general-data',[SettingController::class,'updateGeneralData'])->name('backend.setting.generaldata');

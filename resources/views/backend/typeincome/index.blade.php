@@ -6,6 +6,7 @@
             <div class="col-sm-8">
                 <div class="card shadow-sm">
                     <div class="card-body">
+                        {{-- <a href="{{ route('backend.typeincome.show'->$typeincome->id) }}">Test</a> --}}
                         <div class="table-responsive">
                             <table id='typeincomeTable' class="table table-bordered">
                                 <thead>
@@ -30,7 +31,7 @@
                         <div class="card-body">
                             <div class="form-group">
                                 <label for="">Tipe Pemasukan:</label>
-                                <input type="text" name="name" id="name" class="form-control">
+                                <input type="text"  id="name" class="form-control mb-2">
                             </div>
                         </div>
                         <div class="card-footer">
@@ -44,7 +45,6 @@
         </div>
     </div>
     @push('scripts')
-    {{-- <script src="https://code.jquery.com/jquery-3.6.2.min.js" integrity="sha256-2krYZKh//PcchRtd+H+VyyQoZ/e3EcrkxhM8ycwASPA=" crossorigin="anonymous"></script> --}}
         <script>
 
             $(document).ready(function() {
@@ -54,83 +54,38 @@
                 manipulateForm()
 
                 $('#btn-reset-form').on('click', function() {
-                    form = 'create'
-                    manipulateForm
+                    formData = 'create'
+                    manipulateForm()
                 })
 
-                $('#btn-submit-ad-typeincome').on('click', function(){
+                $('#btn-submit-add-typeincome').on('click', function(){
                     let name = $('#name').val()
                     let token = $("meta[name='csrf-token']").attr("content")
-
-                    if (formData == 'create') {
-                        $.ajax({
-                            url: "{{  url('backend/finance/typeincome/create') }}",
-                            data : {
-                                "_token" :token,
-                                name: name,
-                            },
-                            type :'POST',
-                            dataType :'JSON',
-                            success : function(response) {
-                                if (response.status) {
-                                    Swal.fire(
-                                        'Berhasil dibuat',
-                                        'Data berhasil dibuat',
-                                        'success'
-                                    )
-                                    $('#btn-reset-form').trigger('reset')
-                                }
-                                $('#typeincomeTable').DataTable().ajax().reload();
-                            },
-                            error : function(response) {
-                                console.error(response);
-                            }
-                        })
-                    } else if (formData == 'edit') {
-                        $.ajax({
-                            url:"{{ url('backend/finance/income/update') }}" + "/" +tmpID,
-                            data: {
-                                "_method" : "PUT",
-                                "_token" :token,
-                                name: name,
-                            },
-                            type: 'POST',
-                            dataType: "JSON",
-                            success: function(response) {
-                                if (response.status) {
-                                    Swal.fire(
-                                        'Berhasil diubah',
-                                        'Data berhasil diubah',
-                                        'success'
-                                    )
-                                    $('#btn-reset-form').trigger('reset')
-                                }
-                                $('#typeincomeTable').DataTable().ajax().reload();
-                                formData = 'create'
-                                manipulateForm()
-                            },
-                            error: function(response) {
-                                console.error(response);
-                            }
-                        })
-                    }
-                })
-
-                $('#typeincomeTable').on('click',".btn-edit", function() {
-
-                    let id = $(this).data('id')
                     $.ajax({
-                        url:"{{ url('backend/finance/typeincome/edit') }}/" + id,
-                        type : "GET",
-                        dataType : 'JSON',
-                        success : function (response) {
-                            $('name').val(response.data.name)
-                            formData = 'edit'
-                            tmpID = response.data.id
-                            manipulateForm()
+                        url : formData = 'create' ? "{{ url('backend/finance/typeincome/create') }}" : "{{ url('backend/finance/typeincome/edit') }}" +"/" +tmpID,
+                        data : {
+                            "_method": formData == 'create' ? "POST" : "PUT",
+                            "_token" : token,
+                            name : name,
                         },
-                        error :function(response) {
-                            console.error(response);
+                        type : 'POST',
+                        dataType :"JSON",
+                        success : function(response) {
+                            if (formData == 'create') {
+                                Toast.fire({
+                                    icon: 'success',
+                                    title: 'Data berhasil ditambahkan',
+                                })
+                            } else {
+                                Toast.fire({
+                                    icon: 'success',
+                                    title: 'Data berhasil diubah',
+                                })
+                            }
+                            formData = 'create'
+                            manipulateForm()
+                            $('#typeincomeTable').DataTables().ajax.reload()
+                            $('#form-add-typeincome').trigger('reset')
                         }
                     })
                 })
@@ -166,12 +121,21 @@
                                 $('#typeincomeTable').DataTable().ajax().reload();
                             },
                             error :function(response){
-                                console.error(response);
+                                console.log(response);
                             }
                         })
                     }
                 })
                 })
+
+                $('#typeincomeTable').on('click', '.btn-edit', function() {
+                let id = $(this).data("id")
+                let data = $(this).data("detail")
+                tmpID = id
+                formData = 'edit'
+                manipulateForm()
+                $('#name').val(data.name)
+            })
 
 
                 function showData() {

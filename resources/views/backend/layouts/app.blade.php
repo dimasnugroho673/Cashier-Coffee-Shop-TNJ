@@ -181,7 +181,7 @@
                                         <a class="dropdown-item" href="./layout-horizontal.html">
                                             List Orderan
                                         </a>
-                                        <a class="dropdown-item" href="./layout-boxed.html">
+                                        <a class="dropdown-item {{ Request::is('backend/finance/purchases') ? 'text-white' : '' }} " href="/backend/finance/income">
                                             Pemasukan
                                         </a>
                                         <a class="dropdown-item {{ Request::is('backend/finance/purchases') ? 'text-white' : '' }}" href="/backend/finance/purchases">
@@ -401,14 +401,9 @@
         <!-- Core plugin JavaScript-->
         @vite('resources/js/app.js')
         {{-- @vite('resources/js/jquery') --}}
-
-
         <!-- Page level custom scripts -->
         @yield('custom_scripts')
         @stack('scripts')
-        @push('scripts')
-
-        @endpush
     </body>
 
 
