@@ -119,6 +119,7 @@ Route::middleware(['can:cashier', 'auth'])->group(function () {
         Route::get('/order-history', [FrontendOrderController::class, 'historyOrder'])->name('frontend.order.history');
         Route::get('/checkout', [CheckoutController::class, 'index'])->name('frontend.checkout.index');
         Route::get('/profile', [ProfileController::class, 'index'])->name('frontend.profile.index');
+        Route::get('user/me', [ProfileController::class, 'me']);
     });
 });
 

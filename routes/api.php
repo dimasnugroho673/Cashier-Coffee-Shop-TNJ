@@ -23,6 +23,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::post('/order', [OrderController::class, 'store'])->name('frontend.order.store');
 Route::get('/orders', [OrderController::class, 'listOrder'])->name('frontend.order');
 
-Route::middleware(['can:cashier', 'auth'])->group(function () { 
-    Route::get('user/me', [ProfileController::class, 'me']);
-});
+// Route::middleware(['can:cashier', 'auth'])->group(function () { 
+    // Route::get('user/me', [ProfileController::class, 'me']);
+// });
