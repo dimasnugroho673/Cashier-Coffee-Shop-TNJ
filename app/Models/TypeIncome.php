@@ -11,7 +11,7 @@ class TypeIncome extends Model
     use HasFactory;
     protected $fillable = ['name'];
 
-    public function typeincome() {
-        return $this->belongsTo(Income::class);
+    public function income() {
+        return $this->hasMany(Income::class);
     }
 }

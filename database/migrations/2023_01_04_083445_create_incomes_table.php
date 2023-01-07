@@ -17,13 +17,12 @@ return new class extends Migration
             $table->id();
             $table->date('date');
             $table->string('name');
-            $table->string('from')->nullable();
-            $table->unsignedBigInteger('TypeIcome_id');
+            $table->unsignedBigInteger('typeincome_id');
             $table->float('price');
             $table->text('desc')->nullable();
             $table->timestamps();
 
-            $table->foreign('TypeIcome_id')->references('id')->on('type_incomes')->onDelete('cascade');
+            $table->foreign('typeincome_id')->references('id')->on('type_incomes')->onDelete('cascade');
         });
     }
 

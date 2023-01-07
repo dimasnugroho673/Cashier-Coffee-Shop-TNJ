@@ -11,13 +11,12 @@ class Income extends Model
     protected $fillable = [
         'date',
         'name',
-        'from',
-        'TypeIcome_id',
+        'typeincome_id',
         'price',
         'desc',
     ];
 
     public function typeincome(){
-        return $this->hasMany(TypeIncome::class, 'id', 'TypeIcome_id' );
+        return $this->belongsTo(TypeIncome::class);
     }
 }
