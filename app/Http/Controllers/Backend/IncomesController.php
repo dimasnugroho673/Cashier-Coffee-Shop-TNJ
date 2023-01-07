@@ -6,6 +6,7 @@ use App\Models\Income;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Blade;
+use Illuminate\Support\Facades\Response;
 use Yajra\DataTables\Facades\DataTables;
 
 class IncomesController extends Controller
@@ -25,7 +26,7 @@ class IncomesController extends Controller
             ->addColumn('action', function ($row){
                 return Blade::render(
                     '
-                <a href="javascript:void(0)" class="btn btn-sm btn-edit me-1" data-bs-toggle="modal" data-bs-target="#tambah-data-modal" data-detail="' . htmlspecialchars($row) . '" data-id=' . $row->id . '>Edit</a>
+                <a href="javascript:void(0)" class="btn btn-sm btn-edit me-1" data-bs-toggle="modal" data-bs-target="#modal-income-form" data-detail="' . htmlspecialchars($row) . '" data-id=' . $row->id . '>Edit</a>
                 <a href="javascript:void(0)" class="btn btn-outline-danger btn-sm btn-delete" data-detail="' . htmlspecialchars($row) . '"  data-id= ' . $row->id . ' >Delete</a>',
                     ['row' => $row]
                 );
@@ -59,7 +60,26 @@ class IncomesController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'date' => 'required|date',
+            'name' => 'required',
+            'typeincome_id' => 'required',
+            'price' => 'required',
+            'desc' => 'required'
+        ]);
+        $income = Income::create([
+            'date' => $request->date,
+            'name' => $request->name,
+            'typeincome_id' => $request->typeincome_id,
+            'price' => $request->price,
+            'desc' => $request->desc,
+        ]);
+
+        $response = [
+            'message' => "Data Berhasil Ditambahkan",
+            'status' => true,
+        ];
+        return Response::json($response,201);
     }
 
     /**
@@ -81,7 +101,15 @@ class IncomesController extends Controller
      */
     public function edit($id)
     {
-        //
+        $income = Income::find($id);
+
+        $response = [
+            'message' => "",
+            'status' => true,
+            'data' => $income
+        ];
+
+        return Response::json($response,201);
     }
 
     /**
@@ -93,7 +121,27 @@ class IncomesController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'date' => 'required|date',
+            'name' => 'required',
+            'typeincome_id' => 'required',
+            'price' => 'required',
+            'desc' => 'required'
+        ]);
+        $income = Income::find($id);
+        $income->date = $request->date;
+        $income->name = $request->name;
+        $income->typeincome_id = $request->typeincome_id;
+        $income->price = $request->price;
+        $income->desc = $request->desc;
+        $income->save();
+
+        $response = [
+            'message' => 'Data berhasil diupdate',
+            'status' => true,
+        ];
+
+        return Response::json($response,200);
     }
 
     /**
@@ -104,6 +152,11 @@ class IncomesController extends Controller
      */
     public function destroy($id)
     {
-        //
+        Income::destroy($id);
+        $response = [
+            'message' => "Data berhasil dihapus",
+            'status' => true,
+        ];
+        return Response::json($response,201);
     }
 }
