@@ -1,17 +1,19 @@
 @extends('backend.layouts.app')
+
 @section('content')
-<div class="container">
-    <div class="row g-3">
-        <div class="col-md-8">
+<div class="container-xl">
+    <div class="row">
+        <div class="col-sm-8">
             <div class="card shadow-sm">
                 <div class="card-body">
-                    <div class=" table-responsive">
-                        <table class="table" id="categoriTable">
+                    {{-- <a href="{{ route('backend.typeincome.show'->$typeincome->id) }}">Test</a> --}}
+                    <div class="table-responsive">
+                        <table id='typeincomeTable' class="table table-bordered">
                             <thead>
                                 <tr>
                                     <th>{{ __('No') }}</th>
-                                    <th>{{ __('Kategori') }}</th>
-                                    <th>{{ __('Aksi') }}</th>
+                                    <th>{{ __('Tipe-tipe') }}</th>
+                                    <th>{{ __('Action') }}</th>
                                 </tr>
                             </thead>
                             <tbody></tbody>
@@ -20,80 +22,74 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-4">
-            <div class="card shadow-sm">
+        <div class="col-sm-4">
+            <div class="card">
                 <div class="card-header">
-                    <div class=" card-title" id="text-card-title"></div>
+                    <div class="card-title" id="text-card-title"></div>
                 </div>
-                <form id="form-add-category">
+                <form id="form-add-typeincome">
                     <div class="card-body">
                         <div class="form-group">
-                            <label for="">Nama Kategori:</label>
-                            <input type="text" id="name" class="form-control mt-2" required placeholder="Masukkan Nama Kategori ..." required>
+                            <label for="" class="form-label">Tipe Pemasukan:</label>
+                            <input type="text" name="name" id="name" class="form-control mb-2" placeholder="Nama tipe" required>
                         </div>
                     </div>
                     <div class="card-footer">
-                        <button type="submit" class=" btn btn-primary" id="btn-submit-add-categori"></button>
+                        <button type="submit" class=" btn btn-primary" id="btn-submit-add-typeincome"></button>
                         <button type="reset" class="btn btn-warning ms-1" id="btn-reset-form">Reset</button>
+                    </div>
                 </form>
+
             </div>
         </div>
-        </form>
     </div>
 </div>
-
-
+@push('scripts')
 <script>
     $(document).ready(function() {
-        let formMode = 'create'
+        let formData = 'create'
         let tmpID = ''
         showData()
         manipulateForm()
 
         $('#btn-reset-form').on('click', function() {
-            formMode = 'create'
+            formData = 'create'
             manipulateForm()
         })
 
-        $('#form-add-category').on('submit', function(e) {
+        $('#form-add-typeincome').on('submit', function(e) {
             e.preventDefault()
-
             let name = $('#name').val()
             let token = $("meta[name='csrf-token']").attr("content")
 
             $.ajax({
-                url: formMode == 'create' ? "{{ url('backend/category/create') }}" : "{{ url('backend/category/update') }}" + "/" + tmpID,
+                type: "POST",
+                url: formData == 'create' ? "{{ url('backend/finance/typeincome') }}" : "{{ url('backend/finance/typeincome') }}" + "/" + tmpID,
                 data: {
-                    "_method": formMode == 'create' ? "POST" : "PUT",
+                    "_method": formData == 'create' ? "POST" : "PUT",
                     "_token": token,
                     name: name,
                 },
-                type: 'POST',
                 dataType: "JSON",
                 success: function(response) {
-                    if (response.status) {
-                        if (formMode == 'create') {
-                            Toast.fire({
-                                icon: 'success',
-                                title: 'Data berhasil ditambahkan'
-                            })
-                        } else {
-                            Toast.fire({
-                                icon: 'success',
-                                title: 'Data berhasil diubah'
-                            })
-                        }
+                    Toast.fire({
+                        icon: 'success',
+                        title: response.message
+                    })
 
-                        formMode = 'create'
-                        manipulateForm()
-                        $('#categoriTable').DataTable().ajax.reload()
-                        $('#form-add-category').trigger('reset')
-                    }
+                    formData = 'create'
+                    manipulateForm()
+                    $('#typeincomeTable').DataTable().ajax.reload()
+                    $('#form-add-typeincome').trigger('reset')
+                },
+                error: function(response) {
+                    console.log(response)
                 }
-            })
+            });
         })
 
-        $('#categoriTable').on('click', '.btn-delete', function() {
+
+        $('#typeincomeTable').on('click', '.btn-delete', function() {
             Swal.fire({
                 title: 'Hapus data?',
                 icon: 'warning',
@@ -107,47 +103,44 @@
                     let id = $(this).data("id")
                     let token = $("meta[name='csrf-token']").attr("content")
                     $.ajax({
-                        url: "{{ url('backend/category/destroy') }}" + "/" + id,
+                        url: "{{ url('backend/finance/typeincome') }}" + "/" + id,
                         data: {
                             "_token": token
                         },
                         type: 'DELETE',
                         dataType: "JSON",
                         success: function(response) {
-                            if (response.status) {
-                                Toast.fire({
-                                    icon: 'success',
-                                    title: 'Data berhasil dihapus'
-                                })
-                            }
+                            Toast.fire({
+                                icon: 'success',
+                                title: response.message
+                            })
 
-                            $('#categoriTable').DataTable().ajax.reload()
+                            $('#typeincomeTable').DataTable().ajax.reload();
                         },
                         error: function(response) {
-                            console.log(response)
+                            console.log(response);
                         }
                     })
                 }
             })
         })
 
-        $('#categoriTable').on('click', '.btn-edit', function() {
+        $('#typeincomeTable').on('click', '.btn-edit', function() {
             let id = $(this).data("id")
             let data = $(this).data("detail")
-
             tmpID = id
-            formMode = 'edit'
-            manipulateForm()
+            formData = 'edit'
 
+            manipulateForm()
             $('#name').val(data.name)
         })
 
+
         function showData() {
-            $('#categoriTable').DataTable({
+            $('#typeincomeTable').DataTable({
                 processing: true,
                 serverSide: true,
-                // responsive: true,
-                ajax: "{{ url('backend/category') }}",
+                ajax: "{{ url('backend/finance/typeincome') }}",
                 lengthMenu: [5, 10, 25, 50],
                 columns: [{
                         data: 'DT_RowIndex',
@@ -161,22 +154,22 @@
                         data: 'action',
                         name: 'action',
                         orderable: false,
-                        searchable: false
+                        seacrhable: false
                     },
                 ]
             })
         }
 
         function manipulateForm() {
-            if (formMode == 'create') {
-                $('#text-card-title').text('Tambah Katehori')
-                $('#btn-submit-add-categori').text('Submit')
-            } else if (formMode == 'edit') {
-                $('#text-card-title').text('Edit data Kategori')
-                $('#btn-submit-add-categori').text('Update')
+            if (formData == 'create') {
+                $('#text-card-title').text('Tambah tipe-tipe income')
+                $('#btn-submit-add-typeincome').text('Tambahkan')
+            } else if (formData == 'edit') {
+                $('#text-card-title').text('Edit data tipe-tipe income')
+                $('#btn-submit-add-typeincome').text('Update')
             }
         }
-
     })
 </script>
+@endpush
 @endsection

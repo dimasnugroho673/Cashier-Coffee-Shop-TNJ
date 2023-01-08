@@ -114,10 +114,10 @@
                             })
 
                             normalizeEmailField()
-                            $("#form-add-user").trigger('reset')
+                            $("#form-add-user").trigger('reset');
                         }
 
-                        $('#userTable').DataTable().ajax.reload()
+                        $('#userTable').DataTable().ajax.reload();
                     },
                     error: function(response) {
                         console.log(response)
@@ -201,7 +201,7 @@
                                 })
                             }
 
-                            $('#userTable').DataTable().ajax.reload()
+                            $('#userTable').DataTable().ajax.reload();
                         },
                         error: function(response) {
                             console.log(response)

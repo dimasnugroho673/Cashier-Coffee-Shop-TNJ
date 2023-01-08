@@ -14,6 +14,10 @@ use App\Http\Controllers\Backend\CategoryController;
 use App\Http\Controllers\Frontend\CheckoutController;
 use App\Http\Controllers\Frontend\OrderController as FrontendOrderController;
 use App\Http\Controllers\Frontend\ProfileController;
+use App\Http\Controllers\Backend\SettingController;
+use App\Http\Controllers\Backend\TypeIncomeController;
+use App\Http\Controllers\Backend\IncomesController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -80,17 +84,24 @@ Route::middleware(['can:admin', 'auth'])->group(function () {
         // Route::resource('/kategori',CategoryController::class)->except('show');
 
         Route::get('/category',[CategoryController::class,'index'])->name('backend.category');
-        Route::post('/category/create',[CategoryController::class,'create'])->name('backend.category.create');
-        Route::get('/category/{id}',[CategoryController::class,'edit'])->name('backend.category.edit');
-        Route::put('category/{id}',[CategoryController::class,'update'])->name('backend.category.update');
+        Route::post('/category/create',[CategoryController::class,'store'])->name('backend.category.store');
+        Route::get('/category/edit/{id}',[CategoryController::class,'edit'])->name('backend.category.edit');
+        Route::put('category/update/{id}',[CategoryController::class,'update'])->name('backend.category.update');
         Route::delete('/category/destroy/{id}',[CategoryController::class,'destroy'])->name('backend.category.destroy');
+
+        Route::get('/menu',[MenuController::class,'index'])->name('backend.menu');
+        Route::post('/menu/store',[MenuController::class,'store'])->name('backend.menu.store');
+        Route::get('/menu/edit/{id}',[MenuController::class,'edit'])->name('backend.menu.edit');
+        Route::put('/menu/update/{id}',[MenuController::class,'update'])->name('backend.menu.update');
+        Route::delete('/menu/destroy/{id}',[MenuController::class,'destroy'])->name('backend.menu.destory');
+        Route::get('menu/change-status/{id}',[MenuController::class,'changeStatus'])->name('backend.menu.change-status');
 
         Route::get('/users', [UserController::class, 'index'])->name('backend.users');
         Route::post('/user', [UserController::class, 'create'])->name('backend.users.create');
         Route::get('/user/{id}', [UserController::class, 'show'])->name('backend.users.show');
         Route::put('/user/{id}', [UserController::class, 'update'])->name('backend.users.update');
         Route::delete('/user/{id}', [UserController::class, 'delete'])->name('backend.users.destroy');
-        
+
         Route::get('/tables', [TableController::class, 'index'])->name('backend.tables');
         Route::post('/table', [TableController::class, 'create'])->name('backend.tables.create');
         Route::post('/table-increase', [TableController::class, 'increaseTable'])->name('backend.tables.table-increase');
@@ -104,6 +115,22 @@ Route::middleware(['can:admin', 'auth'])->group(function () {
         Route::get('/finance/purchase/{id}', [PurchaseController::class, 'show'])->name('backend.purchases.show');
         Route::put('/finance/purchase/{id}', [PurchaseController::class, 'update'])->name('backend.purchases.update');
         Route::delete('/finance/purchase/{id}', [PurchaseController::class, 'delete'])->name('backend.purchases.destroy');
+
+        Route::get('/finance/typeincome',[TypeIncomeController::class, 'index'])->name('backend.typeincome');
+        Route::post('/finance/typeincome/',[TypeIncomeController::class, 'store'])->name('backend.typeincome.create');
+        Route::put('/finance/typeincome/{id}',[TypeIncomeController::class, 'update'])->name('backend.typeincome.update');
+        Route::delete('/finance/typeincome/{id}',[TypeIncomeController::class,'destroy'])->name('backend.typeincome.destroy');
+
+        Route::get('/finance/income',[IncomesController::class, 'index'])->name('backend.income');
+        Route::post('/finance/income',[IncomesController::class, 'store'])->name('backend.income.store');
+        Route::put('finance/income/{id}',[IncomesController::class,'update'])->name('backend.income.update');
+        Route::delete('finance/income/{id}',[IncomesController::class, 'destroy'])->name('backend.income.destroy');
+
+
+        Route::get('/setting',[SettingController::class,'index'])->name('backend.setting');
+        Route::put('/setting/update-general-data',[SettingController::class,'updateGeneralData'])->name('backend.setting.generaldata');
+        Route::put('setting/update-modal',[SettingController::class,'updateModal'])->name('backend.setting.updateModal');
+        Route::put('setting/update-icons',[SettingController::class,'updateLogo'])->name('backend.setting.updateLogo');
 
         Route::get('/finance/orders', [OrderController::class, 'index'])->name('backend.order.index');
         Route::get('/finance/order/{orderNumber}/invoice', [OrderController::class, 'invoice'])->name('backend.order.invoice');

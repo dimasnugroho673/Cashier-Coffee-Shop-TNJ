@@ -13,17 +13,16 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('menus', function (Blueprint $table) {
+        Schema::create('incomes', function (Blueprint $table) {
             $table->id();
+            $table->date('date');
             $table->string('name');
-            $table->unsignedBigInteger('category_id');
-            $table->float('price',  12, 2);
-            $table->boolean('status');
-            $table->text('desc')->nullable(true);
-
-            $table->foreign('category_id')->references('id')->on('categories')->onDelete('cascade');
-
+            $table->unsignedBigInteger('typeincome_id');
+            $table->float('price', 12, 2);
+            $table->text('desc')->nullable();
             $table->timestamps();
+
+            $table->foreign('typeincome_id')->references('id')->on('type_incomes')->onDelete('cascade');
         });
     }
 
@@ -34,6 +33,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('menus');
+        Schema::dropIfExists('incomes');
     }
 };

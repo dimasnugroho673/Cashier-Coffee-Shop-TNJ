@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('address');
             $table->bigInteger('phone');
             $table->string('email')->unique();
-            $table->string('icons');
+            $table->string('icons')->nullable();
             $table->float('modal')->nullable();
             $table->timestamps();
         });
