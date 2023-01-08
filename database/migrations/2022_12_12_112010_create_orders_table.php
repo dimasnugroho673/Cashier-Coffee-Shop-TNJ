@@ -19,7 +19,7 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('menu_id');
             $table->integer('quantity');
-            $table->float('total_price');
+            $table->float('total_price', 12, 2);
             $table->text('desc')->nullable(true);
 
             $table->foreign('table_id')->references('id')->on('tables')->onDelete('cascade');

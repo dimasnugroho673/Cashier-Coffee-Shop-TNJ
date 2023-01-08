@@ -18,7 +18,7 @@ return new class extends Migration
             $table->date('date');
             $table->string('name');
             $table->unsignedBigInteger('typeincome_id');
-            $table->float('price');
+            $table->float('price', 12, 2);
             $table->text('desc')->nullable();
             $table->timestamps();
 

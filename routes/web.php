@@ -112,16 +112,14 @@ Route::middleware(['can:admin', 'auth'])->group(function () {
         Route::delete('/finance/purchase/{id}', [PurchaseController::class, 'delete'])->name('backend.purchases.destroy');
 
         Route::get('/finance/typeincome',[TypeIncomeController::class, 'index'])->name('backend.typeincome');
-        Route::post('/finance/typeincome/create',[TypeIncomeController::class, 'store'])->name('backend.typeincome.create');
-        Route::get('/finance/typeincome/edit{id}',[TypeIncomeController::class, 'edit'])->name('backend.typeincome.edit');
-        Route::put('/finance/typeincome/update{id}',[TypeIncomeController::class, 'update'])->name('backend.typeincome.update');
-        Route::delete('/finance/typeincome/destroy/{id}',[TypeIncomeController::class,'destroy'])->name('backend.typeincome.destroy');
+        Route::post('/finance/typeincome/',[TypeIncomeController::class, 'store'])->name('backend.typeincome.create');
+        Route::put('/finance/typeincome/{id}',[TypeIncomeController::class, 'update'])->name('backend.typeincome.update');
+        Route::delete('/finance/typeincome/{id}',[TypeIncomeController::class,'destroy'])->name('backend.typeincome.destroy');
 
         Route::get('/finance/income',[IncomesController::class, 'index'])->name('backend.income');
-        Route::post('/finance/income/store',[IncomesController::class, 'store'])->name('backend.income.store');
-        Route::get('finance/income/edit/{id}',[IncomesController::class, 'edit'])->name('backend.income.edit');
-        Route::post('finance/income/update/{id}',[IncomesController::class,'update'])->name('backend.income.update');
-        Route::delete('finance/income/delete/{id}',[IncomesController::class, 'destroy'])->name('backend.income.destroy');
+        Route::post('/finance/income',[IncomesController::class, 'store'])->name('backend.income.store');
+        Route::put('finance/income/{id}',[IncomesController::class,'update'])->name('backend.income.update');
+        Route::delete('finance/income/{id}',[IncomesController::class, 'destroy'])->name('backend.income.destroy');
 
 
         Route::get('/setting',[SettingController::class,'index'])->name('backend.setting');

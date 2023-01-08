@@ -22,18 +22,18 @@ class TypeIncomeController extends Controller
         if ($request->ajax()) {
             $data = TypeIncome::latest()->get();
             return DataTables::of($data)
-            ->addIndexColumn()
-            ->addColumn('action', function($row) {
-                $btn = '<a href="javascript:void(0)" class="btn btn-outline-primary btn-sm btn-edit me-1" data-id='. $row->id . '>Edit</a>
-                        <a href="javascript:void(0)" class="btn btn-outline-danger btn-sm btn-delete" data-id=' . $row->id . '>Delete</a>';
+                ->addIndexColumn()
+                ->addColumn('action', function ($row) {
+                    $btn = '<a href="javascript:void(0)" class="btn btn-outline-primary btn-sm btn-edit me-1" data-detail="' . htmlspecialchars($row) . '" data-id=' . $row->id . '>Edit</a>
+                        <a href="javascript:void(0)" class="btn btn-outline-danger btn-sm btn-delete" data-detail="' . htmlspecialchars($row) . '" data-id=' . $row->id . '>Delete</a>';
                     return $btn;
-            })
-            ->rawColumns(['action'])
-            ->make('true');
+                })
+                ->rawColumns(['action'])
+                ->make('true');
         }
         $data['title'] = 'Tipe Pemasukan';
         // $data['typeincome'] = TypeIncome::first();
-        return view('backend.typeincome.index',$data);
+        return view('backend.typeincome.index', $data);
     }
 
     /**
@@ -61,11 +61,10 @@ class TypeIncomeController extends Controller
             'name' => $request->name
         ]);
         $response = [
-            "message" => "Data berhasil dibuat",
+            "message" => "Data berhasil ditambahkan",
             "status" => true
         ];
-        return Response::json($response,201);
-
+        return Response::json($response, 201);
     }
 
     /**
@@ -79,7 +78,7 @@ class TypeIncomeController extends Controller
         $typeincome = TypeIncome::find($id);
         // dd($typeincome);
 
-        return view('backend.typeincome.index',compact('typeincome'));
+        return view('backend.typeincome.index', compact('typeincome'));
     }
 
     /**
@@ -92,11 +91,11 @@ class TypeIncomeController extends Controller
     {
         $typeincome = TypeIncome::find($id);
         $response = [
-            'message'=>"",
-            'status'=>true,
+            'message' => "",
+            'status' => true,
             'data' => $typeincome,
         ];
-        return Response::json($response,200);
+        return Response::json($response, 200);
     }
 
     /**
@@ -119,7 +118,7 @@ class TypeIncomeController extends Controller
             "status" => true
         ];
 
-        return Response::json($response,201);
+        return Response::json($response, 201);
     }
 
     /**
@@ -133,8 +132,8 @@ class TypeIncomeController extends Controller
         TypeIncome::destroy($id);
         $response = [
             "message" => "Data berhasil dihapus",
-            "status" =>true
+            "status" => true
         ];
-        return Response::json($response,201);
+        return Response::json($response, 201);
     }
 }

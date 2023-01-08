@@ -19,27 +19,30 @@ class IncomesController extends Controller
     public function index(Request $request)
     {
         // $income = Income::with('typeincome')->latest()->get();
-    if ($request->ajax()) {
-        $data = Income::with('typeincome')->latest()->get();
-        return DataTables::of($data)
-            ->addIndexColumn()
-            ->addColumn('action', function ($row){
-                return Blade::render(
-                    '
+        if ($request->ajax()) {
+            $data = Income::with('typeincome')->latest()->get();
+            return DataTables::of($data)
+                ->addIndexColumn()
+                ->addColumn('action', function ($row) {
+                    return Blade::render(
+                        '
                 <a href="javascript:void(0)" class="btn btn-sm btn-edit me-1" data-bs-toggle="modal" data-bs-target="#incomeModal" data-detail="' . htmlspecialchars($row) . '" data-id=' . $row->id . '>Edit</a>
                 <a href="javascript:void(0)" class="btn btn-outline-danger btn-sm btn-delete" data-detail="' . htmlspecialchars($row) . '"  data-id= ' . $row->id . ' >Delete</a>',
-                    ['row' => $row]
-                );
-            })
-            ->addColumn('typeincome', function ($row) {
-                return $row->typeincome->name;
-            })
-            ->rawColumns(['action','typeincome'])
-            ->make(true);
-    }
+                        ['row' => $row]
+                    );
+                })
+                ->addColumn('price', function ($row) {
+                    return "Rp " . number_format($row->price, 0, ',', '.');
+                })
+                ->addColumn('typeincome', function ($row) {
+                    return $row->typeincome->name;
+                })
+                ->rawColumns(['action', 'typeincome'])
+                ->make(true);
+        }
         // dd($income);
         $data['title'] = 'Pemasukan Dari luar order';
-        return view('backend.income.index',$data);
+        return view('backend.income.index', $data);
     }
 
     /**
@@ -65,7 +68,6 @@ class IncomesController extends Controller
             'name' => 'required',
             'typeincome_id' => 'required',
             'price' => 'required',
-            'desc' => 'required'
         ]);
         $income = Income::create([
             'date' => $request->date,
@@ -79,7 +81,7 @@ class IncomesController extends Controller
             'message' => "Data Berhasil Ditambahkan",
             'status' => true,
         ];
-        return Response::json($response,201);
+        return Response::json($response, 201);
     }
 
     /**
@@ -109,7 +111,7 @@ class IncomesController extends Controller
             'data' => $income
         ];
 
-        return Response::json($response,201);
+        return Response::json($response, 201);
     }
 
     /**
@@ -128,6 +130,7 @@ class IncomesController extends Controller
             'price' => 'required',
             'desc' => 'required'
         ]);
+
         $income = Income::find($id);
         $income->date = $request->date;
         $income->name = $request->name;
@@ -137,11 +140,11 @@ class IncomesController extends Controller
         $income->save();
 
         $response = [
-            'message' => 'Data berhasil diupdate',
+            'message' => 'Data berhasil diubah',
             'status' => true,
         ];
 
-        return Response::json($response,200);
+        return Response::json($response, 200);
     }
 
     /**
@@ -157,6 +160,6 @@ class IncomesController extends Controller
             'message' => "Data berhasil dihapus",
             'status' => true,
         ];
-        return Response::json($response,201);
+        return Response::json($response, 201);
     }
 }

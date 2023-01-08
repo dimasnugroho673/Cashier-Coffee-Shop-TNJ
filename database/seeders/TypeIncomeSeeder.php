@@ -16,7 +16,7 @@ class TypeIncomeSeeder extends Seeder
     public function run()
     {
         TypeIncome::create([
-            'name' => 'modal',
+            'name' => 'Modal',
         ]);
         TypeIncome::create([
             'name' => 'Sumbangan',

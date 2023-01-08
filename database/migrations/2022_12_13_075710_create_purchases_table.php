@@ -18,7 +18,7 @@ return new class extends Migration
             $table->date('date');
             $table->string('name_item');
             $table->string('quantity');
-            $table->float('price');
+            $table->float('price', 12, 2);
             $table->unsignedBigInteger('user_id');
             $table->string('photo_invoice')->nullable(true);
             $table->text('desc')->nullable(true);

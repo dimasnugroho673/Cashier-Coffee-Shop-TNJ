@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->unsignedBigInteger('category_id');
-            $table->float('price');
+            $table->float('price',  12, 2);
             $table->boolean('status');
             $table->text('desc')->nullable(true);
 
