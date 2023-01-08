@@ -30,8 +30,8 @@
                     <form id="form-add-typeincome">
                         <div class="card-body">
                             <div class="form-group">
-                                <label for="">Tipe Pemasukan:</label>
-                                <input type="text"  id="name" class="form-control mb-2">
+                                <label for="" class="form-label">Tipe Pemasukan:</label>
+                                <input type="text" name="name" id="name" class="form-control mb-2">
                             </div>
                         </div>
                         <div class="card-footer">
@@ -58,37 +58,44 @@
                     manipulateForm()
                 })
 
-                $('#btn-submit-add-typeincome').on('click', function(){
+                $('#form-add-typeincome').on('submit', function(e) {
+                    e.preventDefault()
                     let name = $('#name').val()
                     let token = $("meta[name='csrf-token']").attr("content")
+
                     $.ajax({
-                        url : formData = 'create' ? "{{ url('backend/finance/typeincome/create') }}" : "{{ url('backend/finance/typeincome/edit') }}" +"/" +tmpID,
-                        data : {
-                            "_method": formData == 'create' ? "POST" : "PUT",
+                        type: "POST",
+                        url: formData == 'create' ? "{{ url('backend/finance/typeincome/create') }}" : "{{ url('backend/finance/typeincome') }}" + "/" +tmpID,
+                        data: {
+                            "_method" : formData == 'create' ? "POST" : "PUT",
                             "_token" : token,
                             name : name,
                         },
-                        type : 'POST',
-                        dataType :"JSON",
-                        success : function(response) {
-                            if (formData == 'create') {
+                        dataType: "JSON",
+                        success: function (response) {
+                            if (response.status) {
                                 Toast.fire({
-                                    icon: 'success',
-                                    title: 'Data berhasil ditambahkan',
+                                    icon : 'success',
+                                    title : 'Data berhasil ditambahkan'
                                 })
-                            } else {
+                            }else if (formData == 'edit') {
                                 Toast.fire({
                                     icon: 'success',
-                                    title: 'Data berhasil diubah',
+                                    title : 'Data berhasil diupdate'
                                 })
                             }
+
                             formData = 'create'
                             manipulateForm()
-                            $('#typeincomeTable').DataTables().ajax.reload()
+                            $('#typeincomeTable').DataTable().ajax.reload()
                             $('#form-add-typeincome').trigger('reset')
+                        },
+                        error : function (response) {
+                            console.log(response)
                         }
-                    })
+                    });
                 })
+
 
                 $('#typeincomeTable').on('click','.btn-delete', function() {
                     Swal.fire({
@@ -128,12 +135,13 @@
                 })
                 })
 
-                $('#typeincomeTable').on('click', '.btn-edit', function() {
+            $('#typeincomeTable').on('click', '.btn-edit', function() {
                 let id = $(this).data("id")
                 let data = $(this).data("detail")
                 tmpID = id
                 formData = 'edit'
                 manipulateForm()
+                console.log(tmpID)
                 $('#name').val(data.name)
             })
 
