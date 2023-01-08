@@ -6,7 +6,7 @@
 
             <div class="card-body">
                 <div class=" d-grid justify-content-end mb-3">
-                    <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal-income-form">
+                    <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#incomeModal">
                         Tambah Data
                     </a>
                 </div>
@@ -41,11 +41,11 @@
                 manipulateForm()
 
                 // const modal = new boo
-                const modal = new bootstrap.Modal(document.querySelector('#modal-income-form'), {
+                const modal = new bootstrap.Modal(document.querySelector('#incomeModal'), {
                     backdrop: 'static'
                 })
 
-                $('#modalIncome').on('submit', function() {
+                $('#modal-income-form').on('submit', function(e) {
                     e.preventDefault()
                     $.ajax({
                         url : formMode == 'create' ? "{{ url('backend/finance/income/store') }}" : "{{ url('backend/finance/update') }}" + "/" + tmpId,
@@ -58,7 +58,8 @@
                             price: $('#price').val(),
                             desc: $('#desc').val(),
                         },
-                        type: 'POST',
+                        type: "POST",
+                        dataType: "JSON",
                         success: function(response) {
                             if (formMode == 'create') {
                                 Toast.fire({
@@ -74,16 +75,16 @@
                             }
                             modal().hide()
                             $('#modalIcome').trigger('reset')
-                            $('#incomeTable').DataTable.ajax.reload()
+                            $('#incomeTable').DataTable().ajax.reload()
                             manipulateForm()
                         },
-                        error: function(error) {
-                            console.log(error)
+                        error: function(response) {
+                            console.log(response)
                         }
                     })
                 });
 
-                $('#incomeTable').on('click','btn-edit', function() {
+                $('#incomeTable').on('click','.btn-edit', function() {
                     let id = $(this).data('id')
                     let data = $(this).data("detail")
 
@@ -97,6 +98,43 @@
                     formMode == 'edit'
                     manipulateForm()
                 });
+                $('#incomeTable').on('click','.btn-delete', function() {
+                    Swal.fire({
+                        title : 'Hapus Data ?',
+                        icon : 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#d33',
+                        cancelButtonColor: '#6D7A91',
+                        confirmButtonText: 'Ya, hapus!',
+                        cancelButtonText: 'Batal'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            let id = $(this).data('id')
+                            let token = $("meta[name='csrf-token']").attr("content")
+                            $.ajax({
+                                type: "DELETE",
+                                url: "{{ url('backend/finance/income/destroy') }}" + "/" + id,
+                                data: {
+                                    "_token": token,
+                                },
+                                dataType: "JSON",
+                                success: function (response) {
+                                    if (response.status) {
+                                        Toast.fire({
+                                            icon: 'success',
+                                            title: 'Data berhasil dihapus'
+                                        })
+                                    }
+                                    $('#incomeTable').DataTable().ajax.reload()
+                                },
+                                error : function(response) {
+                                    console.log(response)
+                                }
+                            });
+                        }
+                    })
+                });
+
 
 
                 function showData() {
