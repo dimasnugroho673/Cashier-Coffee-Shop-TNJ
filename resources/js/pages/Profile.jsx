@@ -8,11 +8,70 @@ import parse from 'html-react-parser';
 
 const Profile = () => {
 
+    const [ editProfileModal, setEditProfileModal] = useState(false)
+    const { userLoggedIn } = usePage().props
     const [profile, setProfile] = useState({})
+
+    const token = document.getElementsByName('csrf-token')[0].getAttribute('content')
 
     useEffect(() => {
         fetchProfile()
+
+        var modal = new bootstrap.Modal(document.getElementById('editProfileModal'), {
+            keyboard: false
+        })
+        setEditProfileModal(modal)
+
+        let email = document.getElementById('email')
+        let emailFeedback = document.getElementById('email-feedback')
+        let timeout;
+
+        email.addEventListener('keyup', function () {
+            let elem = this
+
+            if (elem.value.length >= 4) {
+                clearTimeout(timeout)
+                timeout = setTimeout(() => {
+
+                    if (elem.value.length == 0) {
+                        normalizeEmailField()
+                    } else {
+                        axios.post(`${window.location.origin}/backend/user/email-validator`, {
+                            "_token": token,
+                            "email": elem.value
+                        })
+                            .then((response) => {
+                                emailFeedback.hidden = false
+                                // // $('#email-feedback').show()
+                                if (response.data.status) {
+                                    email.classList.remove('is-invalid')
+                                    email.classList.add('is-valid')
+                                    emailFeedback.classList.remove('invalid-feedback')
+                                    emailFeedback.classList.add('valid-feedback')
+                                } else {
+                                    email.classList.remove('is-valid')
+                                    email.classList.add('is-invalid')
+                                    emailFeedback.classList.remove('valid-feedback')
+                                    emailFeedback.classList.add('invalid-feedback')
+                                }
+                                emailFeedback.innerHTML = response.data.message
+                            })
+                    }
+                }, 1000);
+            }
+        })
     }, [])
+
+    const normalizeEmailField = () => {
+        let email = document.getElementById('email')
+        let emailFeedback = document.getElementById('email-feedback')
+
+        email.classList.remove('is-invalid')
+        email.classList.remove('is-valid')
+        emailFeedback.classList.remove('invalid-feedback')
+        emailFeedback.classList.remove('valid-feedback')
+        emailFeedback.hidden = true
+    }
 
     const fetchProfile = () => {
         axios.get(`${window.location.origin}/frontend/user/me`)
@@ -48,6 +107,41 @@ const Profile = () => {
         }
     }
 
+    const setFieldEdit = () => {
+        document.getElementById('name').value = profile.name
+        document.getElementById('email').value = profile.email
+        document.getElementById('image-profile').setAttribute('src', profile.photo)
+    }
+
+    const handleFormSubmit = (e) => {
+        e.preventDefault()
+
+        let formData = new FormData()
+        formData.append('_token', token)
+        formData.append('_method', 'POST')
+        formData.append('id', userLoggedIn.id)
+        formData.append('name', document.getElementById('name').value)
+        formData.append('email', document.getElementById('email').value)
+        formData.append('password', document.getElementById('password').value)
+        formData.append('photo', document.getElementById('input-image-profile').files[0])
+
+        axios({
+            method: "post",
+            url: `${window.location.origin}/api/user/`,
+            data: formData,
+            headers: {
+                "Content-Type": "multipart/form-data" 
+            },
+        },)
+            .then((response) => {
+                fetchProfile()
+                editProfileModal.hide()
+            })
+            .catch((error) => {
+                console.log(error)
+            })
+    }
+
     return (
         <Fragment>
             <div className="container">
@@ -55,7 +149,7 @@ const Profile = () => {
                     <div className="col-md-6 offset-md-3">
                         <div class="d-flex mt-4">
                             <div class="flex-shrink-0">
-                                <img src="http://localhost:8000/img/avatar.png" alt="image-profile" style={{ maxWidth: '100px' }} />
+                                <img src={profile.photo} alt="image-profile" style={{ maxWidth: '100px' }} />
                             </div>
                             <div class="flex-grow-1 ms-3">
                                 <h3 class="mt-0">{profile.name}</h3>
@@ -63,7 +157,7 @@ const Profile = () => {
                                 <small className="text-muted">Joined since {profile.joined_at}</small>
                             </div>
                             <div class="flex-grow-1 ms-3">
-                                <button className="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editProfile">Edit
+                                <button className="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editProfileModal" onClick={() => setFieldEdit()}>Edit
                                     <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-pencil ms-1" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                         <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                                         <path d="M4 20h4l10.5 -10.5a1.5 1.5 0 0 0 -4 -4l-10.5 10.5v4"></path>
@@ -106,15 +200,15 @@ const Profile = () => {
                 </div>
             </div>
 
-            <div class="modal fade" id="editProfile" tabindex="-1" aria-labelledby="editProfileLabel" aria-hidden="true">
+            <div class="modal fade" id="editProfileModal" tabindex="-1" aria-labelledby="editProfileModalLabel" aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h1 class="modal-title fs-5" id="editProfileLabel">Edit profile</h1>
+                            <h1 class="modal-title fs-5" id="editProfileModalLabel">Edit profile</h1>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
-                        <div class="modal-body">
-                            <form id="form-add-user" class="needs-validation">
+                        <form id="form-add-user" class="needs-validation" onSubmit={(e) => handleFormSubmit(e)}>
+                            <div class="modal-body">
                                 <div class="mb-3">
                                     <img src="https://dummyimage.com/200x200/787878/fff.png&text=Preview" className="mb-3" id="image-profile" alt="image-profile" style={{ width: '100px', height: '100px', objectFit: 'fill', backgroundSize: 'cover', borderRadius: '50px' }} />
                                     <input class="form-control" type="file" id="input-image-profile" onChange={() => handlePreviewProfile()} />
@@ -124,14 +218,14 @@ const Profile = () => {
                                     <label for="name" class="form-label">Nama</label>
                                     <input type="text" class="form-control" id="name" placeholder="Nama" required />
                                 </div>
-                                {/* <div class="mb-3">
-                                <label for="email" class="form-label">Alamat email</label>
-                                <input type="email" class="form-control" id="email" placeholder="Alamat email valid" aria-describedby="emailHelp" required />
-                                <div id="email-feedback"></div>
-                            </div> */}
+                                <div class="mb-3">
+                                    <label for="email" class="form-label">Alamat email</label>
+                                    <input type="email" class="form-control" id="email" placeholder="Alamat email valid" aria-describedby="emailHelp" required />
+                                    <div id="email-feedback"></div>
+                                </div>
                                 <div class="mb-3">
                                     <label for="password" class="form-label">Password</label>
-                                    <input type="password" class="form-control" id="password" placeholder="Password" required />
+                                    <input type="password" class="form-control" id="password" placeholder="Password" />
                                     <div id="passwordHelp" class="form-text">Isi hanya jika ingin merubah password.</div>
                                 </div>
                                 <div class="mb-3 form-check">
@@ -140,12 +234,13 @@ const Profile = () => {
                                 </div>
                                 {/* <button type="submit" class="btn btn-primary" id="btn-submit-form-add-user"></button>
                             <button type="reset" class="btn btn-warning ms-1" id="btn-reset-form-add-user">Reset</button> */}
-                            </form>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-primary">Save changes</button>
-                        </div>
+
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                                <button type="submit" class="btn btn-primary">Ubah</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>

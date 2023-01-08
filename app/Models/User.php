@@ -3,10 +3,12 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
@@ -46,5 +48,24 @@ class User extends Authenticatable
     public function role()
     {
         return $this->belongsTo(Role::class);
+    }
+
+    public function getPhotoAttribute()
+    {
+        $path = $this->attributes['photo'];
+
+        if ($path != null) {
+            return URL::to(Storage::url($path));
+        } else {
+            return null;
+        }
+        
+    }
+
+    public function getPhotoRawAttribute()
+    {
+        $path = $this->attributes['photo'];
+
+        return $path;
     }
 }

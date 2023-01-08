@@ -86,7 +86,6 @@ Route::middleware(['can:admin', 'auth'])->group(function () {
         Route::delete('/category/destroy/{id}',[CategoryController::class,'destroy'])->name('backend.category.destroy');
 
         Route::get('/users', [UserController::class, 'index'])->name('backend.users');
-        Route::post('/user/email-validator', [UserController::class, 'emailValidator'])->name('backend.users.email-validator');
         Route::post('/user', [UserController::class, 'create'])->name('backend.users.create');
         Route::get('/user/{id}', [UserController::class, 'show'])->name('backend.users.show');
         Route::put('/user/{id}', [UserController::class, 'update'])->name('backend.users.update');
@@ -112,6 +111,7 @@ Route::middleware(['can:admin', 'auth'])->group(function () {
 });
 
 Route::get('/backend/finance/order/{orderNumber}/invoice', [OrderController::class, 'invoice'])->name('backend.order.invoice');
+Route::post('/backend/user/email-validator', [UserController::class, 'emailValidator'])->name('backend.users.email-validator');
 
 Route::middleware(['can:cashier', 'auth'])->group(function () {
     Route::group(['prefix' => 'frontend'], function() {
