@@ -36,21 +36,20 @@
                 </div>
             </div>
             <table class="table table-transparent table-responsive" width="100%">
-                <!-- <thead> -->
-                <!-- <tr>
-                        <th class="text-center" style="width: 1%"></th>
+                <!-- <thead>
+                    <tr>
                         <th>Product</th>
-                        <th class="text-center" style="width: 1%">Qnt</th>
+                        <th class="text-center" style="width: 1%">Qty</th>
                         <th class="text-end" style="width: 1%">Unit</th>
                         <th class="text-end" style="width: 1%">Amount</th>
-                    </tr> -->
-                <!-- </thead> -->
+                    </tr>
+                </thead> -->
                 @foreach ($orders as $d)
                 <tr>
-                    <td>{{ $d->menus->name }}</td>
+                    <td>{{ $d->menu_name }}</td>
                     <td class="text-center">{{ $d->quantity }}</td>
-                    <td class="text-end">{{ number_format($d->menus->price, 0,',','.')  }}</td>
-                    <td class="text-end">{{ number_format(($d->menus->price * $d->quantity), 0,',','.')  }}</td>
+                    <td class="text-end">{{ number_format($d->price, 0,',','.')  }}</td>
+                    <td class="text-end">{{ number_format(($d->price * $d->quantity), 0,',','.')  }}</td>
                 </tr>
                 @endforeach
 

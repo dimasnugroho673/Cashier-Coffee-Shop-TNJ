@@ -90,7 +90,9 @@ class OrderController extends Controller
                 OrderedMenu::create([
                     "order_id" => $create->id,
                     "quantity" => $order->quantity,
-                    "menu_id" => $order->menu_id
+                    // "menu_id" => $order->menu_id
+                    "price" => $order->price,
+                    "menu_name" => $order->menu_name
                 ]);
             }
 
