@@ -118,7 +118,7 @@ fsLightboxInstances["gallery"].props.onOpen = function () {
             $('#quantity').val(data.quantity)
             $('#price').val(data.price)
             $('#desc').val(data.desc)
-            $('#img-invoice-preview').attr('src', data.photo_invoice)
+            $('#img-invoice-preview').attr('src', data.photo_invoice != undefined ? data.photo_invoice : 'https://dummyimage.com/200x200/787878/fff.png&text=No+Image')
         })
 
         $('#purchaseDatatable').on('click', '.btn-detail', function() {
