@@ -62,9 +62,8 @@
                                                         <select id="select-month-on-recap-{{ $year }}" required>
                                                             <option value="" selected disabled>Pilih bulan</option>
                                                             <?php $monthArr = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'Desember'] ?>
-                                                            @for($month = 0; $month < count($monthArr); $month++)
-                                                                <option value="{{ $month + 1 }}">{{ $monthArr[$month] }}</option>
-                                                            @endfor
+                                                            @for($month = 0; $month < count($monthArr); $month++) <option value="{{ $month + 1 }}">{{ $monthArr[$month] }}</option>
+                                                                @endfor
                                                         </select>
 
                                                         <button type="submit" class="btn btn-sm btn-outliine-light btn-show-modal-recap" data-name="month" data-year="{{ $year }}">Lihat</button>
@@ -208,18 +207,20 @@
                     if (dateNow.getFullYear() == yearSelected) {
                         if ((dateNow.getMonth() + 1) < '12') {
                             $('#modal-recap-info').html(`
-                            <div class="alert alert-primary d-flex align-items-center" role="alert">
-                                <svg class="bi flex-shrink-0 me-2" role="img" aria-label="Info:"><use xlink:href="#info-fill"/></svg>
-                                <div>
+                                <div class="alert alert-warning" role="alert">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-alert-circle" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                        <circle cx="12" cy="12" r="9"></circle>
+                                        <line x1="12" y1="8" x2="12" y2="12"></line>
+                                        <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                                    </svg>
+
                                     Tahun yang dipilih belum sampai 12 bulan.
                                 </div>
-                            </div>
                             `)
-                        } else if ((dateNow.getMonth() + 1) == '12') {
-
                         }
                     }
-       
+
                     $('#label-file-name-recap').text(`Rekap_${yearSelected}`)
                     $('.card-recap-file-touchable').data('url', `{{ url('/backend/finance/recapitulation/year?at=${yearSelected}') }}`)
 
@@ -228,11 +229,11 @@
                     let yearSelected2 = $(this).data('year')
                     let monthSelected = $(`#select-month-on-recap-${yearSelected2}`).val()
 
-                    modal.show()
+                    // modal.show()
                     $('#modal-recap-info').html(``)
                     $('#label-file-name-recap').text(`Rekap_${monthSelected}_${yearSelected2}`)
 
-                    $('.card-recap-file-touchable').data('url', `{{ url('/backend/finance/recapitulation/month?on_month=${monthSelected}&at_year=${yearSelected2}') }}`.replace('&amp;','&'))
+                    $('.card-recap-file-touchable').data('url', `{{ url('/backend/finance/recapitulation/month?on_month=${monthSelected}&at_year=${yearSelected2}') }}`.replace('&amp;', '&'))
 
                     break;
 
@@ -244,7 +245,7 @@
                     $('#modal-recap-info').html(``)
                     $('#label-file-name-recap').text(`Rekap_${dateFrom}_${dateTo}`)
 
-                    $('.card-recap-file-touchable').data('url', `{{ url('/backend/finance/recapitulation/custom?date_from=${dateFrom}&date_to=${dateTo}') }}`.replace('&amp;','&'))
+                    $('.card-recap-file-touchable').data('url', `{{ url('/backend/finance/recapitulation/custom?date_from=${dateFrom}&date_to=${dateTo}') }}`.replace('&amp;', '&'))
 
                     break;
                 default:
@@ -254,10 +255,14 @@
 
         $('.form-select-month-on-recap').on('submit', function(e) {
             e.preventDefault()
+
+            modal.show()
         })
 
         $('#form-filter-on-recap').on('submit', function(e) {
             e.preventDefault()
+
+            modal.show()
         })
 
         $('.card-recap-file-touchable').on('click', function() {
