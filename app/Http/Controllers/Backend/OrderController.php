@@ -20,11 +20,11 @@ class OrderController extends Controller
             if (request('date_from') != "" && request('date_to') != "") {
                 $orders = $orders->whereBetween(DB::raw('DATE(created_at)'), [request('date_from'), request('date_to')]);
             }
-            
+
             $orders = $orders->get();
-            // $orders->map(function($order)     
+            // $orders->map(function($order)
             // {
-            //     $order->ordered_menus = 
+            //     $order->ordered_menus =
             //    return $order;
             // });
 
@@ -67,7 +67,7 @@ class OrderController extends Controller
 
             return $data;
         });
-        
+
         // return view('guest.invoice', $data);
         $pdf = PDF::loadView('guest.invoice', $data)->setPaper('a6', 'potrait');
         return $pdf->stream();

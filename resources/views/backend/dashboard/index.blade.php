@@ -10,7 +10,7 @@
                     <div class="row align-items-center ">
                         <div class="col-auto">
                             <h1 class="text-muted font-weight-bold fs-1">Pengeluaran</h1>
-                            <p class="mt-3 text-red fw-bold fs-2"><span> RP. 300.000,00</span></p>
+                            <p class="mt-3 text-red fw-bold fs-2"><span>{{ $purchase }}</span></p>
                         </div>
                         <div class="col"></div>
                         <div class="col-auto text-muted">
@@ -31,7 +31,7 @@
                     <div class="row align-items-center">
                         <div class="col-auto">
                             <h1 class="text-muted font-weight-bold fs-1">Pemasukan</h1>
-                            <p class="mt-3 text-indigo fw-bold fs-2"><span> RP. 800.000,00</span></p>
+                            <p class="mt-3 text-indigo fw-bold fs-2"><span>{{ $income_total }}</span></p>
                         </div>
                         <div class="col"></div>
                         <div class="col-auto text-muted">
