@@ -41,7 +41,7 @@ class RecapitulationController extends Controller
 
     public function _recapCustom($dateFrom, $dateTo, $type)
     {
-        $orders = Order::whereBetween(DB::raw('DATE(created_at)'), [$dateFrom, $dateTo])->get();
+        $orders = Order::where('status_payment', 'complete')->whereBetween(DB::raw('DATE(created_at)'), [$dateFrom, $dateTo])->get();
         $purchases = Purchase::whereBetween(DB::raw('DATE(date)'), [$dateFrom, $dateTo])->get();
         $incomes = Income::whereBetween(DB::raw('DATE(date)'), [$dateFrom, $dateTo])->get();
 
@@ -52,7 +52,7 @@ class RecapitulationController extends Controller
 
     private function _recapYear($year, $type)
     {
-        $orders = Order::whereYear('created_at', $year)->get();
+        $orders = Order::where('status_payment', 'complete')->whereYear('created_at', $year)->get();
         $purchases = Purchase::whereYear('date', $year)->get();
         $incomes = Income::whereYear('date', $year)->get();
 
@@ -63,7 +63,7 @@ class RecapitulationController extends Controller
 
     private function _recapMonth($month, $year, $type)
     {
-        $orders = Order::whereYear('created_at', $year)->whereMonth('created_at', $month)->get();
+        $orders = Order::where('status_payment', 'complete')->whereYear('created_at', $year)->whereMonth('created_at', $month)->get();
         $purchases = Purchase::whereYear('date', $year)->whereMonth('date', $month)->get();
         $incomes = Income::whereYear('date', $year)->whereMonth('date', $month)->get();
 
