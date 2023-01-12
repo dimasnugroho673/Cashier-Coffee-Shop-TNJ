@@ -18,3 +18,8 @@
     background-color: rgb(213, 213, 213);
     cursor: pointer;
  }
+
+ .card-recap-file-touchable:hover {
+    background-color: rgb(231, 231, 231);
+    cursor: pointer;
+ }

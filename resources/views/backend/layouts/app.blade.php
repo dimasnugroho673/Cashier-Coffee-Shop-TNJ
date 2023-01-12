@@ -130,7 +130,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ route('backend.category') }}">
+                            <a class="nav-link {{ Request::is('backend/category') ? 'active' : '' }}" href="{{ route('backend.category') }}">
                                 <span class="nav-link-icon d-md-none d-lg-inline-block">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-category-2" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                         <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
@@ -182,7 +182,7 @@
                                         <a class="dropdown-item {{ Request::is('backend/finance/orders') ? 'text-white' : '' }}" href="/backend/finance/orders">
                                             List Orderan
                                         </a>
-                                        <a class="dropdown-item {{ Request::is('backend/finance/purchases') ? 'text-white' : '' }} " href="/backend/finance/income">
+                                        <a class="dropdown-item {{ Request::is('backend/finance/income') ? 'text-white' : '' }} " href="/backend/finance/income">
                                             Pemasukan
                                         </a>
                                         <a class="dropdown-item {{ Request::is('backend/finance/purchases') ? 'text-white' : '' }}" href="/backend/finance/purchases">
@@ -191,7 +191,7 @@
                                         <a class="dropdown-item" href="./layout-boxed.html">
                                             Modal awal
                                         </a>
-                                        <a class="dropdown-item" href="./layout-boxed.html">
+                                        <a class="dropdown-item {{ Request::segment(3) == 'recapitulations' ? 'text-white' : '' }}" href="/backend/finance/recapitulations">
                                             Rekap Penjualan
                                         </a>
                                         <a class="dropdown-item {{ Request::is('backend/finance/typeincome') ? 'text-white' : '' }}" href="{{  route('backend.typeincome') }}">
@@ -227,8 +227,8 @@
                             </div>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link {{ Request::is('backend/tables') ? 'active' : '' }}" href="/backend/setting">
-                                <span class="nav-link-icon d-md-none d-lg-inline-block {{ Request::is('backend/tables') ? 'text-white' : '' }}">
+                            <a class="nav-link {{ Request::is('backend/setting') ? 'active' : '' }}" href="/backend/setting">
+                                <span class="nav-link-icon d-md-none d-lg-inline-block {{ Request::is('backend/setting') ? 'text-white' : '' }}">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-settings" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                         <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                                         <path d="M10.325 4.317c.426 -1.756 2.924 -1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543 -.94 3.31 .826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.756 .426 1.756 2.924 0 3.35a1.724 1.724 0 0 0 -1.066 2.573c.94 1.543 -.826 3.31 -2.37 2.37a1.724 1.724 0 0 0 -2.572 1.065c-.426 1.756 -2.924 1.756 -3.35 0a1.724 1.724 0 0 0 -2.573 -1.066c-1.543 .94 -3.31 -.826 -2.37 -2.37a1.724 1.724 0 0 0 -1.065 -2.572c-1.756 -.426 -1.756 -2.924 0 -3.35a1.724 1.724 0 0 0 1.066 -2.573c-.94 -1.543 .826 -3.31 2.37 -2.37c1 .608 2.296 .07 2.572 -1.065z"></path>

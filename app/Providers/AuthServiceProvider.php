@@ -5,9 +5,10 @@ namespace App\Providers;
 // use Illuminate\Support\Facades\Gate;
 
 use App\Models\Role;
-use App\Models\RoleUser;
 use App\Models\User;
+use App\Models\RoleUser;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
 class AuthServiceProvider extends ServiceProvider
@@ -30,18 +31,20 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
 
-        $roles = Role::get();
+        if (Schema::hasTable('roles')) {
+            $roles = Role::get();
 
-        foreach ($roles as $ru) {
-            Gate::define($ru->name, function() use ($ru) {
-                $getLoggedinAccountRole = RoleUser::join('roles', 'roles.id', '=', 'role_users.role_id')->where('role_users.user_id', auth()->user()->id)->first();
-
-                if ($ru->name == $getLoggedinAccountRole->name) {
-                    return true;
-                } else {
-                    return false;
-                }
-            });
+            foreach ($roles as $ru) {
+                Gate::define($ru->name, function() use ($ru) {
+                    $getLoggedinAccountRole = RoleUser::join('roles', 'roles.id', '=', 'role_users.role_id')->where('role_users.user_id', auth()->user()->id)->first();
+    
+                    if ($ru->name == $getLoggedinAccountRole->name) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                });
+            }
         }
     }
 }

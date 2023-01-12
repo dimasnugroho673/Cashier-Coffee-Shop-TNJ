@@ -58,15 +58,16 @@ class OrderController extends Controller
         $data['title'] = "Invoice";
         $orderID = Order::where('order_number', $orderNumber)->first()->id;
         $data['company'] = 'Dummy Company';
-        $data['orders'] = OrderedMenu::join('orders', 'orders.id', '=', 'ordered_menus.order_id')->join('menus', 'menus.id', '=', 'ordered_menus.menu_id')->where('ordered_menus.order_id', $orderID)->get();
+        $data['orders'] = OrderedMenu::join('orders', 'orders.id', '=', 'ordered_menus.order_id')->where('ordered_menus.order_id', $orderID)->get();
 
         $data['orders']->order = $data['orders'][0]->order;
-        $data['orders']->map(function ($data)
-        {
-            $this->_formatData($data);
+        // dd($data['orders']);
+        // $data['orders']->map(function ($data)
+        // {
+        //     $this->_formatData($data);
 
-            return $data;
-        });
+        //     return $data;
+        // });
 
         // return view('guest.invoice', $data);
         $pdf = PDF::loadView('guest.invoice', $data)->setPaper('a6', 'potrait');

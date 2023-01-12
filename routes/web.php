@@ -17,7 +17,7 @@ use App\Http\Controllers\Frontend\ProfileController;
 use App\Http\Controllers\Backend\SettingController;
 use App\Http\Controllers\Backend\TypeIncomeController;
 use App\Http\Controllers\Backend\IncomesController;
-
+use App\Http\Controllers\Backend\RecapitulationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -126,7 +126,6 @@ Route::middleware(['can:admin', 'auth'])->group(function () {
         Route::put('finance/income/{id}',[IncomesController::class,'update'])->name('backend.income.update');
         Route::delete('finance/income/{id}',[IncomesController::class, 'destroy'])->name('backend.income.destroy');
 
-
         Route::get('/setting',[SettingController::class,'index'])->name('backend.setting');
         Route::put('/setting/update-general-data',[SettingController::class,'updateGeneralData'])->name('backend.setting.generaldata');
         Route::put('setting/update-modal',[SettingController::class,'updateModal'])->name('backend.setting.updateModal');
@@ -134,9 +133,13 @@ Route::middleware(['can:admin', 'auth'])->group(function () {
 
         Route::get('/finance/orders', [OrderController::class, 'index'])->name('backend.order.index');
         Route::get('/finance/order/{orderNumber}/invoice', [OrderController::class, 'invoice'])->name('backend.order.invoice');
+
+        Route::get('/finance/recapitulations', [RecapitulationController::class, 'index'])->name('backend.recapitulation.index');
+        Route::get('/finance/recapitulations/{type}', [RecapitulationController::class, 'index'])->name('backend.recapitulation.index');
     });
 });
 
+Route::get('/backend/finance/recapitulation/{type}', [RecapitulationController::class, 'recapAsPdf'])->name('backend.recap.pdf');
 Route::get('/backend/finance/order/{orderNumber}/invoice', [OrderController::class, 'invoice'])->name('backend.order.invoice');
 Route::post('/backend/user/email-validator', [UserController::class, 'emailValidator'])->name('backend.users.email-validator');
 

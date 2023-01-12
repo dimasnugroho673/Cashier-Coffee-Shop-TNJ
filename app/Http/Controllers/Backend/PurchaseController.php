@@ -102,6 +102,8 @@ class PurchaseController extends Controller
             'price' => 'required|numeric',
         ]);
 
+        $purchaseOld = Purchase::find($id);
+
         if ($request->hasFile('photo_invoice')) {
             $request->validate([
                 'photo_invoice' => 'image|mimes:jpg,png,jpeg|max:4096'
@@ -123,6 +125,11 @@ class PurchaseController extends Controller
             Storage::disk('public')->put($path, File::get($request->file('photo_invoice')));
 
             Purchase::find($id)->update(['photo_invoice' => $path]);
+
+            // delete old image
+            if (file_exists(public_path() . '/' . 'storage/' . $purchaseOld->photo_invoice_raw)) {
+                unlink(public_path() . '/' . 'storage/' . $purchaseOld->photo_invoice_raw);
+            }
         }
 
         $response = [

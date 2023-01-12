@@ -36,36 +36,36 @@
                             </button>
 
                             <button type="reset" class="btn btn-outline-warning ms-2" id="btn-filter-reset">Reset</button>
+                        </div>
                     </form>
                 </div>
             </div>
         </div>
-    </div>
 
-    <div class="row mt-4">
-        <div class="col-md-12">
-            <div class="card">
-                <div class="card-body">
-                    <table class="table" id="ordersTable" width="100%" cellspacing="0">
-                        <thead>
-                            <tr>
-                                <th>{{ __('No.') }}</th>
-                                <th>{{ __('No. order') }}</th>
-                                <th>{{ __('Kasir') }}</th>
-                                <th>{{ __('No. customer') }}</th>
-                                <th>{{ __('Total harga') }}</th>
-                                <th>{{ __('Tanggal') }}</th>
-                                <th>{{ __('Aksi') }}</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        </tbody>
-                    </table>
+        <div class="row mt-4">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-body">
+                        <table class="table" id="ordersTable" width="100%" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>{{ __('No.') }}</th>
+                                    <th>{{ __('No. order') }}</th>
+                                    <th>{{ __('Kasir') }}</th>
+                                    <th>{{ __('No. customer') }}</th>
+                                    <th>{{ __('Total harga') }}</th>
+                                    <th>{{ __('Tanggal') }}</th>
+                                    <th>{{ __('Aksi') }}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 </div>
 
 <!-- Invice Modal -->
@@ -156,7 +156,7 @@
 
         $('#btn-filter-reset').on('click', function() {
             $('#ordersTable').DataTable().clear().destroy()
-            showData('', '')            
+            showData('', '')
             history.pushState('', null, `{{ url('backend/finance/orders') }}`)
             Toast.fire({
                 icon: 'success',

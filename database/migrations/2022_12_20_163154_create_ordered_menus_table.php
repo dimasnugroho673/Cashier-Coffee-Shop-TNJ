@@ -17,11 +17,13 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('order_id');
             $table->integer('quantity');
-            $table->unsignedBigInteger('menu_id');
+            // $table->unsignedBigInteger('menu_id');
+            $table->string('menu_name', 120);
+            $table->float('price',  12, 2);
             $table->timestamps();
 
             $table->foreign('order_id')->references('id')->on('orders')->onDelete('cascade');
-            $table->foreign('menu_id')->references('id')->on('menus')->onDelete('cascade');
+            // $table->foreign('menu_id')->references('id')->on('menus')->onDelete('cascade');
         });
     }
 
