@@ -38,7 +38,7 @@ class MenuController extends Controller
                     <a href="javascript:void(0)" class="btn btn-outline-danger btn-sm btn-delete" data-detail="' . htmlspecialchars($row) . '"  data-id= ' . $row->id . ' >Delete</a>',
                         ['row' => $row]
                     );
-                })                
+                })
                 ->addColumn('price', function ($row) {
                     return "Rp " . number_format($row->price, 0, ',', '.');
                 })
