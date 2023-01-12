@@ -4,7 +4,7 @@
 <div class="container-xl">
     <div class="row g-3">
         <div class="col-sm-6 col-lg-3">
-            <div class="card">
+            <div class="card shadow-sm">
                 <div class="card-status-top bg-red-lt"></div>
                 <div class="card-body">
                     <div class="row align-items-center ">
@@ -52,7 +52,7 @@
                     <div class="row align-items-center">
                         <div class="col-auto">
                             <h1 class="text-muted font-weight-bold fs-1">Modal</h1>
-                            <p class="mt-3 text-info fw-bold fs-2"><span> RP. 100.000,00</span></p>
+                            <p class="mt-3 text-info fw-bold fs-2"><span> {{ $total_modal }}</span></p>
                         </div>
                         <div class="col"></div>
                         <div class="col-auto text-muted">
@@ -71,13 +71,13 @@
             </div>
         </div>
         <div class="col-sm-6 col-lg-3">
-            <div class="card">
+            <div class="card shadow-sm">
                 <div class="card-status-top bg-success-lt"></div>
                 <div class="card-body">
                     <div class="row align-items-center">
                         <div class="col-auto">
                             <h1 class="text-muted font-weight-bold fs-1">Total Order</h1>
-                            <p class="mt-3 text-success fw-bold fs-2"><span> RP. 10.000.000,00</span></p>
+                            <p class="mt-3 text-success fw-bold fs-2"><span> {{ $order }}0</span></p>
                         </div>
                         <div class="col"></div>
                         <div class="col-auto text-muted">
@@ -91,6 +91,18 @@
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-3 mt-3" >
+        <div class="col-sm-6 col-lg-3">
+            <div class="card bg-red">
+                <div class="card-header">
+                    <h3 class="text-white">Pengeluaran</h3>
+                    <p class="text-white"><span> Hari ini</span></p>
+                </div>
+                <div class="card-body"></div>
             </div>
         </div>
     </div>

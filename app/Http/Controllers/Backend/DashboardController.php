@@ -14,14 +14,21 @@ class DashboardController extends Controller
     {
         $data['title'] = 'Dashboard';
         $total_purchase = Purchase::sum('price');
-        $data['purchase'] = 'Rp. ' . number_format($total_purchase,2,',','.');
-
-        // $element = 'Rp. ' . number_format($order->total_price, 0,',','.');
         $total_income = Income::sum('price');
         $total_order = Order::sum('total_price');
+        $modal = Income::with('typeincome')->where('typeincome_id',1)->sum('price');
+
         $totalPemasukan = $total_income + $total_order;
-        $data['income_total'] = 'Rp. ' . number_format($totalPemasukan,2,',','.');
         // dd($totalPemasukan);
+        $data['purchase'] = 'Rp. ' . number_format($total_purchase,2,',','.');
+        $data['income_total'] = 'Rp. ' . number_format($totalPemasukan,2,',','.');
+        $data['total_modal'] = 'Rp. ' . number_format($modal,2,',','.');
+        $data['order'] = 'Rp. ' . number_format($total_order,2,',','.');
+        // dd($modal);
+
+
+
+
 
         // $data['income'] = Income::where('price')->count();
         // $data['order'] = Order::where('price')->count();
