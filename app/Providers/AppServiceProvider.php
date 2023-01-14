@@ -26,10 +26,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        Blade::directive('rupiah', function ( $expression ) {
-            return "Rp. ". number_format(floatval($expression),0,',','.');
-        });
-        Paginator::useBootstrap();
+        // Blade::directive('rupiah', function ( $expression ) {
+        //     return "Rp. ". number_format(floatval($expression),0,',','.');
+        // });
+        // Paginator::useBootstrap();
 
         config(['app.locale' => 'id']);
         Carbon::setLocale('id');
