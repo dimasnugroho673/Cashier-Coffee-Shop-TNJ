@@ -10,7 +10,7 @@
                         <div class="d-flex justify-content-between align-items-center">
                             <div>
                                 {{-- <span></span> --}}
-                                <h1>1</h1>
+                                <h1>{{ $OrderFinish }}</h1>
                                 <span>Orderan Sudah bayar</span>
                             </div>
                             <div class="bg-success-lt rounded-circle">
@@ -31,7 +31,7 @@
                     <div class="card-body">
                         <div class="d-flex justify-content-between align-items-center">
                             <div>
-                                <h1>2</h1>
+                                <h1>{{ $OrderWait }}</h1>
                                 <span>Orderan yang Belum bayar</span>
                             </div>
                             <div class=" bg-red-lt rounded-circle">
@@ -49,7 +49,7 @@
                     <div class="card-body">
                         <div class="d-flex justify-content-between align-items-center">
                             <div>
-                                <h1>2</h1>
+                                <h1>{{ $OrderTotal }}</h1>
                                 <span>Total Orderan</span>
                             </div>
                             <div class=" bg-indigo-lt rounded-circle">
@@ -80,7 +80,7 @@
                     <div class="card-status-start bg-red"></div>
                     <div class="card-body">
                         <p class="fw-bold fs-3">Pengeluaran Hari ini</p>
-                        <h1 class="text-red fw-bold">Rp. 1000.000,00</h1>
+                        <h1 class="text-red fw-bold">{{ $purchase }}</h1>
                     </div>
                 </div>
             </div>
@@ -89,7 +89,7 @@
                     <div class="card-status-start bg-success"></div>
                     <div class="card-body">
                         <p class="fw-bold fs-3">Pemasukan hari ini</p>
-                        <h1 class="text-success fw-bold">Rp. 3.000.000,00</h1>
+                        <h1 class="text-success fw-bold">R{{ $AllIncomeNow }}</h1>
                     </div>
                 </div>
             </div>
@@ -98,7 +98,7 @@
                     <div class="card-status-start bg-yellow"></div>
                     <div class="card-body">
                         <p class="fw-bold fs-3">Orderan Belum Bayar </p>
-                        <h1 class=" text-yellow fw-bold">Rp. 2.000.000,00</h1>
+                        <h1 class=" text-yellow fw-bold">{{ $UnpaidOrderNow }}</h1>
                     </div>
                 </div>
             </div>
@@ -107,7 +107,7 @@
                     <div class="card-status-start bg-info"></div>
                     <div class="card-body">
                         <p class="fw-bold fs-3">Total Saldo</p>
-                        <h1 class="text-info fw-bold">Rp. 2.000.000,00</h1>
+                    <h1 class="text-info fw-bold">{{ $SaldoTotal }}</h1>
                     </div>
                 </div>
             </div>
