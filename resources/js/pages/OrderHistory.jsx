@@ -120,36 +120,38 @@ const OrderHistory = () => {
                         </div> */}
                         <div className="row mt-5">
                             <div className="col-md-12">
-                                <table class="table" id="">
-                                    <thead>
-                                        <tr>
-                                            {/* <th>No.</th> */}
-                                            <th>No. order</th>
-                                            <th>Kasir</th>
-                                            <th>No. customer</th>
-                                            <th>Total harga</th>
-                                            <th>Tanggal</th>
-                                            <th>Aksi</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {orders.map((order, index) => (
-                                            <tr key={order.id}>
-                                                {/* <td>{index + 1}</td> */}
-                                                <td>{order.order_number}</td>
-                                                <td>{order.cashier_name}</td>
-                                                <td>{order.customer_number}</td>
-                                                <td>{rupiahFormatter(order.total_price)}</td>
-                                                <td>{order.created_at}</td>
-                                                <td>
-                                                    <button type="button" class="btn btn-outline-dark btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={() => handleInvoicePreview(order.order_number)}>
-                                                        Invoice
-                                                    </button>
-                                                </td>
+                                <div className="table-responsive">
+                                    <table className="table" id="">
+                                        <thead>
+                                            <tr>
+                                                {/* <th>No.</th> */}
+                                                <th>No. order</th>
+                                                <th>Kasir</th>
+                                                <th>No. customer</th>
+                                                <th>Total harga</th>
+                                                <th>Tanggal</th>
+                                                <th>Aksi</th>
                                             </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
+                                        </thead>
+                                        <tbody>
+                                            {orders.map((order, index) => (
+                                                <tr key={order.id}>
+                                                    {/* <td>{index + 1}</td> */}
+                                                    <td>{order.order_number}</td>
+                                                    <td>{order.cashier_name}</td>
+                                                    <td>{order.customer_number}</td>
+                                                    <td>{rupiahFormatter(order.total_price)}</td>
+                                                    <td>{order.created_at}</td>
+                                                    <td>
+                                                        <button type="button" class="btn btn-outline-dark btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={() => handleInvoicePreview(order.order_number)}>
+                                                            Invoice
+                                                        </button>
+                                                    </td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                </div>
 
                                 <div className="row">
                                     <div className="col-md-12">

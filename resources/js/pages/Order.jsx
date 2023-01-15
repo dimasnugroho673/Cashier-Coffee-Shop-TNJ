@@ -8,7 +8,7 @@ const Order = (menus) => {
     const [menusData, setMenusData] = useState(menus)
     const [filtertedData, setFiltertedData] = useState(menus.menus)
     const [orderMenuModal, setOrderMenuModal] = useState([])
-    const [cartModal, setCartModal] = useState([])
+    const [cartModal, setCartModal] = useState(false)
     const [quantityCount, setQuantityCount] = useState(1)
     const [menuTmp, setMenuTmp] = useState({})
     const [orderedMenus, setOrderedMenus] = useState([])
@@ -35,10 +35,6 @@ const Order = (menus) => {
             let data = JSON.parse(params.ordered_menus)
 
             for (let i = 0; i < data.length; i++) {
-                // setOrderedMenus([ ...orderedMenus, data[i]])
-                // console.log('data: ' + i)
-                // orderedMenus.push(data[0])
-
                 orderedMenus.push(data[i])
             }
 
@@ -51,18 +47,40 @@ const Order = (menus) => {
             return "Leave this page ?";
         }
 
-        if (document.getElementById('input-search-mobile') == null) {
-            const input = document.createElement('input');
+        if (document.getElementById('input-search-mobile') == null && document.getElementById('input-group-search-mobile') == null) {
+            // const input = document.createElement('input');
 
-            input.className = 'form-control mt-3 mb-2';
-            input.id = 'input-search-mobile'
-            input.placeholder = "Cari menu..."
-    
+            // input.className = 'form-control mt-3 mb-2';
+            // input.id = 'input-search-mobile'
+            // input.placeholder = "Cari menu..."
+
+            const input = `
+            <div class="input-group mt-3 mb-2" id="input-group-search-mobile">
+                                    <input class="form-control border rounded-pill border-primary-custom shadow-sm" placeholder="Cari menu apa...?" id="input-search-mobile" />
+                                    <span class="input-group-append">
+                                        <button class="btn rounded-pill ms-n5" type="button" style={{ width: "50px" }}>
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search text-muted" width="20" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                                <circle cx="10" cy="10" r="7"></circle>
+                                                <line x1="21" y1="21" x2="15" y2="15"></line>
+                                            </svg>
+                                        </button>
+                                    </span>
+                                </div>
+            `
+
             const navbarContainer = document.getElementById('navbar-container')
-            navbarContainer.append(input)
+            navbarContainer.innerHTML += input
         }
 
         handleOnSearchTyping()
+
+        return () => {
+            const input = document.getElementById('input-search-mobile')
+            const group = document.getElementById('input-group-search-mobile')
+            group.remove()
+            input.remove()
+        }
     }, [])
 
     const handleOnSearchTyping = () => {
@@ -79,14 +97,25 @@ const Order = (menus) => {
         })
     }
 
-
     const handleSelectMenu = (menu) => {
+
+        if (menu.status == 0) {
+            // alert("Menu ini sedang tidak tersedia")
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Menu ini sedang tidak tersedia!',
+                confirmButtonColor: '#4A374B',
+            })
+
+            return
+        }
 
         orderMenuModal.toggle()
 
         document.getElementsByClassName('modal-title')[0].innerHTML = menu.name
 
-        setMenuTmp({ ...menuTmp, name_customer: `Customer ${quantityCount}`, quantity: quantityCount, menu_id: menu.id, menu_name: menu.name, price: menu.price })
+        setMenuTmp({ ...menuTmp, name_customer: `Customer ${quantityCount}`, quantity: quantityCount, menu_id: menu.id, menu_name: menu.name, price: menu.price, category_id: menu.category.id, category_name: menu.category.name })
     }
 
     const handleCancelSelectMenu = () => {
@@ -105,7 +134,9 @@ const Order = (menus) => {
             quantity: quantityCount,
             menu_id: menuTmp.menu_id,
             menu_name: menuTmp.menu_name,
-            price: menuTmp.price
+            price: menuTmp.price,
+            category_id: menuTmp.category_id,
+            category_name: menuTmp.category_name
         }
         ])
 
@@ -175,15 +206,25 @@ const Order = (menus) => {
 
                         <div className="row mt-5">
                             <div className="col-md-6 offset-md-3">
-                                <input type="text" className="form-control mb-4" id="input-search-desktop" placeholder="Cari menu..." />
+                                <div class="input-group">
+                                    <input class="form-control border rounded-pill border-primary-custom shadow mb-5" placeholder="Cari menu apa...?" id="input-search-desktop" />
+                                    <span class="input-group-append">
+                                        <button class="btn rounded-pill ms-n5" type="button" style={{ width: "50px" }}>
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search text-muted" width="20" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                                <circle cx="10" cy="10" r="7"></circle>
+                                                <line x1="21" y1="21" x2="15" y2="15"></line>
+                                            </svg>
+                                        </button>
+                                    </span>
+                                </div>
                             </div>
                         </div>
 
-                        <div className="col-md-12 mt-5">
-                            <table class="table" id="menuFrontendTable">
+                        <div className="col-md-12">
+                            <table class="table" id="menuFrontendTable" style={{ marginTop: '10px', marginBottom: '50px' }}>
                                 <thead>
                                     <tr>
-                                        <th>No</th>
                                         <th>Nama</th>
                                         <th>Harga</th>
                                     </tr>
@@ -191,9 +232,8 @@ const Order = (menus) => {
                                 <tbody>
                                     {filtertedData.map((menu, index) => (
                                         <tr key={menu.id} onClick={() => handleSelectMenu(menu)}>
-                                            <td>{index + 1}</td>
-                                            <td>{menu.name}</td>
-                                            <td>{rupiahFormatter(menu.price)}</td>
+                                            <td className={menu.status == 0 ? "text-muted text-decoration-line-through" : ""}>{menu.name}</td>
+                                            <td className={menu.status == 0 ? "text-muted text-decoration-line-through" : ""}>{rupiahFormatter(menu.price)}</td>
                                         </tr>
                                     ))}
                                 </tbody>
@@ -203,11 +243,11 @@ const Order = (menus) => {
                                 <div class="modal-dialog modal-dialog-centered">
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                            <h5 class="modal-title">Modal title</h5>
+                                            <h5 class="modal-title text-primary-darken-custom" style={{ fontWeight: 600 }}>Modal title</h5>
                                         </div>
                                         <div class="modal-body">
                                             <div className="form-group">
-                                                <label htmlFor="">Quantity</label>
+                                                <label htmlFor="">Jumlah</label>
                                                 <div class="input-group mt-2 mb-3">
                                                     <button class="btn btn-outline-secondary" type="button" id="button-addon2" onClick={() => setQuantityCount(quantityCount == 1 ? 1 : quantityCount - 1)}>-</button>
                                                     <input type="text" class="form-control" value={quantityCount} />
@@ -217,8 +257,8 @@ const Order = (menus) => {
 
                                         </div>
                                         <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" onClick={() => handleCancelSelectMenu()} >Batal</button>
-                                            <button type="button" class="btn btn-danger" onClick={() => addToOrderedMenus()}>Tambahkan</button>
+                                            <button type="button" class="btn btn-outline-secondary" onClick={() => handleCancelSelectMenu()} >Batal</button>
+                                            <button type="button" class="btn btn-primary btn-primary-custom shadow-sm" onClick={() => addToOrderedMenus()}>Tambahkan</button>
                                         </div>
                                     </div>
                                 </div>
@@ -228,16 +268,28 @@ const Order = (menus) => {
                 </div>
 
                 <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-bottom ">
-                    <div class="container-fluid">
-                        <a class="navbar-brand" href="#">Pesanan {orderedMenus.length}</a>
-                        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarFooterToggler" aria-controls="navbarFooterToggler" aria-expanded="false" aria-label="Toggle navigation">
-                            <span class="navbar-toggler-icon"></span>
+                    <div class="container">
+                        <a class="navbar-brand" href="#">Pesanan</a>
+
+                        <button className="btn btn-primary btn-primary-custom shadow-sm" onClick={() => cartModal.show()}>
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-shopping-cart me-2" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                <circle cx="6" cy="19" r="2"></circle>
+                                <circle cx="17" cy="19" r="2"></circle>
+                                <path d="M17 17h-11v-14h-2"></path>
+                                <path d="M6 5l14 1l-1 7h-13"></path>
+                            </svg>
+
+                            Keranjang <span class="ms-2 badge text-primary-custom bg-white rounded-pill">{orderedMenus.length}</span>
                         </button>
-                        <div class="collapse navbar-collapse" id="navbarFooterToggler">
+                        {/* <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarFooterToggler" aria-controls="navbarFooterToggler" aria-expanded="false" aria-label="Toggle navigation">
+                            <span class="navbar-toggler-icon"></span>
+                        </button> */}
+                        {/* <div class="collapse navbar-collapse" id="navbarFooterToggler">
                             <div class="navbar-nav">
                                 <a class="nav-link" href="#" tabindex="-1" onClick={() => cartModal.show()}>Keranjang</a>
                             </div>
-                        </div>
+                        </div> */}
                     </div>
                 </nav>
 
@@ -245,45 +297,69 @@ const Order = (menus) => {
                     <div class="modal-dialog modal-fullscreen">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title">Keranjang</h5>
+                                <h5 class="modal-title">Keranjang
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-shopping-cart ms-1" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                        <circle cx="6" cy="19" r="2"></circle>
+                                        <circle cx="17" cy="19" r="2"></circle>
+                                        <path d="M17 17h-11v-14h-2"></path>
+                                        <path d="M6 5l14 1l-1 7h-13"></path>
+                                    </svg>
+                                </h5>
                                 <button type="button" class="btn-close" onClick={() => cartModal.hide()}></button>
                             </div>
                             <div class="modal-body">
                                 {orderedMenus.map((menu, index) => (
-                                    <div class="card mb-3">
+                                    <div class="card mb-3 shadow-sm">
                                         <div class="card-body">
                                             <div className="row">
                                                 <div className="col-9">
-                                                    {menu.menu_name} <span class="badge bg-secondary">{menu.quantity}</span> {rupiahFormatter(menu.price)} x {menu.quantity} -> {rupiahFormatter(menu.price * menu.quantity)}
+                                                    <p><strong>{menu.menu_name}</strong></p>
+                                                    <p>{rupiahFormatter(menu.price)} x {menu.quantity}  pcs -> {rupiahFormatter(menu.price * menu.quantity)}</p>
                                                 </div>
-                                                <div className="col-3">
-                                                    <a href="javascript: void(0)" className="text-danger" onClick={() => removeFromOrderedMenus(menu)}>Hapus</a>
+                                                <div className="col-3 text-end">
+                                                    <a href="javascript: void(0)" className="btn btn-outline-danger" onClick={() => removeFromOrderedMenus(menu)}><svg xmlns="http://www.w3.org/2000/svg" class="m-0 icon icon-tabler icon-tabler-trash-x" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                                        <path d="M4 7h16"></path>
+                                                        <path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12"></path>
+                                                        <path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3"></path>
+                                                        <path d="M10 12l4 4m0 -4l-4 4"></path>
+                                                    </svg></a>
                                                 </div>
                                             </div>
 
                                         </div>
                                         <div className="card-footer">
-
                                             <div class="input-group mb-3">
                                                 <button class="btn btn-outline-secondary" type="button" id="button-addon2" onClick={() => decreaseQuantityOnOrderedMenu(menu)}>-</button>
-                                                <input type="text" class="form-control" value={menu.quantity} />
+                                                <input type="text" class="form-control" value={menu.quantity} style={{ maxWidth: '80px' }} />
                                                 <button class="btn btn-outline-secondary" type="button" id="button-addon2" onClick={() => increaseQuantityOnOrderedMenu(menu)}>+</button>
                                             </div>
                                         </div>
                                     </div>
                                 ))}
                             </div>
-                            <div class="modal-footer">
-                                <h6>Total harga: {calculateTotalPrice()}</h6>
-                                <button type="button" class="btn btn-secondary" onClick={() => cartModal.hide()}>Close</button>
-                                {/* <InertiaLink
-                          tabIndex="-1" onClick={() => cartModal.hide()}
-                          href={'/checkout'}
-                          className="flex items-center px-4"
-                        >
-                        Checkout
-                        </InertiaLink> */}
-                                <Link className="btn btn-danger" onClick={() => cartModal.hide()} href={`/frontend/checkout?ordered_menus=${JSON.stringify(orderedMenus)}`}>Checkout</Link>
+                            <div class="modal-footer bg-body-tertiary shadow">
+                                <h5 className="modal-title me-auto">Total harga: {calculateTotalPrice()}</h5>
+                                <button type="button" class="btn btn-outline-secondary" onClick={() => cartModal.hide()}>
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-circle-chevron-left me-2" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                        <path d="M13 15l-3 -3l3 -3"></path>
+                                        <path d="M21 12a9 9 0 1 0 -18 0a9 9 0 0 0 18 0z"></path>
+                                    </svg>
+
+                                    Kembali
+                                </button>
+
+                                <Link className={"btn btn-primary btn-primary-custom" + (orderedMenus.length <= 0 ? " disabled" : "")} onClick={() => cartModal.hide()} href={`/frontend/checkout?ordered_menus=${JSON.stringify(orderedMenus)}`}>
+                                    Checkout
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-cash ms-2" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                        <rect x="7" y="9" width="14" height="10" rx="2"></rect>
+                                        <circle cx="14" cy="14" r="2"></circle>
+                                        <path d="M17 9v-2a2 2 0 0 0 -2 -2h-10a2 2 0 0 0 -2 2v6a2 2 0 0 0 2 2h2"></path>
+                                    </svg>
+                                </Link>
                                 {/* <Link className="btn btn-danger" onClick={() => cartModal.hide()} href={`/checkout`} method="get" data={{ ordered_menus: `${JSON.stringify(orderedMenus)}` }}>Checkout</Link> */}
                             </div>
                         </div>

@@ -2,23 +2,6 @@
     
 }
 
-@media (max-width: 576px) { 
-    #input-search-desktop {
-        display: none;
-    }
-}
-
-@media (min-width: 992px) { 
-    #input-search-mobile {
-        display: none;
-    }
- }
-
- #menuFrontendTable tr:hover {
-    background-color: rgb(213, 213, 213);
-    cursor: pointer;
- }
-
  .card-recap-file-touchable:hover {
     background-color: rgb(231, 231, 231);
     cursor: pointer;

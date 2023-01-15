@@ -19,4 +19,9 @@ class Menu extends Model
     public function categories() {
         return $this->belongsTo(Categories::class,'category_id','id');
     }
+
+    // new
+    public function category() {
+        return $this->belongsTo(Categories::class, 'category_id', 'id');
+    }
 }
