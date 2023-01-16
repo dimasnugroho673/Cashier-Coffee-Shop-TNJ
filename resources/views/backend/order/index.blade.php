@@ -54,6 +54,7 @@
                                     <th>{{ __('Kasir') }}</th>
                                     <th>{{ __('No. customer') }}</th>
                                     <th>{{ __('Total harga') }}</th>
+                                    <th>{{ __('Status pembayaran') }}</th>
                                     <th>{{ __('Tanggal') }}</th>
                                     <th>{{ __('Aksi') }}</th>
                                 </tr>
@@ -85,11 +86,47 @@
     </div>
 </div>
 
+<!-- Update Payment Modal -->
+<div class="modal fade" id="paymentModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <form id="form-update-payment">
+                <div class="modal-header">
+                    <h5 class="modal-title">Update pembayaran</h5>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group mb-3">
+                        <label>No. Order</label>
+                        <input type="text" id="order_number" class="form-control" readonly>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="status_payment">Status pembayaran</label>
+                        <select name="status_payment" id="status_payment" class="form-control" required>
+                            <option selected>Pilih status pembayaran</option>
+                            <option value="complete">Selesai</option>
+                            <option value="waiting">Menunggu</option>
+                            <option value="canceled">Pesanan dibatalkan</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Batal</button>
+                    <button type="submit" class="btn btn-primary">Update pembayaran</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
 <script>
     $(document).ready(function() {
+        let token = $("meta[name='csrf-token']").attr("content")
+        let tmpID = ''
         showData(getQueryString().date_from == undefined ? '' : getQueryString().date_from, getQueryString().date_to == undefined ? '' : getQueryString().date_to)
 
         let invoiceModal = new bootstrap.Modal(document.getElementById('invoiceModal'), {})
+        let paymentModal = new bootstrap.Modal(document.getElementById('paymentModal'), {})
 
         function showData(dateFrom, dateTo) {
             $('#ordersTable').DataTable({
@@ -116,6 +153,9 @@
                     data: 'total_price',
                     name: 'total_price'
                 }, {
+                    data: 'status_payment',
+                    name: 'status_payment'
+                }, {
                     data: 'created_at',
                     name: 'created_at'
                 }, {
@@ -138,6 +178,46 @@
                     </div>
                 </div>
             `)
+        })
+
+        $('#ordersTable').on('click', '.btn-modal-update-payment', function() {
+            let id = $(this).data("id")
+            let data = $(this).data("detail")
+
+            tmpID = id
+            paymentModal.show()
+
+            $('#order_number').val(data.order_number)
+            $('#status_payment').val(data.status_payment)
+        })
+
+        $('#form-update-payment').on('submit', function(e) {
+            e.preventDefault()
+
+            $.ajax({
+                url: "{{ url('/backend/finance/order/payment') }}" + "/" + tmpID,
+                data: {
+                    "_token": token,
+                    "_method": 'PUT',
+                    status_payment: $('#status_payment').val(),
+                },
+                type: 'POST',
+                dataType: "JSON",
+                success: function(response) {
+                    if (response.status) {
+                        Toast.fire({
+                            icon: 'success',
+                            title: 'Data berhasil dihapus'
+                        })
+                    }
+
+                    paymentModal.hide()
+                    $('#ordersTable').DataTable().ajax.reload()
+                },
+                error: function(response) {
+                    console.log(response)
+                }
+            })
         })
 
         $('#form-filter').on('submit', function(e) {

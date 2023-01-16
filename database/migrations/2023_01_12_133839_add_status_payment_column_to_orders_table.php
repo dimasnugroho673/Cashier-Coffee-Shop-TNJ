@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('orders', function (Blueprint $table) {
-            $table->enum('status_payment', ['complete', 'waiting'])->default('waiting')->after('desc');
+            $table->enum('status_payment', ['complete', 'waiting', 'canceled'])->default('waiting')->after('desc');
         });
     }
 
