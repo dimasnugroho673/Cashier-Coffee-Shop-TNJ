@@ -95,6 +95,11 @@
     color: grey;
 }
 
+.navbar-nav .nav-item .active {
+    font-weight: 600;
+    color: var(--bs-color-primary);
+}
+
 .btn-primary {
     color: var(--bs-color-secondary) !important;
     border-color: var(--bs-color-primary) !important;

@@ -43,9 +43,9 @@ const Order = (menus) => {
 
         }
 
-        window.onbeforeunload = function () {
-            return "Leave this page ?";
-        }
+        // window.onbeforeunload = function () {
+        //     return "Leave this page ?";
+        // }
 
         if (document.getElementById('input-search-mobile') == null && document.getElementById('input-group-search-mobile') == null) {
             // const input = document.createElement('input');
@@ -267,9 +267,9 @@ const Order = (menus) => {
                     </div>
                 </div>
 
-                <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-bottom ">
+                <nav class="navbar navbar-expand-lg navbar-light bg-dark fixed-bottom shadow-lg">
                     <div class="container">
-                        <a class="navbar-brand" href="#">Pesanan</a>
+                        <a class="navbar-brand modal-title text-white" href="#">Pesanan</a>
 
                         <button className="btn btn-primary btn-primary-custom shadow-sm" onClick={() => cartModal.show()}>
                             <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-shopping-cart me-2" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
