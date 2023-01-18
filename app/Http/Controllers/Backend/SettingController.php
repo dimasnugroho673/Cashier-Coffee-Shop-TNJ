@@ -36,17 +36,7 @@ class SettingController extends Controller
         return back();
     }
 
-    public function updateModal(Request $request)
-    {
-        $request->validate([
-            'modal' => 'required|numeric',
-        ]);
-        $this->setting = Settings::first();
-        $this->setting->update([
-            'modal' => $request->modal,
-        ]);
-        return back();
-    }
+
 
     public function updateLogo(Request $request){
         $request->validate([

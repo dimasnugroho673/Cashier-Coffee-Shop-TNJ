@@ -79,6 +79,7 @@ Route::get('/', function()
 
     Route::group(['prefix' => 'backend', 'middleware'=> ['check.role.admin']], function(){
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('backend.dasboard');
+        Route::get('/dashboard/purchases',[DashboardController::class,'ChartPengeluaran'])->name('backend.dashboard.chart.purchases');
         Route::get('/menu', [MenuController::class, 'index'])->name('backend.dasboard');
 
         // Route::resource('/kategori',CategoryController::class)->except('show');

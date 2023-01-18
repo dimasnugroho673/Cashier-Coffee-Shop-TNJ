@@ -92,7 +92,16 @@ class IncomesController extends Controller
      */
     public function show($id)
     {
-        //
+        $income = Income::with('typeincome')->find($id)->get();
+
+        $response = [
+            "message" => "",
+            "status" => true,
+            "data" => $income
+        ];
+
+        return Response::json($response, 201);
+
     }
 
     /**

@@ -8,8 +8,13 @@ use App\Models\Income;
 use App\Models\Purchase;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+// use Flasher\Laravel\Http\Response;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Response;
 
+// use Termwind\Components\Raw;
+// use DB
 class DashboardController extends Controller
 {
 
@@ -18,7 +23,6 @@ class DashboardController extends Controller
     {
         $data['title'] = 'Dashboard';
         $now = Carbon::now();
-
 
         //orderan
         $data['OrderWait'] = Order::whereDate('created_at','=',$now)->where('status_payment','waiting')->count();
@@ -33,7 +37,7 @@ class DashboardController extends Controller
 
         //pemasukan
         $nowincome = Income::whereDate('created_at','=',$now)->sum('price');
-        $nowOrder = Order::whereDate('created_at','=',$now)->where('status_payment','success')->sum('total_price');
+        $nowOrder = Order::whereDate('created_at','=',$now)->where('status_payment','compelete')->sum('total_price');
         $data['AllIncomeNow'] ='Rp. ' . number_format($nowincome + $nowOrder,2,',','.') ;
         //pemasukan
 
@@ -47,14 +51,42 @@ class DashboardController extends Controller
         $orderAll = Order::where('status_payment','success')->sum('total_price');
         $data['SaldoTotal'] = 'Rp. ' . number_format($incomeAll + $orderAll - $purchaseAll,2,',','.');
         //total saldo
-        // $data['income_total'] = 'Rp. ' . number_format($totalPemasukan,2,',','.');
-        // $data['total_modal'] = 'Rp. ' . number_format($modal,2,',','.');
-        // $data['order'] = 'Rp. ' . number_format($total_order,2,',','.');
 
-        // //perhari
-        // $data['now_purchase'] ='Rp. ' . number_format($nowPurchase,2,',','.'); ;
-        // $data['now_order'] ='Rp. ' . number_format($nowOrder,2,',','.'); ;
+
+
+        $data['purchases'] = $this->ChartPengeluaran();
+        $data['incomes'] = $this->ChartMasuk();
+
 
         return view('backend.dashboard.index', $data);
     }
+
+    private function ChartPengeluaran ()
+    {
+        $purchases = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        $rawPurchases = Purchase::whereYear('created_at', date('Y', time()))->get();
+        foreach ($rawPurchases as $purchase) {
+            $currentMonth = (int)date('m', strtotime($purchase->date));
+            $purchases[$currentMonth - 1] += $purchase->price;
+        }
+        return $purchases;
+    }
+
+    private function ChartMasuk ()
+    {
+        $incomes = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        $rawIncomes = Income::whereYear('created_at', date('Y', time()))->get();
+        $rawOrders = Order::whereYear('created_at', date('Y', time()))->get();
+        foreach ($rawIncomes as $income) {
+            $currentMonth = (int)date('m', strtotime($income->date));
+            $incomes[$currentMonth - 1] += $income->price;
+        }
+        foreach ($rawOrders as $order) {
+            $currentMonth = (int)date('m', strtotime($order->created_at));
+            $incomes[$currentMonth - 1] += $order->total_price;
+        }
+
+    return $incomes;
+}
+
 }

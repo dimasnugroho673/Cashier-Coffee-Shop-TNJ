@@ -116,30 +116,51 @@
     </div>
 
     <div class="my-5">
-        ini bagian grafik masuk dan keluar bisa di lihat secara sehari, seminggu, sebulan, 3 bulan, 6 bulan, 9bulan, 12bulan
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <canvas id="purchasesChart" height="100px"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 
 <div class="mt-3">
-    <div class="card">
 
-        <div class="card-body">
-            <div class=" table-responsive">
-                <table class=" table table-bordered">
-                    <thead>
-                        <tr>
-                            <th>No</th>
-                            <th>No order</th>
-                            <th>Kasir</th>
-                            <th>No.Customer</th>
-                            <th>Total harga</th>
-                            <th>tanggal status</th>
-                        </tr>
-                    </thead>
-                </table>
-            </div>
-        </div>
-    </div>
 </div>
 
 </div>
+@push('scripts')
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        const purchasesChartCtx = document.getElementById('purchasesChart');
+        new Chart(purchasesChartCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dec'],
+                datasets: [{
+                label: 'Pengeluaran',
+                data: [{{ implode(',', $purchases) }}],
+                borderWidth: 1
+                },{
+                label: 'Pemasukan',
+                data: [{{ implode(',', $incomes) }}],
+                borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>
+@endpush
 @endsection
