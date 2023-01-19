@@ -87,7 +87,7 @@ const Checkout = () => {
               <a class="nav-link nav-link-filter" data-filter-label="minuman" href="#">Minuman</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link nav-link-filter" data-filter-label="">Lain-lain</a>
+              <a class="nav-link nav-link-filter" data-filter-label="lain-lain">Lain-lain</a>
             </li>
           </ul>`
 
@@ -98,8 +98,13 @@ const Checkout = () => {
 
     const handleShowData = (label) => {
         if (label != 'all') {
-            let dataNew = data.filter(menu => menu.category_name.toLowerCase().includes(label.toLowerCase()))
-            setFilteredMenus(dataNew)
+            if (label != 'makanan' || label != 'minuman') {
+                let dataNew = data.filter(menu => menu.category_name.toLowerCase().includes(label.toLowerCase()))
+                setFilteredMenus(dataNew)
+            } else {
+                let dataNew = data.filter(menu => menu.category_name.toLowerCase().includes("lain-lain".toLowerCase()))
+                setFilteredMenus(dataNew)
+            }
         } else {
             setFilteredMenus(data)
         }
@@ -107,23 +112,26 @@ const Checkout = () => {
 
     const attemptOrderToPaymentData = () => {
         const dataTotal = {
-            table_number: takeaway ? '-' : document.getElementById('table_number').value,
+            table_number: takeaway ? 'takeaway' : document.getElementById('table_number').value,
             ordered_menus: data,
-            desc: "",
+            desc: document.getElementById('desc').value,
             cashier_name: userLoggedIn.name,
             total_price: calculateTotalPrice()
         }
 
-        // console.log(dataTotal)
+        console.log(dataTotal)
 
         axios.post('http://127.0.0.1:8000/api/order', dataTotal)
             .then(function (response) {
+                descriptionModal.hide()
+
                 Swal.fire({
                     icon: 'success',
                     title: 'Pemesanan berhasil',
                     text: 'Menu berhasil dipesan',
                     showConfirmButton: false,
                 })
+                
                 Inertia.visit('/frontend/order', { method: 'get' })
                 // setTimeout(() => {
 
