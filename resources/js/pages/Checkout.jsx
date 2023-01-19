@@ -172,24 +172,6 @@ const Checkout = () => {
                             </ol>
                         ))}
 
-                        {/* <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-bottom ">
-                            <div class="container">
-
-
-                                <button className="btn btn-primary btn-primary-custom shadow" onClick={() => attemptOrderToPaymentData()}>
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-shopping-cart me-2" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                        <circle cx="6" cy="19" r="2"></circle>
-                                        <circle cx="17" cy="19" r="2"></circle>
-                                        <path d="M17 17h-11v-14h-2"></path>
-                                        <path d="M6 5l14 1l-1 7h-13"></path>
-                                    </svg>
-
-                                    Bayar
-                                </button>
-                            </div>
-                        </nav> */}
-
                         <nav class="fixed-bottom bg-light p-2">
                             <div class="container">
                                 <div className="row align-items-center mt-1">
@@ -231,11 +213,6 @@ const Checkout = () => {
 
                             </div>
                         </nav>
-
-                        {/* <div className="mt-5">
-                            <Link href={`/frontend/order?ordered_menus=${JSON.stringify(data)}`}>Back</Link>
-                            <button className='btn btn-danger ms-4' onClick={() => attemptOrderToPaymentData()}>Bayar: {calculateTotalPrice()}</button>
-                        </div> */}
                     </div>
                 </div>
             </div>

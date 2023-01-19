@@ -274,14 +274,6 @@ const Order = (menus) => {
 
                             Keranjang <span class="ms-2 badge text-primary-custom bg-white rounded-pill">{orderedMenus.length}</span>
                         </button>
-                        {/* <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarFooterToggler" aria-controls="navbarFooterToggler" aria-expanded="false" aria-label="Toggle navigation">
-                            <span class="navbar-toggler-icon"></span>
-                        </button> */}
-                        {/* <div class="collapse navbar-collapse" id="navbarFooterToggler">
-                            <div class="navbar-nav">
-                                <a class="nav-link" href="#" tabindex="-1" onClick={() => cartModal.show()}>Keranjang</a>
-                            </div>
-                        </div> */}
                     </div>
                 </nav>
 
@@ -301,13 +293,17 @@ const Order = (menus) => {
                                 <button type="button" class="btn-close" onClick={() => cartModal.hide()}></button>
                             </div>
                             <div class="modal-body">
+                                {orderedMenus.length <= 0 && (
+                                    <div className="text-muted text-center" style={{ marginTop: '50px' }}>Keranjang kosong</div>
+                                )}
+                                
                                 {orderedMenus.map((menu, index) => (
                                     <div class="card mb-3 shadow-sm">
                                         <div class="card-body">
                                             <div className="row">
                                                 <div className="col-9">
                                                     <p><strong>{menu.menu_name}</strong></p>
-                                                    <p>{rupiahFormatter(menu.price)} x {menu.quantity}  pcs -> {rupiahFormatter(menu.price * menu.quantity)}</p>
+                                                    <p className="text-muted" style={{ fontSize: '15px' }}>{rupiahFormatter(menu.price)} x {menu.quantity}  pcs -> {rupiahFormatter(menu.price * menu.quantity)}</p>
                                                 </div>
                                                 <div className="col-3 text-end">
                                                     <a href="javascript: void(0)" className="btn btn-outline-danger" onClick={() => removeFromOrderedMenus(menu)}><svg xmlns="http://www.w3.org/2000/svg" class="m-0 icon icon-tabler icon-tabler-trash-x" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -321,19 +317,21 @@ const Order = (menus) => {
                                             </div>
 
                                         </div>
-                                        <div className="card-footer">
+                                        <div className="card-footer pt-0 pb-0">
                                             <div class="input-group mb-3">
                                                 <button class="btn btn-outline-secondary" type="button" id="button-addon2" onClick={() => decreaseQuantityOnOrderedMenu(menu)}>-</button>
-                                                <input type="text" class="form-control" value={menu.quantity} style={{ maxWidth: '80px' }} />
+                                                <input type="text" class="form-control" value={menu.quantity} style={{ maxWidth: '65px' }} />
                                                 <button class="btn btn-outline-secondary" type="button" id="button-addon2" onClick={() => increaseQuantityOnOrderedMenu(menu)}>+</button>
                                             </div>
                                         </div>
                                     </div>
                                 ))}
                             </div>
-                            <div class="modal-footer bg-body-tertiary shadow">
-                                <h5 className="modal-title me-auto">Total harga: {calculateTotalPrice()}</h5>
-                                <button type="button" class="btn btn-outline-secondary" onClick={() => cartModal.hide()}>
+                            <div class="modal-footer bg-body-tertiary shadow border">
+
+                                <h5 className="modal-title me-auto">{calculateTotalPrice()}</h5>
+
+                                {/* <button type="button" class="btn btn-outline-secondary" onClick={() => cartModal.hide()}>
                                     <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-circle-chevron-left me-2" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                         <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                                         <path d="M13 15l-3 -3l3 -3"></path>
@@ -341,7 +339,7 @@ const Order = (menus) => {
                                     </svg>
 
                                     Kembali
-                                </button>
+                                </button> */}
 
                                 <Link className={"btn btn-primary btn-primary-custom" + (orderedMenus.length <= 0 ? " disabled" : "")} onClick={() => cartModal.hide()} href={`/frontend/checkout?ordered_menus=${JSON.stringify(orderedMenus)}`}>
                                     Checkout
@@ -352,7 +350,6 @@ const Order = (menus) => {
                                         <path d="M17 9v-2a2 2 0 0 0 -2 -2h-10a2 2 0 0 0 -2 2v6a2 2 0 0 0 2 2h2"></path>
                                     </svg>
                                 </Link>
-                                {/* <Link className="btn btn-danger" onClick={() => cartModal.hide()} href={`/checkout`} method="get" data={{ ordered_menus: `${JSON.stringify(orderedMenus)}` }}>Checkout</Link> */}
                             </div>
                         </div>
                     </div>
