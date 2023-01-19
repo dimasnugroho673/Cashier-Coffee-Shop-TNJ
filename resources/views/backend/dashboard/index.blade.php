@@ -120,7 +120,7 @@
             <div class="col-lg-12">
                 <div class="card">
                     <div class="card-body">
-                        <div class="table-responsive">
+                        <div class=" table-responsive">
                             <canvas id="purchasesChart" height="100px"></canvas>
                         </div>
                     </div>
