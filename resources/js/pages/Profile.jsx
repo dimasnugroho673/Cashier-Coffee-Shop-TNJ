@@ -5,6 +5,7 @@ import Layout from "../layouts/app";
 import axios from "axios";
 import Pagination from '@/Components/Pagination';
 import parse from 'html-react-parser';
+import Toast from "../components/Toast";
 
 const Profile = () => {
 
@@ -136,6 +137,11 @@ const Profile = () => {
             .then((response) => {
                 fetchProfile()
                 editProfileModal.hide()
+                
+                Toast.fire({
+                    icon: 'success',
+                    title: 'Pembayaran berhasil diubah'
+                })
             })
             .catch((error) => {
                 console.log(error)
@@ -145,7 +151,7 @@ const Profile = () => {
     return (
         <Fragment>
             <div className="container">
-                <div className="row my-5">
+                <div className="row" style={{ marginTop: '65px' }}>
                     <div className="col-md-6 offset-md-3">
                         <div class="d-flex mt-4">
                             <div class="flex-shrink-0">
@@ -157,7 +163,7 @@ const Profile = () => {
                                 <small className="text-muted">Joined since {profile.joined_at}</small>
                             </div>
                             <div class="flex-grow-1 ms-3">
-                                <button className="btn btn-outline-primary btn-sm" data-bs-toggle="modal" data-bs-target="#editProfileModal" onClick={() => setFieldEdit()}>Edit
+                                <button className="btn btn-outline-primary-custom btn-sm" data-bs-toggle="modal" data-bs-target="#editProfileModal" onClick={() => setFieldEdit()}>Edit
                                     <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-pencil ms-1" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                         <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                                         <path d="M4 20h4l10.5 -10.5a1.5 1.5 0 0 0 -4 -4l-10.5 10.5v4"></path>
@@ -237,7 +243,7 @@ const Profile = () => {
 
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+                                <button type="button" class="btn btn-outliine-secondary" onClick={() => editProfileModal.hide()}>Batal</button>
                                 <button type="submit" class="btn btn-primary">Ubah</button>
                             </div>
                         </form>

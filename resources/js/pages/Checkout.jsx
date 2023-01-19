@@ -5,6 +5,7 @@ import axios from 'axios';
 import { toNumber } from 'lodash';
 import { Fragment, useEffect, useState } from "react"
 import Layout from "../layouts/app"
+import { rupiahFormatter } from "../Utils/Helper";
 
 const Checkout = () => {
     // let data = JSON.parse(orderedMenus.orderedMenus)
@@ -31,7 +32,7 @@ const Checkout = () => {
         }
 
         return () => {
-            const nav = document.getElementById('nav-menu-categories')
+            const nav = document.getElementById('nav-filter-mobile')
             nav.remove()
         }
     }, [])
@@ -67,7 +68,7 @@ const Checkout = () => {
     }
 
     const appendNavCategory = () => {
-        if (document.getElementById('nav-menu-categories') == null) {
+        if (document.getElementById('nav-filter-mobile') == null) {
             const nav = `<ul class="nav nav-pills nav-fill m-2 w-100" id="nav-filter-mobile">
             <li class="nav-item">
               <a class="nav-link nav-link-filter" data-filter-label="all" aria-current="page" href="#">Semua</a>
@@ -95,8 +96,6 @@ const Checkout = () => {
         } else {
             setFilteredMenus(data)
         }
-
-
     }
 
     const attemptOrderToPaymentData = () => {
@@ -116,11 +115,12 @@ const Checkout = () => {
                     icon: 'success',
                     title: 'Pemesanan berhasil',
                     text: 'Menu berhasil dipesan',
+                    showConfirmButton: false,
                 })
+                Inertia.visit('/frontend/order', { method: 'get' })
+                // setTimeout(() => {
 
-                setTimeout(() => {
-                    Inertia.visit('/frontend/order', { method: 'get' })
-                }, 1000)
+                // }, 1000)
 
             })
             .catch(function (error) {
@@ -136,13 +136,6 @@ const Checkout = () => {
         })
 
         return total
-    }
-
-    const rupiahFormatter = (number) => {
-        return new Intl.NumberFormat("id-ID", {
-            style: "currency",
-            currency: "IDR"
-        }).format(number);
     }
 
     return (
@@ -164,7 +157,27 @@ const Checkout = () => {
                             </ol>
                         ))}
 
+                        {/* <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-bottom ">
+                            <div class="container">
+
+
+                                <button className="btn btn-primary btn-primary-custom shadow" onClick={() => attemptOrderToPaymentData()}>
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-shopping-cart me-2" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                        <circle cx="6" cy="19" r="2"></circle>
+                                        <circle cx="17" cy="19" r="2"></circle>
+                                        <path d="M17 17h-11v-14h-2"></path>
+                                        <path d="M6 5l14 1l-1 7h-13"></path>
+                                    </svg>
+
+                                    Bayar
+                                </button>
+                            </div>
+                        </nav> */}
                         <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-bottom ">
+                            asdasd
+                            <br />
+                            <br />
                             <div class="container">
                                 <a class="navbar-brand modal-title" href="#">{rupiahFormatter(calculateTotalPrice())}</a>
 

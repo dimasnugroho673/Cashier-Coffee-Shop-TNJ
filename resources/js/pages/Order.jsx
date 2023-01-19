@@ -2,6 +2,7 @@ import { toNumber } from "lodash";
 import { InertiaLink, usePage, Link } from '@inertiajs/inertia-react';
 import React, { Fragment, useState, useEffect } from "react";
 import Layout from "../layouts/app";
+import { rupiahFormatter } from "../Utils/Helper";
 
 const Order = (menus) => {
 
@@ -187,15 +188,6 @@ const Order = (menus) => {
         })
 
         setOrderedMenus(increaseQuantity)
-    }
-
-    // const 
-
-    const rupiahFormatter = (number) => {
-        return new Intl.NumberFormat("id-ID", {
-            style: "currency",
-            currency: "IDR"
-        }).format(number);
     }
 
     return (

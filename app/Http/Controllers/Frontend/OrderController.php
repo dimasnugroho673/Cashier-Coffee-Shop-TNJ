@@ -59,7 +59,7 @@ class OrderController extends Controller
 
     public function historyOrder()
     {
-        return Inertia::render('OrderHistory', []);
+        return Inertia::render('OrderHistory');
     }
 
     public function listOrder()
