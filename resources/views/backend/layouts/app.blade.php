@@ -92,9 +92,9 @@
                         <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
                             <div class="dropdown-divider"></div>
                             <a href="{{ route('backend.setting') }}" class="dropdown-item">Settings</a>
-                            <form action="/logout" method="post">
+                            <form action="{{ route('logout') }}" method="POST">
                                 @csrf
-                                <button type="button" class="dropdown-item">Logout</button>
+                                <button type="submit" class="dropdown-item">Logout</button>
                             </form>
                         </div>
                     </div>

@@ -138,6 +138,7 @@ Route::get('/', function()
         Route::get('/finance/recapitulations', [RecapitulationController::class, 'index'])->name('backend.recapitulation.index');
         Route::get('/finance/recapitulations/{type}', [RecapitulationController::class, 'index'])->name('backend.recapitulation.index');
     });
+    // Auth::logout();
 
 
 Route::get('/backend/finance/recapitulation/{type}', [RecapitulationController::class, 'recapAsPdf'])->name('backend.recap.pdf');
