@@ -15,6 +15,7 @@ const OrderHistory = () => {
     const [links, setLinks] = useState([])
     const [orders, setOrders] = useState([])
     const [paymentModal, setPaymentModal] = useState(false)
+    const [orderDetailModal, setOrderDetailModal] = useState(false)
 
     const token = document.getElementsByName('csrf-token')[0].getAttribute('content')
 
@@ -39,6 +40,11 @@ const OrderHistory = () => {
             keyboard: false
         })
         setPaymentModal(paymentModal)
+
+        var orderDetailModal = new bootstrap.Modal(document.getElementById('orderDetailModal'), {
+            keyboard: false
+        })
+        setOrderDetailModal(orderDetailModal)
     }, [])
 
     const paginate = (url) => {
@@ -105,18 +111,59 @@ const OrderHistory = () => {
             "_method": 'PUT',
             status_payment: statusPayment
         })
-        .then(function (response) {
-            resetData()
-            paymentModal.hide()
+            .then(function (response) {
+                resetData()
+                paymentModal.hide()
 
-            Toast.fire({
-                icon: 'success',
-                title: 'Pembayaran berhasil diubah'
+                Toast.fire({
+                    icon: 'success',
+                    title: 'Pembayaran berhasil diubah'
+                })
             })
-        })
-        .catch(function (error) {
-            console.log(error)
-        })
+            .catch(function (error) {
+                console.log(error)
+            })
+    }
+
+    const handleDetailOrder = (order) => {
+        orderDetailModal.show()
+
+        let body = document.getElementById('table-body-detail-order')
+
+        document.getElementById('list-order-number').textContent = order.order_number
+        document.getElementById('list-table-number').textContent = order.table_number == 'takeaway' ? 'Bawa pulang' : order.table_number
+        document.getElementById('list-cashier-name').textContent = order.cashier_name
+        document.getElementById('list-customer-number').textContent = order.customer_number
+        document.getElementById('list-desc').textContent = order.desc
+
+        if (order.status_payment == 'complete') {
+            document.getElementById('list-status-payment').innerHTML = `
+            <span class="badge text-bg-success">Pembayaran selesai</span>`
+        } else if (order.status_payment == 'waiting') {
+            document.getElementById('list-status-payment').innerHTML = `
+            <span class="badge text-bg-warning">Menunggu pembayaran</span>`
+        } else if (order.status_payment == 'canceled') {
+            document.getElementById('list-status-payment').innerHTML = `
+            <span class="badge text-bg-secondary">Pembayaran dibatalkan</span>`
+        }
+
+        document.getElementById('list-total-price').textContent = rupiahFormatter(order.total_price)
+
+        let html = ``
+        let data = order.ordered_menus
+        for (let i = 0; i < data.length; i++) {
+
+            html += `
+                <tr>
+                    <td>${i + 1}</td>
+                    <td>${data[i].menu_name}</td>
+                    <td>${data[i].quantity}</td>
+                    <td>${rupiahFormatter(data[i].price)}</td>
+                </tr>
+            `
+        }
+
+        body.innerHTML = html
     }
 
     if (orders != {}) {
@@ -202,30 +249,43 @@ const OrderHistory = () => {
                                                         <td>{renderStatusPayment(order.status_payment)}</td>
                                                         <td className={(order.status_payment == 'canceled' ? 'text-muted text-decoration-line-through' : '')}>{order.created_at}</td>
                                                         <td>
-                                                            <button type="button" class={"btn btn-outline-dark btn-sm " + (order.status_payment == 'canceled' ? 'disabled' : '')} data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={() => handleInvoicePreview(order.order_number)}>
-                                                                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-file-invoice me-2" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                                                    <path d="M14 3v4a1 1 0 0 0 1 1h4"></path>
-                                                                    <path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z"></path>
-                                                                    <line x1="9" y1="7" x2="10" y2="7"></line>
-                                                                    <line x1="9" y1="13" x2="15" y2="13"></line>
-                                                                    <line x1="13" y1="17" x2="15" y2="17"></line>
-                                                                </svg>
+                                                            <div class="btn-group btn-group-sm" role="group" aria-label="Basic example">
+                                                                <button type="button" className={"btn btn-outline-dark " + (order.status_payment == 'canceled' ? 'disabled' : '')} data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={() => handleInvoicePreview(order.order_number)}>
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-file-invoice me-2" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                                                        <path d="M14 3v4a1 1 0 0 0 1 1h4"></path>
+                                                                        <path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z"></path>
+                                                                        <line x1="9" y1="7" x2="10" y2="7"></line>
+                                                                        <line x1="9" y1="13" x2="15" y2="13"></line>
+                                                                        <line x1="13" y1="17" x2="15" y2="17"></line>
+                                                                    </svg>
+                                                                    Invoice
+                                                                </button>
 
-                                                                Invoice
-                                                            </button>
+                                                                <button type="button" className={"btn btn-outline-dark"} onClick={() => showPaymentModal(order)}>
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-credit-card me-2" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                                                        <rect x="3" y="5" width="18" height="14" rx="3"></rect>
+                                                                        <line x1="3" y1="10" x2="21" y2="10"></line>
+                                                                        <line x1="7" y1="15" x2="7.01" y2="15"></line>
+                                                                        <line x1="11" y1="15" x2="13" y2="15"></line>
+                                                                    </svg>
+                                                                    Pembayaran
+                                                                </button>
 
-                                                            <button type="button" class={"btn btn-outline-dark btn-sm ms-2"} onClick={() => showPaymentModal(order)}>
-                                                                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-credit-card me-2" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                                                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                                                                    <rect x="3" y="5" width="18" height="14" rx="3"></rect>
-                                                                    <line x1="3" y1="10" x2="21" y2="10"></line>
-                                                                    <line x1="7" y1="15" x2="7.01" y2="15"></line>
-                                                                    <line x1="11" y1="15" x2="13" y2="15"></line>
-                                                                </svg>
-
-                                                                Update pembayaran
-                                                            </button>
+                                                                <button type="button" class="btn btn-outline-dark" onClick={() => handleDetailOrder(order)}>
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-list-details me-2" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                                                        <path d="M13 5h8"></path>
+                                                                        <path d="M13 9h5"></path>
+                                                                        <path d="M13 15h8"></path>
+                                                                        <path d="M13 19h5"></path>
+                                                                        <rect x="3" y="4" width="6" height="6" rx="1"></rect>
+                                                                        <rect x="3" y="14" width="6" height="6" rx="1"></rect>
+                                                                    </svg>
+                                                                    Detail
+                                                                </button>
+                                                            </div>
                                                         </td>
                                                     </tr>
                                                 ))}
@@ -257,11 +317,10 @@ const OrderHistory = () => {
                 </div>
 
                 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div class="modal-dialog modal-lg">
+                    <div class="modal-dialog modal-lg modal-dialog-centered">
                         <div class="modal-content">
                             <div class="modal-header">
                                 <h1 class="modal-title fs-5" id="exampleModalLabel">Invoice</h1>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
                                 <embed type="application/pdf" id="embed-pdf-invoice" src="" width="100%" height="600"></embed>
@@ -302,6 +361,103 @@ const OrderHistory = () => {
                                     <button type="submit" class="btn btn-primary">Update pembayaran</button>
                                 </div>
                             </form>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal fade" id="orderDetailModal" tabindex="-1">
+                    <div class="modal-dialog modal-xl modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Detail pesanan</h5>
+                            </div>
+                            <div class="modal-body" id="modal-body-detail-order">
+
+                                <ol class="list-group list-group">
+                                    <li class="list-group-item d-flex justify-content-between align-items-start">
+                                        <div class="ms-2 me-auto">
+                                            <div class="fw-bold mb-1">No order</div>
+                                            <span id="list-order-number" class="font-monospace text-muted"></span>
+                                        </div>
+                                    </li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-start">
+                                        <div class="ms-2 me-auto">
+                                            <div class="fw-bold mb-1">No Meja</div>
+                                            <span id="list-table-number" class="font-monospace text-muted"></span>
+                                        </div>
+                                    </li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-start">
+                                        <div class="ms-2 me-auto">
+                                            <div class="fw-bold mb-1">Nama kasir</div>
+                                            <span id="list-cashier-name" class="text-muted"></span>
+                                        </div>
+                                    </li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-start">
+                                        <div class="ms-2 me-auto">
+                                            <div class="fw-bold mb-1">No customer</div>
+                                            <span id="list-customer-number" class="font-monospace text-muted"></span>
+                                        </div>
+                                    </li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-start">
+                                        <div class="ms-2 me-auto">
+                                            <div class="fw-bold mb-1">Status pembayaran</div>
+                                            <span id="list-status-payment" class="font-monospace text-muted"></span>
+                                        </div>
+                                    </li>
+                                </ol>
+
+                                <div className="card mt-3">
+                                    <div className="card-header">Menu dipesan</div>
+                                    <div className="card-body">
+                                        <div className="table responsive">
+                                            <table className="table table-striped">
+                                                <thead>
+                                                    <th>No</th>
+                                                    <th>Menu</th>
+                                                    <th>Qty</th>
+                                                    <th>Harga</th>
+                                                </thead>
+                                                <tbody id="table-body-detail-order">
+
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <ol class="list-group list-group mt-3">
+                                    <li class="list-group-item d-flex justify-content-between align-items-start bg-light">
+                                        <div class="ms-2 me-auto">
+                                            <div class="fw-bold mb-2">
+
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-notes me-1" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                                    <rect x="5" y="3" width="14" height="18" rx="2"></rect>
+                                                    <line x1="9" y1="7" x2="15" y2="7"></line>
+                                                    <line x1="9" y1="11" x2="15" y2="11"></line>
+                                                    <line x1="9" y1="15" x2="13" y2="15"></line>
+                                                </svg>
+
+                                                Catatan tambahan
+                                            </div>
+                                            <span id="list-desc" class="text-muted" style={{ fontSize: '15px' }}></span>
+                                        </div>
+                                    </li>
+                                </ol>
+
+                                <ol class="list-group list-group mt-3">
+                                    <li class="list-group-item d-flex justify-content-between align-items-start bg-light">
+                                        <div class="ms-2 me-auto">
+                                            <div class="fw-bold mb-2">Total harga</div>
+                                            <span id="list-total-price" class="h5 text-primary"></span>
+                                        </div>
+                                    </li>
+                                </ol>
+
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" onClick={() => orderDetailModal.hide()}>Tutup</button>
+                            </div>
                         </div>
                     </div>
                 </div>

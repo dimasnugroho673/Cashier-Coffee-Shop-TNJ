@@ -218,14 +218,14 @@ const Order = (menus) => {
                                 <thead>
                                     <tr>
                                         <th>Nama</th>
-                                        <th>Harga</th>
+                                        <th className="text-end">Harga</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {filtertedData.map((menu, index) => (
                                         <tr key={menu.id} onClick={() => handleSelectMenu(menu)}>
-                                            <td className={menu.status == 0 ? "text-muted text-decoration-line-through" : ""}>{menu.name}</td>
-                                            <td className={menu.status == 0 ? "text-muted text-decoration-line-through" : ""}>{rupiahFormatter(menu.price)}</td>
+                                            <td className={menu.status == 0 ? "text-muted text-decoration-line-through " : ""}>{menu.name}</td>
+                                            <td className={menu.status == 0 ? "text-muted text-decoration-line-through text-end" : "text-end"}>{rupiahFormatter(menu.price)}</td>
                                         </tr>
                                     ))}
                                 </tbody>

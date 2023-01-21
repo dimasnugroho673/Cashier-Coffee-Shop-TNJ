@@ -65,7 +65,7 @@ class OrderController extends Controller
     public function listOrder()
     {
         $perPage = request('per_page') != null ? request('per_page') : 10;
-        $orders = Order::latest('created_at');
+        $orders = Order::with('orderedMenus')->latest('created_at');
         if (request('date_from') != "" && request('date_to') != "") {
             $orders = $orders->whereBetween(DB::raw('DATE(created_at)'), [request('date_from'), request('date_to')]);
         }

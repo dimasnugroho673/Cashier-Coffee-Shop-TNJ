@@ -44,7 +44,7 @@ const Layout = ({ children }) => {
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                             <li class="nav-item">
-                                <Link class="nav-link active" href="/frontend/order">Order</Link>
+                                <Link class="nav-link" href="/frontend/order">Order</Link>
                             </li>
                             <li class="nav-item">
                                 <Link class="nav-link" href="/frontend/order-history">Riwayat Order</Link>
