@@ -90,12 +90,12 @@
                             </div>
                         </a>
                         <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                            <a href="#" class="dropdown-item">Status</a>
-                            <a href="#" class="dropdown-item">Profile</a>
-                            <a href="#" class="dropdown-item">Feedback</a>
                             <div class="dropdown-divider"></div>
-                            <a href="./settings.html" class="dropdown-item">Settings</a>
-                            <a href="./sign-in.html" class="dropdown-item">Logout</a>
+                            <a href="{{ route('backend.setting') }}" class="dropdown-item">Settings</a>
+                            <form action="/logout" method="post">
+                                @csrf
+                                <button type="button" class="dropdown-item">Logout</button>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -303,7 +303,7 @@
                             </div>
                         </a>
                         <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-                            <a href="#" class="dropdown-item">Profile</a>
+
                             <div class="dropdown-divider"></div>
                             <a href="./settings.html" class="dropdown-item">Settings</a>
                             <form action="/logout" method="POST">

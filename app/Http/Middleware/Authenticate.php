@@ -5,6 +5,8 @@ namespace App\Http\Middleware;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Auth\Middleware\Authenticate as Middleware;
 
+use Illuminate\Support\Facades\Auth;
+
 class Authenticate extends Middleware
 {
     /**
@@ -20,4 +22,8 @@ class Authenticate extends Middleware
         }
     }
 
+    // public function Logout(){
+
+    //     Auth::logoutOtherDevices($password);
+    // }
 }

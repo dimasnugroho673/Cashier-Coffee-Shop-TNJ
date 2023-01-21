@@ -51,20 +51,18 @@ class SettingController extends Controller
         $filename = $icons->getClientOriginalName();
         $extention = explode(".",$filename);
         $newFileName = uniqid(). "." . $extention[1];
-
+        // dd($newFileName);
         $logoResize = Image::make($icons->getRealPath());
         $logoResize->resize(256, 256);
         $logoResize->save(storage_path('app/public/icons/' . $newFileName));
         // $this->setting = Settings:first();
-        $this->setting = Settings::first();
-        if (Storage::disk('public')->exists($this->setting->icons)) {
-            Storage::disk('public')->delete($this->setting->icons);
+        $setting = Settings::first();
+        if ($setting->icons != null && Storage::disk('public')->exists($setting->icons)) {
+            Storage::disk('public')->delete($setting->icons);
         }
+        $setting->icons = 'icons/'. $newFileName;
+        $setting->save();
 
-        $this->setting->update([
-            'icons' => 'icons/' . $newFileName
-        ]);
-        // toast('Logo updated','success');
         return back();
     }
 }
