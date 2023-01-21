@@ -22,6 +22,7 @@ class OrderController extends Controller
                 $orders = $orders->whereBetween(DB::raw('DATE(created_at)'), [request('date_from'), request('date_to')]);
             }
 
+
             $orders = $orders->get();
 
             return DataTables::of($orders)
@@ -93,9 +94,12 @@ class OrderController extends Controller
                 })
                 ->addColumn('action', function ($row) {
                     $btn = '
-            <a href="javascript:void(0)" class="btn btn-sm btn-invoice me-1" data-detail="' . htmlspecialchars($row) . '"  data-id=' . $row->id . '>Invoice</a>
-
-            <button class="btn btn-sm btn-outline-primary btn-modal-update-payment" data-detail="' . htmlspecialchars($row) . '" data-id=' . $row->id . '>Update pembayaran</button>
+            <a href="javascript:void(0)" class="btn btn-sm btn-outline-info btn-invoice me-1" data-detail="' . htmlspecialchars($row) . '"  data-id=' . $row->id . '>
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-receipt-2" width="40" height="40" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                <path d="M5 21v-16a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v16l-3 -2l-2 2l-2 -2l-2 2l-2 -2l-3 2"></path>
+                <path d="M14 8h-2.5a1.5 1.5 0 0 0 0 3h1a1.5 1.5 0 0 1 0 3h-2.5m2 0v1.5m0 -9v1.5"></path>
+            </svg>Invoice</a>
             ';
                     return $btn;
                 })

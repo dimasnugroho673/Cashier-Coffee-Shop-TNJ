@@ -20,8 +20,4 @@ class Authenticate extends Middleware
         }
     }
 
-    protected function authenticated(Request $request, $user)
-{
-   echo "ok";
-}
 }
