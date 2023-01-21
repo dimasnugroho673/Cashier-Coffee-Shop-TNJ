@@ -26,7 +26,7 @@ class DashboardController extends Controller
 
         //orderan
         $data['OrderWait'] = Order::whereDate('created_at','=',$now)->where('status_payment','waiting')->count();
-        $data['OrderFinish'] = Order::whereDate('created_at', '=', $now)->where('status_payment','compelet')->count();
+        $data['OrderFinish'] = Order::whereDate('created_at', '=', $now)->where('status_payment','compelete')->count();
         $data['OrderTotal'] = Order::whereDate('created_at','=',$now)->count();
         //orderan
 
