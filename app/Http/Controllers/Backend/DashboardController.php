@@ -26,7 +26,7 @@ class DashboardController extends Controller
 
         //orderan
         $data['OrderWait'] = Order::whereDate('created_at','=',$now)->where('status_payment','waiting')->count();
-        $data['OrderFinish'] = Order::whereDate('created_at', '=', $now)->where('status_payment','compelete')->count();
+        $data['OrderFinish'] = Order::whereDate('created_at', '=', $now)->where('status_payment','complete')->count();
         $data['OrderTotal'] = Order::whereDate('created_at','=',$now)->count();
         //orderan
 
@@ -37,7 +37,7 @@ class DashboardController extends Controller
 
         //pemasukan
         $nowincome = Income::whereDate('created_at','=',$now)->sum('price');
-        $nowOrder = Order::whereDate('created_at','=',$now)->where('status_payment','compelete')->sum('total_price');
+        $nowOrder = Order::whereDate('created_at','=',$now)->where('status_payment','complete')->sum('total_price');
         $data['AllIncomeNow'] ='Rp. ' . number_format($nowincome + $nowOrder,2,',','.') ;
         //pemasukan
 

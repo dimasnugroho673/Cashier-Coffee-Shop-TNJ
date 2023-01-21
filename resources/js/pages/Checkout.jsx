@@ -121,7 +121,7 @@ const Checkout = () => {
 
         console.log(dataTotal)
 
-        axios.post('http://127.0.0.1:8000/api/order', dataTotal)
+        axios.post(`${window.location.origin}/api/order`, dataTotal)
             .then(function (response) {
                 descriptionModal.hide()
 

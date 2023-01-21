@@ -400,8 +400,7 @@
         </div>
 
         <!-- Core plugin JavaScript-->
-        <!-- @vite('resources/js/app.js') -->
-        {{-- @vite('resources/js/jquery') --}}
+        @vite('resources/js/app.jsx')
 
         <script src="{{ asset('/js/tabler.min.js') }}"></script>
         <script src="{{ asset('/js/datatables.min.js') }}"></script>

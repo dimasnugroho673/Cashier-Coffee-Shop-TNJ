@@ -7,7 +7,7 @@
     <meta name="description" content="">
     <title>{{ config('app.name', 'Laravel') }}</title>
 
-    @vite('resources/sass/app.scss')
+    @vite(['resources/css/app.css', 'resources/js/app.jsx'])
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/core@latest/dist/css/tabler.min.css">
 </head>
@@ -26,6 +26,6 @@
         </div>
     </div>
 
-    @vite('resources/js/app.js')
+    @vite('resources/js/app.jsx')
 </body>
 </html>
