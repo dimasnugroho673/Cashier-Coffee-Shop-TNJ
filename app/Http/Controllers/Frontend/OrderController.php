@@ -17,20 +17,25 @@ class OrderController extends Controller
     public function index(Request $request)
     {
         if (!request('ordered_menus')) {
-            $menus = Menu::get();
+            $menus = Menu::with('category')->get();
 
             return Inertia::render('Order', [
                 'menus' =>  $menus->map(function ($m) {
                    return [
                     'id' => $m->id,
                     'name' => $m->name,
-                    'price' => $m->price
+                    'price' => $m->price,
+                    'status' => $m->status,
+                    'category' => [
+                        'id' => $m->category->id,
+                        'name' => $m->category->name
+                    ]
                    ];
                 }),
                 'orderedMenu' => null,
             ]);
         } else {
-            $menus = Menu::get();
+            $menus = Menu::with('category')->get();
             $orderedMenus = request('ordered_menus');
 
             return Inertia::render('Order', [
@@ -38,7 +43,12 @@ class OrderController extends Controller
                    return [
                     'id' => $m->id,
                     'name' => $m->name,
-                    'price' => $m->price
+                    'price' => $m->price,
+                    'status' => $m->status,
+                    'category' => [
+                        'id' => $m->category->id,
+                        'name' => $m->category->name
+                    ]
                    ];
                 }),
                 'orderedMenu' => $orderedMenus
@@ -49,13 +59,13 @@ class OrderController extends Controller
 
     public function historyOrder()
     {
-        return Inertia::render('OrderHistory', []);
+        return Inertia::render('OrderHistory');
     }
 
     public function listOrder()
     {
         $perPage = request('per_page') != null ? request('per_page') : 10;
-        $orders = Order::latest('created_at');
+        $orders = Order::with('orderedMenus')->latest('created_at');
         if (request('date_from') != "" && request('date_to') != "") {
             $orders = $orders->whereBetween(DB::raw('DATE(created_at)'), [request('date_from'), request('date_to')]);
         }

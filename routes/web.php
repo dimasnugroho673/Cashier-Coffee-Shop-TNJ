@@ -143,6 +143,7 @@ Route::get('/', function()
 Route::get('/backend/finance/recapitulation/{type}', [RecapitulationController::class, 'recapAsPdf'])->name('backend.recap.pdf');
 Route::get('/backend/finance/order/{orderNumber}/invoice', [OrderController::class, 'invoice'])->name('backend.order.invoice');
 Route::post('/backend/user/email-validator', [UserController::class, 'emailValidator'])->name('backend.users.email-validator');
+Route::put('/backend/finance/order/payment/{id}', [OrderController::class, 'updatePayment'])->name('backend.order.payment');
 
 
     Route::group(['prefix' => 'frontend','middleware'=> ['check.role.cashier']], function() {

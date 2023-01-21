@@ -68,7 +68,7 @@
 
                     modal.hide()
 
-                    $('#modalIcome').trigger('reset')
+                    $('#modal-income-form').trigger('reset')
                     $('#incomeTable').DataTable().ajax.reload()
                     formMode == 'create'
                     manipulateForm()

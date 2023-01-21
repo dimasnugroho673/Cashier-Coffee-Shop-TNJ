@@ -5,6 +5,8 @@ import Layout from "../layouts/app";
 import axios from "axios";
 import Pagination from '@/Components/Pagination';
 import parse from 'html-react-parser';
+import Toast from "../components/Toast";
+import { rupiahFormatter } from "../Utils/Helper";
 
 const OrderHistory = () => {
 
@@ -12,6 +14,10 @@ const OrderHistory = () => {
     const [currentPage, setCurrentPage] = useState('')
     const [links, setLinks] = useState([])
     const [orders, setOrders] = useState([])
+    const [paymentModal, setPaymentModal] = useState(false)
+    const [orderDetailModal, setOrderDetailModal] = useState(false)
+
+    const token = document.getElementsByName('csrf-token')[0].getAttribute('content')
 
     const fetchHistoryOrders = (perPage, page, keyword, dateFrom, dateTo) => {
         axios.get(`${window.location.origin}/api/orders?per_page=${perPage}&page=${page}&date_from=${dateFrom}&date_to=${dateTo}`)
@@ -29,6 +35,16 @@ const OrderHistory = () => {
 
     useEffect(() => {
         fetchHistoryOrders(20, 1, '', '', '')
+
+        var paymentModal = new bootstrap.Modal(document.getElementById('paymentModal'), {
+            keyboard: false
+        })
+        setPaymentModal(paymentModal)
+
+        var orderDetailModal = new bootstrap.Modal(document.getElementById('orderDetailModal'), {
+            keyboard: false
+        })
+        setOrderDetailModal(orderDetailModal)
     }, [])
 
     const paginate = (url) => {
@@ -54,11 +70,100 @@ const OrderHistory = () => {
         document.querySelector('#embed-pdf-invoice').setAttribute('src', `${window.location.origin}/backend/finance/order/${orderNumber}/invoice`)
     }
 
-    const rupiahFormatter = (number) => {
-        return new Intl.NumberFormat("id-ID", {
-            style: "currency",
-            currency: "IDR"
-        }).format(number);
+    const renderStatusPayment = (status) => {
+        switch (status) {
+            case 'complete':
+                return <span className="text-success">Pembayaran selesai</span>
+                break;
+            case 'waiting':
+                return <span className="text-warning">Menunggu pembayaran</span>
+                break;
+            case 'canceled':
+                return <span className="text-muted">Pesanan dibatalkan
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-wash-dryclean-off ms-2" width="24" height="24" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                        <path d="M20.048 16.033a9 9 0 0 0 -12.094 -12.075m-2.321 1.682a9 9 0 0 0 12.733 12.723"></path>
+                        <path d="M3 3l18 18"></path>
+                    </svg>
+                </span>
+                break;
+            default:
+                break;
+        }
+    }
+
+    const showPaymentModal = (order) => {
+        paymentModal.show()
+
+        document.getElementById('order_number').value = order.order_number
+        document.getElementById('status_payment').value = order.status_payment
+        document.getElementById('id_order').value = order.id
+    }
+
+    const handleUpdatePayment = (e) => {
+        e.preventDefault()
+
+        let id = document.getElementById('id_order').value
+        let statusPayment = document.getElementById('status_payment').value
+
+        axios.post(`${window.location.origin}/backend/finance/order/payment/${id}`, {
+            "_token": token,
+            "_method": 'PUT',
+            status_payment: statusPayment
+        })
+            .then(function (response) {
+                resetData()
+                paymentModal.hide()
+
+                Toast.fire({
+                    icon: 'success',
+                    title: 'Pembayaran berhasil diubah'
+                })
+            })
+            .catch(function (error) {
+                console.log(error)
+            })
+    }
+
+    const handleDetailOrder = (order) => {
+        orderDetailModal.show()
+
+        let body = document.getElementById('table-body-detail-order')
+
+        document.getElementById('list-order-number').textContent = order.order_number
+        document.getElementById('list-table-number').textContent = order.table_number == 'takeaway' ? 'Bawa pulang' : order.table_number
+        document.getElementById('list-cashier-name').textContent = order.cashier_name
+        document.getElementById('list-customer-number').textContent = order.customer_number
+        document.getElementById('list-desc').textContent = order.desc
+
+        if (order.status_payment == 'complete') {
+            document.getElementById('list-status-payment').innerHTML = `
+            <span class="badge text-bg-success">Pembayaran selesai</span>`
+        } else if (order.status_payment == 'waiting') {
+            document.getElementById('list-status-payment').innerHTML = `
+            <span class="badge text-bg-warning">Menunggu pembayaran</span>`
+        } else if (order.status_payment == 'canceled') {
+            document.getElementById('list-status-payment').innerHTML = `
+            <span class="badge text-bg-secondary">Pembayaran dibatalkan</span>`
+        }
+
+        document.getElementById('list-total-price').textContent = rupiahFormatter(order.total_price)
+
+        let html = ``
+        let data = order.ordered_menus
+        for (let i = 0; i < data.length; i++) {
+
+            html += `
+                <tr>
+                    <td>${i + 1}</td>
+                    <td>${data[i].menu_name}</td>
+                    <td>${data[i].quantity}</td>
+                    <td>${rupiahFormatter(data[i].price)}</td>
+                </tr>
+            `
+        }
+
+        body.innerHTML = html
     }
 
     if (orders != {}) {
@@ -69,7 +174,7 @@ const OrderHistory = () => {
                         <div className="row">
                             <div className="col-md-6" style={{ marginTop: '100px' }}>
 
-                                <div class="card">
+                                <div class="card shadow-sm">
                                     <div class="card-header">Fiter data</div>
                                     <form id="form-filter" onSubmit={(e) => handleFilterForm(e)}>
                                         <div class="card-body">
@@ -89,7 +194,7 @@ const OrderHistory = () => {
                                             </div>
                                         </div>
                                         <div class="card-footer">
-                                            <button type="submit" class="btn btn-outline-primary" id="btn-submit-filter">
+                                            <button type="submit" class="btn btn-outline-primary-custom" id="btn-submit-filter">
                                                 <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-filter" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                                     <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                                                     <path d="M5.5 5h13a1 1 0 0 1 .5 1.5l-5 5.5l0 7l-4 -3l0 -4l-5 -5.5a1 1 0 0 1 .5 -1.5"></path>
@@ -97,7 +202,7 @@ const OrderHistory = () => {
                                                 Terapkan
                                             </button>
 
-                                            <button type="reset" class="btn btn-outline-warning ms-2" id="btn-filter-reset" onClick={() => resetData()}>Reset</button>
+                                            <button type="reset" class="btn btn-outline-warning-custom ms-2" id="btn-filter-reset" onClick={() => resetData()}>Reset</button>
                                         </div>
                                     </form>
                                 </div>
@@ -120,38 +225,76 @@ const OrderHistory = () => {
                         </div> */}
                         <div className="row mt-5">
                             <div className="col-md-12">
-                                <table class="table" id="">
-                                    <thead>
-                                        <tr>
-                                            {/* <th>No.</th> */}
-                                            <th>No. order</th>
-                                            <th>Kasir</th>
-                                            <th>No. customer</th>
-                                            <th>Total harga</th>
-                                            <th>Tanggal</th>
-                                            <th>Aksi</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {orders.map((order, index) => (
-                                            <tr key={order.id}>
-                                                {/* <td>{index + 1}</td> */}
-                                                <td>{order.order_number}</td>
-                                                <td>{order.cashier_name}</td>
-                                                <td>{order.customer_number}</td>
-                                                <td>{rupiahFormatter(order.total_price)}</td>
-                                                <td>{order.created_at}</td>
-                                                <td>
-                                                    <button type="button" class="btn btn-outline-dark btn-sm" data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={() => handleInvoicePreview(order.order_number)}>
-                                                        Invoice
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
+                                <div className="table-container p-3">
+                                    <div className="table-responsive">
+                                        <table className="table" id="">
+                                            <thead>
+                                                <tr class="text-center">
+                                                    <th>No. order</th>
+                                                    <th>Kasir</th>
+                                                    <th>No. customer</th>
+                                                    <th>Total harga</th>
+                                                    <th>Status pembayaran</th>
+                                                    <th>Tanggal</th>
+                                                    <th>Aksi</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody class="text-center">
+                                                {orders.map((order, index) => (
+                                                    <tr key={order.id}>
+                                                        <td className={(order.status_payment == 'canceled' ? 'text-muted text-decoration-line-through' : '')}>{order.order_number}</td>
+                                                        <td className={(order.status_payment == 'canceled' ? 'text-muted text-decoration-line-through' : '')}>{order.cashier_name}</td>
+                                                        <td className={(order.status_payment == 'canceled' ? 'text-muted text-decoration-line-through' : '')}>{order.customer_number}</td>
+                                                        <td className={(order.status_payment == 'canceled' ? 'text-muted text-decoration-line-through' : '')}>{rupiahFormatter(order.total_price)}</td>
+                                                        <td>{renderStatusPayment(order.status_payment)}</td>
+                                                        <td className={(order.status_payment == 'canceled' ? 'text-muted text-decoration-line-through' : '')}>{order.created_at}</td>
+                                                        <td>
+                                                            <div class="btn-group btn-group-sm" role="group" aria-label="Basic example">
+                                                                <button type="button" className={"btn btn-outline-dark " + (order.status_payment == 'canceled' ? 'disabled' : '')} data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={() => handleInvoicePreview(order.order_number)}>
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-file-invoice me-2" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                                                        <path d="M14 3v4a1 1 0 0 0 1 1h4"></path>
+                                                                        <path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z"></path>
+                                                                        <line x1="9" y1="7" x2="10" y2="7"></line>
+                                                                        <line x1="9" y1="13" x2="15" y2="13"></line>
+                                                                        <line x1="13" y1="17" x2="15" y2="17"></line>
+                                                                    </svg>
+                                                                    Invoice
+                                                                </button>
 
-                                <div className="row">
+                                                                <button type="button" className={"btn btn-outline-dark"} onClick={() => showPaymentModal(order)}>
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-credit-card me-2" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                                                        <rect x="3" y="5" width="18" height="14" rx="3"></rect>
+                                                                        <line x1="3" y1="10" x2="21" y2="10"></line>
+                                                                        <line x1="7" y1="15" x2="7.01" y2="15"></line>
+                                                                        <line x1="11" y1="15" x2="13" y2="15"></line>
+                                                                    </svg>
+                                                                    Pembayaran
+                                                                </button>
+
+                                                                <button type="button" class="btn btn-outline-dark" onClick={() => handleDetailOrder(order)}>
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-list-details me-2" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                                                        <path d="M13 5h8"></path>
+                                                                        <path d="M13 9h5"></path>
+                                                                        <path d="M13 15h8"></path>
+                                                                        <path d="M13 19h5"></path>
+                                                                        <rect x="3" y="4" width="6" height="6" rx="1"></rect>
+                                                                        <rect x="3" y="14" width="6" height="6" rx="1"></rect>
+                                                                    </svg>
+                                                                    Detail
+                                                                </button>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                ))}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                                <div className="row mt-3">
                                     <div className="col-md-12">
                                         <nav aria-label="...">
                                             <ul class="pagination">
@@ -174,17 +317,146 @@ const OrderHistory = () => {
                 </div>
 
                 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div class="modal-dialog modal-lg">
+                    <div class="modal-dialog modal-lg modal-dialog-centered">
                         <div class="modal-content">
                             <div class="modal-header">
                                 <h1 class="modal-title fs-5" id="exampleModalLabel">Invoice</h1>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
                                 <embed type="application/pdf" id="embed-pdf-invoice" src="" width="100%" height="600"></embed>
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal fade" id="paymentModal" tabindex="-1">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <form id="form-update-payment" onSubmit={(e) => handleUpdatePayment(e)}>
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Update pembayaran</h5>
+                                </div>
+                                <div class="modal-body">
+                                    <input type="hidden" id="id_order" class="form-control" readonly />
+                                    <div class="form-group mb-3">
+                                        <label className="mb-1">No. Order</label>
+                                        <input type="text" id="order_number" class="form-control" readonly />
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label className="mb-1" for="status_payment">Status pembayaran</label>
+                                        <select name="status_payment" id="status_payment" class="form-select" required>
+                                            <option selected>Pilih status pembayaran</option>
+                                            <option value="complete">Selesai</option>
+                                            <option value="waiting">Menunggu</option>
+                                            <option value="canceled">Pesanan dibatalkan</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Batal</button>
+                                    <button type="submit" class="btn btn-primary">Update pembayaran</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal fade" id="orderDetailModal" tabindex="-1">
+                    <div class="modal-dialog modal-xl modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Detail pesanan</h5>
+                            </div>
+                            <div class="modal-body" id="modal-body-detail-order">
+
+                                <ol class="list-group list-group">
+                                    <li class="list-group-item d-flex justify-content-between align-items-start">
+                                        <div class="ms-2 me-auto">
+                                            <div class="fw-bold mb-1">No order</div>
+                                            <span id="list-order-number" class="font-monospace text-muted"></span>
+                                        </div>
+                                    </li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-start">
+                                        <div class="ms-2 me-auto">
+                                            <div class="fw-bold mb-1">No Meja</div>
+                                            <span id="list-table-number" class="font-monospace text-muted"></span>
+                                        </div>
+                                    </li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-start">
+                                        <div class="ms-2 me-auto">
+                                            <div class="fw-bold mb-1">Nama kasir</div>
+                                            <span id="list-cashier-name" class="text-muted"></span>
+                                        </div>
+                                    </li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-start">
+                                        <div class="ms-2 me-auto">
+                                            <div class="fw-bold mb-1">No customer</div>
+                                            <span id="list-customer-number" class="font-monospace text-muted"></span>
+                                        </div>
+                                    </li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-start">
+                                        <div class="ms-2 me-auto">
+                                            <div class="fw-bold mb-1">Status pembayaran</div>
+                                            <span id="list-status-payment" class="font-monospace text-muted"></span>
+                                        </div>
+                                    </li>
+                                </ol>
+
+                                <div className="card mt-3">
+                                    <div className="card-header">Menu dipesan</div>
+                                    <div className="card-body">
+                                        <div className="table responsive">
+                                            <table className="table table-striped">
+                                                <thead>
+                                                    <th>No</th>
+                                                    <th>Menu</th>
+                                                    <th>Qty</th>
+                                                    <th>Harga</th>
+                                                </thead>
+                                                <tbody id="table-body-detail-order">
+
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <ol class="list-group list-group mt-3">
+                                    <li class="list-group-item d-flex justify-content-between align-items-start bg-light">
+                                        <div class="ms-2 me-auto">
+                                            <div class="fw-bold mb-2">
+
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-notes me-1" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                                    <rect x="5" y="3" width="14" height="18" rx="2"></rect>
+                                                    <line x1="9" y1="7" x2="15" y2="7"></line>
+                                                    <line x1="9" y1="11" x2="15" y2="11"></line>
+                                                    <line x1="9" y1="15" x2="13" y2="15"></line>
+                                                </svg>
+
+                                                Catatan tambahan
+                                            </div>
+                                            <span id="list-desc" class="text-muted" style={{ fontSize: '15px' }}></span>
+                                        </div>
+                                    </li>
+                                </ol>
+
+                                <ol class="list-group list-group mt-3">
+                                    <li class="list-group-item d-flex justify-content-between align-items-start bg-light">
+                                        <div class="ms-2 me-auto">
+                                            <div class="fw-bold mb-2">Total harga</div>
+                                            <span id="list-total-price" class="h5 text-primary"></span>
+                                        </div>
+                                    </li>
+                                </ol>
+
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" onClick={() => orderDetailModal.hide()}>Tutup</button>
                             </div>
                         </div>
                     </div>

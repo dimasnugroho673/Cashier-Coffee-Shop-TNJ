@@ -1,8 +1,22 @@
 import { Link, usePage } from "@inertiajs/inertia-react"
 import axios from "axios";
-import { Fragment } from "react"
+import { Fragment, useEffect } from "react"
 
 const Layout = ({ children }) => {
+
+    useEffect(() => {
+        // const navLinks = document.querySelectorAll('.nav-item')
+        // const menuToggle = document.getElementById('navbarSupportedContent')
+        // const bsCollapse = new bootstrap.Collapse(menuToggle)
+        // navLinks.forEach((l) => {
+        //     l.addEventListener('click', () => { bsCollapse.toggle() })
+        // })
+
+        // var url = new URL(window.location.href)
+
+        // url = url.pathname.split("/")
+        // alert(url[2])
+    }, [])
 
     const handleLogout = () => {
         const csrfElement = window.document.getElementsByName('csrf-token')[0]
@@ -21,25 +35,27 @@ const Layout = ({ children }) => {
 
     return (
         <Fragment>
-            <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+            <nav class="navbar navbar-expand-lg bg-white fixed-top shadow-sm">
                 <div class="container" id="navbar-container">
-                    <a class="navbar-brand" href="/frontend/order">Coffee shop</a>
-                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarExpandToggler" aria-controls="navbarExpandToggler" aria-expanded="false" aria-label="Toggle navigation">
+                    <a class="navbar-brand" id="navbar-brand" href="/frontend/order">Coffee Shop</a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
-                    <div class="collapse navbar-collapse" id="navbarExpandToggler">
-                        <div class="navbar-nav">
-                            <Link href="/frontend/order" className="nav-link active">Order</Link>
-                        </div>
-                        <div class="navbar-nav">
-                            <Link class="nav-link active" href="/frontend/order-history">Riwayat Order</Link>
-                        </div>
-                        <div class="navbar-nav">
-                            <Link class="nav-link active" href="/frontend/profile">Profile</Link>
-                        </div>
-                        <div class="navbar-nav">
-                            <a class="nav-link text-danger" onClick={() => handleLogout()} href="#">Logout</a>
-                        </div>
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                            <li class="nav-item">
+                                <Link class="nav-link" href="/frontend/order">Order</Link>
+                            </li>
+                            <li class="nav-item">
+                                <Link class="nav-link" href="/frontend/order-history">Riwayat Order</Link>
+                            </li>
+                            <li class="nav-item">
+                                <Link class="nav-link" href="/frontend/profile">Profile</Link>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-danger" onClick={() => handleLogout()} href="#">Logout</a>
+                            </li>
+                        </ul>
                     </div>
                 </div>
             </nav>
@@ -62,7 +78,7 @@ const Layout = ({ children }) => {
             <div className="content">
                 {children}
             </div>
-            <footer>Ini footer</footer>
+            {/* <footer>Ini footer</footer> */}
         </Fragment>
     )
 }
