@@ -2,36 +2,37 @@
 
 namespace App\Http\Controllers\Backend;
 
+use App\Exports\RecapitulationExport;
 use PDF;
 use Carbon\Carbon;
 use App\Models\Order;
 use App\Models\Income;
 use App\Models\Purchase;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use Maatwebsite\Excel\Facades\Excel;
 
 class RecapitulationController extends Controller
 {
-    public function index(Request $request)
+    public function index()
     {
         $data['title'] = 'Rekap data';
         $data['year_start'] = 2019;
         return view('backend.recapitulation.index', $data);
     }
 
-    public function recapAsPdf($type)
+    public function recap($by, $type)
     {
-        if ($type == 'year') {
+        if ($by == 'year') {
             $yearSelected = request('at');
 
             return $this->_recapYear($yearSelected, $type);
-        } else if ($type == 'month') {
+        } else if ($by == 'month') {
             $monthSelected = request('on_month');
             $yearSelected = request('at_year');
 
             return $this->_recapMonth($monthSelected, $yearSelected, $type);
-        } else if ($type == 'custom') {
+        } else if ($by == 'custom') {
             $dateFrom = request('date_from');
             $dateTo = request('date_to');
 
@@ -39,18 +40,7 @@ class RecapitulationController extends Controller
         }
     }
 
-    public function _recapCustom($dateFrom, $dateTo, $type)
-    {
-        $orders = Order::where('status_payment', 'complete')->whereBetween(DB::raw('DATE(created_at)'), [$dateFrom, $dateTo])->get();
-        $purchases = Purchase::whereBetween(DB::raw('DATE(date)'), [$dateFrom, $dateTo])->get();
-        $incomes = Income::whereBetween(DB::raw('DATE(date)'), [$dateFrom, $dateTo])->get();
-
-        $date = $dateFrom . " - " . $dateTo;
-
-        return $this->_generateRecap($orders, $purchases, $incomes, $type, $date);
-    }
-
-    private function _recapYear($year, $type)
+    private function _recapYear($year, $exportTo)
     {
         $orders = Order::where('status_payment', 'complete')->whereYear('created_at', $year)->get();
         $purchases = Purchase::whereYear('date', $year)->get();
@@ -58,10 +48,17 @@ class RecapitulationController extends Controller
 
         $date = $year;
 
-        return $this->_generateRecap($orders, $purchases, $incomes, $type, $date);
+        $data = $this->_generateRecapData($orders, $purchases, $incomes);
+        $data['title'] = 'Rekap_' . $year;
+
+        if ($exportTo == 'pdf') {
+            return $this->_generatePdf($data);
+        } else if ($exportTo == 'xlsx') {
+            return $this->_generateXlsx($data);
+        }
     }
 
-    private function _recapMonth($month, $year, $type)
+    private function _recapMonth($month, $year, $exportTo)
     {
         $orders = Order::where('status_payment', 'complete')->whereYear('created_at', $year)->whereMonth('created_at', $month)->get();
         $purchases = Purchase::whereYear('date', $year)->whereMonth('date', $month)->get();
@@ -71,10 +68,35 @@ class RecapitulationController extends Controller
         $month->settings(['formatFunction' => 'translatedFormat']);
         $date = $month->format('F') . " " . $year;
 
-        return $this->_generateRecap($orders, $purchases, $incomes, $type, $date);
+        $data = $this->_generateRecapData($orders, $purchases, $incomes);
+        $data['title'] = 'Rekap_' . $date;
+
+        if ($exportTo == 'pdf') {
+            return $this->_generatePdf($data);
+        } else if ($exportTo == 'xlsx') {
+            return $this->_generateXlsx($data);
+        }
     }
 
-    private function _generateRecap($orders, $purchases, $incomes, $type, $dateTitle)
+    public function _recapCustom($dateFrom, $dateTo, $exportTo)
+    {
+        $orders = Order::where('status_payment', 'complete')->whereBetween(DB::raw('DATE(created_at)'), [$dateFrom, $dateTo])->get();
+        $purchases = Purchase::whereBetween(DB::raw('DATE(date)'), [$dateFrom, $dateTo])->get();
+        $incomes = Income::whereBetween(DB::raw('DATE(date)'), [$dateFrom, $dateTo])->get();
+
+        $date = $dateFrom . "-" . $dateTo;
+
+        $data = $this->_generateRecapData($orders, $purchases, $incomes);
+        $data['title'] = $date;
+
+        if ($exportTo == 'pdf') {
+            return $this->_generatePdf($data);
+        } else if ($exportTo == 'xlsx') {
+            return $this->_generateXlsx($data);
+        }
+    }
+
+    private function _generateRecapData($orders, $purchases, $incomes, $dateTitle = null)
     {
         $newOrders = [];
         $newPurchases = [];
@@ -139,10 +161,19 @@ class RecapitulationController extends Controller
         $data['total_debit'] =  $total_debit;
         $data['total_credit'] = $total_credit;
         $data['total_profit'] = $data['total_debit'] - $data['total_credit'];
-  
-        $data['title'] = 'Rekap data - ' . $dateTitle;
-        
-        $pdf = PDF::loadView('guest.recap.monthly', $data)->setPaper('a4', 'potrait');
+
+        return $data;
+    }
+
+    private function _generatePdf($data)
+    {
+        $pdf = PDF::loadView('guest.recap.pdf', $data)->setPaper('a4', 'potrait');
         return $pdf->stream();
+    }
+
+    private function _generateXlsx($data)
+    {
+        $xlsx = new RecapitulationExport($data);
+        return Excel::download($xlsx, $data['title'] . ".xlsx");
     }
 }

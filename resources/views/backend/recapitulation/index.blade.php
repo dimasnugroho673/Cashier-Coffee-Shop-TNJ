@@ -164,11 +164,11 @@
             </div>
             <div class="modal-body" id="modal-body-recap">
                 <div id="modal-recap-file">
-                    <div class="card card-recap-file-touchable mb-3" data-url="" style="border-radius: 12px;">
+                    <div class="card mb-3 card-recap-file-touchable" id="card-recap-file-touchable-pdf" data-url="" style="border-radius: 12px;">
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-auto">
-                                    <span class="bg-primary text-white avatar shadow" style="border-radius: 12px;"><!-- Download SVG icon from http://tabler-icons.io/i/currency-dollar -->
+                                    <span class="bg-danger text-white avatar shadow" style="border-radius: 12px;">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-file-text" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                             <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                                             <path d="M14 3v4a1 1 0 0 0 1 1h4"></path>
@@ -181,8 +181,32 @@
                                 </div>
 
                                 <div class="col-md-9">
-                                    <h4 class="m-0" id="label-file-name-recap"></h4>
+                                    <h4 class="m-0 label-file-name-recap"></h4>
                                     <small class="text-muted m-0">Tipe file: PDF</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card card-recap-file-touchable mb-3" id="card-recap-file-touchable-xlsx" data-url="" style="border-radius: 12px;">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-auto">
+                                    <span class="bg-success text-white avatar shadow" style="border-radius: 12px;">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-file-spreadsheet" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                            <path d="M14 3v4a1 1 0 0 0 1 1h4"></path>
+                                            <path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z"></path>
+                                            <path d="M8 11h8v7h-8z"></path>
+                                            <path d="M8 15h8"></path>
+                                            <path d="M11 11v7"></path>
+                                        </svg>
+                                    </span>
+                                </div>
+
+                                <div class="col-md-9">
+                                    <h4 class="m-0 label-file-name-recap"></h4>
+                                    <small class="text-muted m-0">Tipe file: XLSX</small>
                                 </div>
                             </div>
                         </div>
@@ -236,8 +260,9 @@
                         }
                     }
 
-                    $('#label-file-name-recap').text(`Rekap_${yearSelected}`)
-                    $('.card-recap-file-touchable').data('url', `{{ url('/backend/finance/recapitulation/year?at=${yearSelected}') }}`)
+                    $('.label-file-name-recap').text(`Rekap_${yearSelected}`)
+                    $('#card-recap-file-touchable-pdf').data('url', `{{ url('/backend/finance/recapitulation/year/pdf?at=${yearSelected}') }}`)
+                    $('#card-recap-file-touchable-xlsx').data('url', `{{ url('/backend/finance/recapitulation/year/xlsx?at=${yearSelected}') }}`)
 
                     break;
                 case 'month':
@@ -246,9 +271,10 @@
 
                     // modal.show()
                     $('#modal-recap-info').html(``)
-                    $('#label-file-name-recap').text(`Rekap_${toMonthInIndonesian(monthSelected)}_${yearSelected2}`)
+                    $('.label-file-name-recap').text(`Rekap_${toMonthInIndonesian(monthSelected)}_${yearSelected2}`)
 
-                    $('.card-recap-file-touchable').data('url', `{{ url('/backend/finance/recapitulation/month?on_month=${monthSelected}&at_year=${yearSelected2}') }}`.replace('&amp;', '&'))
+                    $('#card-recap-file-touchable-pdf').data('url', `{{ url('/backend/finance/recapitulation/month/pdf?on_month=${monthSelected}&at_year=${yearSelected2}') }}`.replace('&amp;', '&'))
+                    $('#card-recap-file-touchable-xlsx').data('url', `{{ url('/backend/finance/recapitulation/month/xlsx?on_month=${monthSelected}&at_year=${yearSelected2}') }}`.replace('&amp;', '&'))
 
                     break;
 
@@ -273,9 +299,10 @@
                     let monthTo = toMonthInIndonesian(dateConverterTo.getMonth() + 1)
                     let yearTo = dateConverterTo.getFullYear()
 
-                    $('#label-file-name-recap').text(`Rekap_${dayFrom} ${monthFrom} ${yearFrom} - ${dayTo} ${monthTo} ${yearTo}`)
+                    $('.label-file-name-recap').text(`Rekap_${dayFrom} ${monthFrom} ${yearFrom} - ${dayTo} ${monthTo} ${yearTo}`)
 
-                    $('.card-recap-file-touchable').data('url', `{{ url('/backend/finance/recapitulation/custom?date_from=${dateFrom}&date_to=${dateTo}') }}`.replace('&amp;', '&'))
+                    $('#card-recap-file-touchable-pdf').data('url', `{{ url('/backend/finance/recapitulation/custom/pdf?date_from=${dateFrom}&date_to=${dateTo}') }}`.replace('&amp;', '&'))
+                    $('#card-recap-file-touchable-xlsx').data('url', `{{ url('/backend/finance/recapitulation/custom/xlsx?date_from=${dateFrom}&date_to=${dateTo}') }}`.replace('&amp;', '&'))
 
                     break;
                 default:

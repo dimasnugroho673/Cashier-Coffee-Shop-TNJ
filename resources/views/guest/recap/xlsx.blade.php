@@ -25,27 +25,28 @@
     <table class="table" width="100%">
         <thead>
             <tr>
-                <th>Tanggal</th>
-                <th>Transaksi</th>
-                <th>Debit</th>
-                <th>Kredit</th>
+                <th><strong>Tanggal</strong></th>
+                <th><strong>Transaksi</strong></th>
+                <th><strong>Debit</strong></th>
+                <th><strong>Kredit</strong></th>
             </tr>
         </thead>
         <tbody>
             @foreach($recaps as $recap)
-            @if($recap->month_separator != '')
-            <tr>
-                <td colspan="4" align="center"><strong>{{ $recap->month_separator }}</strong></td>
-            </tr>
-            @endif
+                @if($recap->month_separator != '')
+                    <tr>
+                        <td colspan="4" align="center"><strong>{{ $recap->month_separator }}</strong></td>
+                    </tr>
+                @endif
 
-            <tr>
-                <td align="center">{{ $recap->date }}</td>
-                <td>{{ $recap->name }}</td>
-                <td align="center">{{ $recap->debit != 0 ? number_format($recap->debit, 0, ',', '.') : '' }}</td>
-                <td align="center">{{ $recap->credit != 0 ? number_format($recap->credit, 0, ',', '.') : '' }}</td>
-            </tr>
+                <tr>
+                    <td align="center">{{ $recap->date }}</td>
+                    <td>{{ $recap->name }}</td>
+                    <td align="center">{{ $recap->debit != 0 ? $recap->debit : '' }}</td>
+                    <td align="center">{{ $recap->credit != 0 ? $recap->credit : '' }}</td>
+                </tr>
             @endforeach
+
             <tr>
                 <td colspan="2" align="center"><strong>Total debit</strong></td>
                 <td align="center"><strong>{{ "Rp. " . number_format($total_debit, 0, ',', '.') }}</strong></td>

@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Response;
 
 class OrderController extends Controller
 {
-    public function index(Request $request)
+    public function index()
     {
         if (!request('ordered_menus')) {
             $menus = Menu::with('category')->get();
