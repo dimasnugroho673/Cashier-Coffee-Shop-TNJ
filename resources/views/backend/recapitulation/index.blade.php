@@ -33,7 +33,15 @@
                                             <tr>
                                                 <td>{{ $no++ }}</td>
                                                 <td>{{ $year }}</td>
-                                                <td><button class="btn btn-sm btn-outliine-light btn-show-modal-recap" data-name="year" data-year="{{ $year }}" data-bs-toggle="modal" data-bs-target="#recapModal">Lihat</button></td>
+                                                <td>
+                                                    <button class="btn btn-sm btn-outliine-light btn-show-modal-recap" data-name="year" data-year="{{ $year }}" data-bs-toggle="modal" data-bs-target="#recapModal">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-eye me-1" width="40" height="40" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                                            <circle cx="12" cy="12" r="2"></circle>
+                                                            <path d="M22 12c-2.667 4.667 -6 7 -10 7s-7.333 -2.333 -10 -7c2.667 -4.667 6 -7 10 -7s7.333 2.333 10 7"></path>
+                                                        </svg>Lihat
+                                                    </button>
+                                                </td>
                                             </tr>
                                             @endfor
                                         </tbody>
@@ -66,7 +74,14 @@
                                                                 @endfor
                                                         </select>
 
-                                                        <button type="submit" class="btn btn-sm btn-outliine-light btn-show-modal-recap" data-name="month" data-year="{{ $year }}">Lihat</button>
+                                                        <button type="submit" class="btn btn-sm btn-outliine-light btn-show-modal-recap ms-1" data-name="month" data-year="{{ $year }}">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-eye me-1" width="40" height="40" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                        <circle cx="12" cy="12" r="2"></circle>
+                        <path d="M22 12c-2.667 4.667 -6 7 -10 7s-7.333 -2.333 -10 -7c2.667 -4.667 6 -7 10 -7s7.333 2.333 10 7"></path>
+                    </svg>
+                    Lihat
+                </button>
                                                     </form>
                                                 </td>
                                             </tr>

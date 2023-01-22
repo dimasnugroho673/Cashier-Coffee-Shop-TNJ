@@ -169,11 +169,11 @@
 
         function manipulateForm() {
             if (formMode == 'create') {
-                $('#text-card-title').text('Tambah Katehori')
-                $('#btn-submit-add-categori').text('Submit')
+                $('#text-card-title').text('Tambah Kategori')
+                $('#btn-submit-add-categori').text('Tambahkan')
             } else if (formMode == 'edit') {
                 $('#text-card-title').text('Edit data Kategori')
-                $('#btn-submit-add-categori').text('Update')
+                $('#btn-submit-add-categori').text('Ubah data')
             }
         }
 

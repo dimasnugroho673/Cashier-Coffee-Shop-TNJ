@@ -52,7 +52,7 @@
                 processing: true,
                 serverside: true,
                 ajax: "{{ route('backend.menu') }}",
-                lengthMenu: [5, 15, 25, 50, 100],
+                lengthMenu: [25, 50, 100],
                 columns: [{
                         data: 'DT_RowIndex',
                         name: 'DT_RowIndex'

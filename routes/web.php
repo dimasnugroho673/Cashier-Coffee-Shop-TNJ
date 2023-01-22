@@ -127,7 +127,7 @@ Route::get('/', function()
         Route::put('finance/income/{id}',[IncomesController::class,'update'])->name('backend.income.update');
         Route::delete('finance/income/{id}',[IncomesController::class, 'destroy'])->name('backend.income.destroy');
 
-        Route::get('/setting',[SettingController::class,'index'])->name('backend.setting');
+        Route::get('/settings',[SettingController::class,'index'])->name('backend.setting');
         Route::put('/setting/update-general-data',[SettingController::class,'updateGeneralData'])->name('backend.setting.generaldata');
         Route::put('setting/update-modal',[SettingController::class,'updateModal'])->name('backend.setting.updateModal');
         Route::put('setting/update-icons',[SettingController::class,'updateLogo'])->name('backend.setting.updateLogo');

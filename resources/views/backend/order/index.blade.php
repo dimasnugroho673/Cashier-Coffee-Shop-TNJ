@@ -71,7 +71,7 @@
 
 <!-- Invice Modal -->
 <div class="modal fade" id="invoiceModal" tabindex="-1" aria-labelledby="invoiceModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
                 <h1 class="modal-title fs-5" id="invoiceModalLabel">Invoice</h1>
@@ -102,7 +102,7 @@
 
                     <div class="form-group">
                         <label for="status_payment">Status pembayaran</label>
-                        <select name="status_payment" id="status_payment" class="form-control" required>
+                        <select name="status_payment" id="status_payment" class="form-select" required>
                             <option selected>Pilih status pembayaran</option>
                             <option value="complete">Selesai</option>
                             <option value="waiting">Menunggu</option>
@@ -207,7 +207,7 @@
                     if (response.status) {
                         Toast.fire({
                             icon: 'success',
-                            title: 'Data berhasil dihapus'
+                            title: 'Data berhasil diubah'
                         })
                     }
 

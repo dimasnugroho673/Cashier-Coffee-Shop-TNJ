@@ -94,12 +94,30 @@ class OrderController extends Controller
                 })
                 ->addColumn('action', function ($row) {
                     $btn = '
-            <a href="javascript:void(0)" class="btn btn-sm btn-outline-info btn-invoice me-1" data-detail="' . htmlspecialchars($row) . '"  data-id=' . $row->id . '>
-            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-receipt-2" width="40" height="40" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                <path d="M5 21v-16a2 2 0 0 1 2 -2h10a2 2 0 0 1 2 2v16l-3 -2l-2 2l-2 -2l-2 2l-2 -2l-3 2"></path>
-                <path d="M14 8h-2.5a1.5 1.5 0 0 0 0 3h1a1.5 1.5 0 0 1 0 3h-2.5m2 0v1.5m0 -9v1.5"></path>
-            </svg>Invoice</a>
+                        <a href="javascript:void(0)" class="btn btn-sm btn-outline-info btn-invoice" data-detail="' . htmlspecialchars($row) . '"  data-id=' . $row->id . '>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-file-invoice me-1" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                            <path d="M14 3v4a1 1 0 0 0 1 1h4"></path>
+                            <path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z"></path>
+                            <line x1="9" y1="7" x2="10" y2="7"></line>
+                            <line x1="9" y1="13" x2="15" y2="13"></line>
+                            <line x1="13" y1="17" x2="15" y2="17"></line>
+                        </svg>
+
+                        Invoice
+                        </a>
+
+                        <a href="javascript:void(0)" class="btn btn-sm btn-outline-success btn-modal-update-payment ms-1" data-detail="' . htmlspecialchars($row) . '"  data-id=' . $row->id . '>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-credit-card me-1" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                            <rect x="3" y="5" width="18" height="14" rx="3"></rect>
+                            <line x1="3" y1="10" x2="21" y2="10"></line>
+                            <line x1="7" y1="15" x2="7.01" y2="15"></line>
+                            <line x1="11" y1="15" x2="13" y2="15"></line>
+                        </svg>
+                        
+                        Pembayaran
+                        </a>
             ';
                     return $btn;
                 })

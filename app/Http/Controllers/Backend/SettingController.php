@@ -12,7 +12,7 @@ class SettingController extends Controller
 {
     public function index ()
     {
-        $data['title']='Setting';
+        $data['title']='Settings';
         $data['setting'] = Settings::first();
         return view('backend.setting.index',$data);
     }

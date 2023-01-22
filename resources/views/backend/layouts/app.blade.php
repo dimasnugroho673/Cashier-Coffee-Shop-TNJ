@@ -33,7 +33,7 @@
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <h1 class="navbar-brand navbar-brand-autodark">
-                    <a href=".">
+                    <a href="/backend/dashboard">
                         <img src="./static/logo-white.svg" width="110" height="32" alt="Tabler" class="navbar-brand-image">
                     </a>
                 </h1>
@@ -188,9 +188,6 @@
                                         <a class="dropdown-item {{ Request::is('backend/finance/purchases') ? 'text-white' : '' }}" href="/backend/finance/purchases">
                                             Pengeluaran
                                         </a>
-                                        <a class="dropdown-item" href="./layout-boxed.html">
-                                            Modal awal
-                                        </a>
                                         <a class="dropdown-item {{ Request::segment(3) == 'recapitulations' ? 'text-white' : '' }}" href="/backend/finance/recapitulations">
                                             Rekap Penjualan
                                         </a>
@@ -227,8 +224,8 @@
                             </div>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link {{ Request::is('backend/setting') ? 'active' : '' }}" href="/backend/setting">
-                                <span class="nav-link-icon d-md-none d-lg-inline-block {{ Request::is('backend/setting') ? 'text-white' : '' }}">
+                            <a class="nav-link {{ Request::is('backend/settings') ? 'active' : '' }}" href="/backend/settings">
+                                <span class="nav-link-icon d-md-none d-lg-inline-block {{ Request::is('backend/settings') ? 'text-white' : '' }}">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-settings" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                         <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                                         <path d="M10.325 4.317c.426 -1.756 2.924 -1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543 -.94 3.31 .826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.756 .426 1.756 2.924 0 3.35a1.724 1.724 0 0 0 -1.066 2.573c.94 1.543 -.826 3.31 -2.37 2.37a1.724 1.724 0 0 0 -2.572 1.065c-.426 1.756 -2.924 1.756 -3.35 0a1.724 1.724 0 0 0 -2.573 -1.066c-1.543 .94 -3.31 -.826 -2.37 -2.37a1.724 1.724 0 0 0 -1.065 -2.572c-1.756 -.426 -1.756 -2.924 0 -3.35a1.724 1.724 0 0 0 1.066 -2.573c-.94 -1.543 .826 -3.31 2.37 -2.37c1 .608 2.296 .07 2.572 -1.065z"></path>
@@ -236,7 +233,7 @@
                                     </svg>
                                 </span>
                                 <span class="nav-link-title">
-                                    Setting
+                                    Settings
                                 </span>
                             </a>
                         </li>
@@ -305,7 +302,7 @@
                         <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
 
                             <div class="dropdown-divider"></div>
-                            <a href="./settings.html" class="dropdown-item">Settings</a>
+                            <a href="{{ route('backend.setting') }}" class="dropdown-item">Settings</a>
                             <form action="/logout" method="POST">
                                 @csrf
                                 <button class="dropdown-item">Logout</button>
