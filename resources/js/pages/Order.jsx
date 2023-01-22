@@ -49,11 +49,6 @@ const Order = (menus) => {
         // }
 
         if (document.getElementById('input-search-mobile') == null && document.getElementById('input-group-search-mobile') == null) {
-            // const input = document.createElement('input');
-
-            // input.className = 'form-control mt-3 mb-2';
-            // input.id = 'input-search-mobile'
-            // input.placeholder = "Cari menu..."
 
             const input = `
             <div class="input-group mt-3 mb-2" id="input-group-search-mobile">
@@ -101,7 +96,6 @@ const Order = (menus) => {
     const handleSelectMenu = (menu) => {
 
         if (menu.status == 0) {
-            // alert("Menu ini sedang tidak tersedia")
             Swal.fire({
                 icon: 'error',
                 title: 'Oops...',
@@ -129,17 +123,33 @@ const Order = (menus) => {
     const addToOrderedMenus = () => {
         orderMenuModal.hide()
 
-        setOrderedMenus([...orderedMenus,
-        {
-            name_customer: menuTmp.name_customer,
-            quantity: quantityCount,
-            menu_id: menuTmp.menu_id,
-            menu_name: menuTmp.menu_name,
-            price: menuTmp.price,
-            category_id: menuTmp.category_id,
-            category_name: menuTmp.category_name
+        // check if this menu in orderedMenus
+        const findObjectIndex = orderedMenus.findIndex(key => key.menu_id == menuTmp.menu_id)
+
+        if (findObjectIndex != '-1') {
+            // edit value on state
+            let newDataArray = orderedMenus.map((menu) => {
+                if (menu.menu_id == menuTmp.menu_id) {
+                   return {...menu, quantity: menu.quantity + quantityCount}
+                }
+                return menu
+            })
+
+            // set value and replace state
+            setOrderedMenus([...newDataArray])
+        } else {
+            setOrderedMenus([...orderedMenus,
+            {
+                name_customer: menuTmp.name_customer,
+                quantity: quantityCount,
+                menu_id: menuTmp.menu_id,
+                menu_name: menuTmp.menu_name,
+                price: menuTmp.price,
+                category_id: menuTmp.category_id,
+                category_name: menuTmp.category_name
+            }
+            ])
         }
-        ])
 
         setQuantityCount(1)
     }
@@ -296,7 +306,7 @@ const Order = (menus) => {
                                 {orderedMenus.length <= 0 && (
                                     <div className="text-muted text-center" style={{ marginTop: '50px' }}>Keranjang kosong</div>
                                 )}
-                                
+
                                 {orderedMenus.map((menu, index) => (
                                     <div class="card mb-3 shadow-sm">
                                         <div class="card-body">
