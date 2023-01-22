@@ -131,7 +131,7 @@ const Checkout = () => {
                     text: 'Menu berhasil dipesan',
                     showConfirmButton: false,
                 })
-                
+
                 Inertia.visit('/frontend/order', { method: 'get' })
                 // setTimeout(() => {
 
@@ -177,7 +177,7 @@ const Checkout = () => {
                                 <div className="row align-items-center mt-1">
                                     <div className="col-md-6 mb-2">
                                         <select name="table_number" id="table_number" className="form-select" disabled={takeaway}>
-                                            <option selected disabled>Pilih meja</option>
+                                            <option selected disabled value={''}>Pilih meja</option>
                                             {tables.map((table) => (
                                                 <option value={table.number}>Meja {table.number}</option>
                                             ))}
@@ -198,7 +198,12 @@ const Checkout = () => {
                                         <a class="navbar-brand modal-title" href="#">{rupiahFormatter(calculateTotalPrice())}</a>
                                     </div>
                                     <div class="col-6 text-end">
-                                        <button className="btn btn-primary btn-primary-custom shadow" onClick={() => descriptionModal.show()}>
+                                        <button className="btn btn-primary btn-primary-custom shadow" onClick={() => document.getElementById('table_number').value == '' && document.getElementById('checkbox-takeaway').checked == false ? Swal.fire({
+                                            icon: 'error',
+                                            title: 'Oops...',
+                                            text: 'Pilih meja atau bawa pulang!',
+                                            confirmButtonColor: '#4A374B',
+                                        }) : descriptionModal.show()}>
                                             Lanjut
 
                                             <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
