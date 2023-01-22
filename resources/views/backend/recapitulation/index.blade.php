@@ -69,19 +69,19 @@
                                                         <!-- <input type="hidden" name="input-month-on-recap" class="input-month-on-recap" value="{{ $year }}" required> -->
                                                         <select id="select-month-on-recap-{{ $year }}" required>
                                                             <option value="" selected disabled>Pilih bulan</option>
-                                                            <?php $monthArr = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'Desember'] ?>
+                                                            <?php $monthArr = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'] ?>
                                                             @for($month = 0; $month < count($monthArr); $month++) <option value="{{ $month + 1 }}">{{ $monthArr[$month] }}</option>
                                                                 @endfor
                                                         </select>
 
                                                         <button type="submit" class="btn btn-sm btn-outliine-light btn-show-modal-recap ms-1" data-name="month" data-year="{{ $year }}">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-eye me-1" width="40" height="40" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                        <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                        <circle cx="12" cy="12" r="2"></circle>
-                        <path d="M22 12c-2.667 4.667 -6 7 -10 7s-7.333 -2.333 -10 -7c2.667 -4.667 6 -7 10 -7s7.333 2.333 10 7"></path>
-                    </svg>
-                    Lihat
-                </button>
+                                                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-eye me-1" width="40" height="40" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                                <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                                                <circle cx="12" cy="12" r="2"></circle>
+                                                                <path d="M22 12c-2.667 4.667 -6 7 -10 7s-7.333 -2.333 -10 -7c2.667 -4.667 6 -7 10 -7s7.333 2.333 10 7"></path>
+                                                            </svg>
+                                                            Lihat
+                                                        </button>
                                                     </form>
                                                 </td>
                                             </tr>
@@ -246,7 +246,7 @@
 
                     // modal.show()
                     $('#modal-recap-info').html(``)
-                    $('#label-file-name-recap').text(`Rekap_${monthSelected}_${yearSelected2}`)
+                    $('#label-file-name-recap').text(`Rekap_${toMonthInIndonesian(monthSelected)}_${yearSelected2}`)
 
                     $('.card-recap-file-touchable').data('url', `{{ url('/backend/finance/recapitulation/month?on_month=${monthSelected}&at_year=${yearSelected2}') }}`.replace('&amp;', '&'))
 
@@ -256,9 +256,24 @@
                     let dateFrom = $('#date-from').val()
                     let dateTo = $('#date-to').val()
 
+                    if (dateFrom == '' && dateTo == '') {
+                        return
+                    }
+
                     modal.show()
                     $('#modal-recap-info').html(``)
-                    $('#label-file-name-recap').text(`Rekap_${dateFrom}_${dateTo}`)
+
+                    let dateConverterFrom = new Date(dateFrom)
+                    let dayFrom = dateConverterFrom.getDate()
+                    let monthFrom = toMonthInIndonesian(dateConverterFrom.getMonth() + 1)
+                    let yearFrom = dateConverterFrom.getFullYear()
+
+                    let dateConverterTo = new Date(dateTo)
+                    let dayTo = dateConverterTo.getDate()
+                    let monthTo = toMonthInIndonesian(dateConverterTo.getMonth() + 1)
+                    let yearTo = dateConverterTo.getFullYear()
+
+                    $('#label-file-name-recap').text(`Rekap_${dayFrom} ${monthFrom} ${yearFrom} - ${dayTo} ${monthTo} ${yearTo}`)
 
                     $('.card-recap-file-touchable').data('url', `{{ url('/backend/finance/recapitulation/custom?date_from=${dateFrom}&date_to=${dateTo}') }}`.replace('&amp;', '&'))
 

@@ -24,12 +24,55 @@ const rupiahFormatter = (number) => {
     }).format(number);
 }
 
-function getQueryString(){
+function getQueryString() {
     var url = document.location.href;
     var qs = url.substring(url.indexOf('?') + 1).split('&');
-    for(var i = 0, result = {}; i < qs.length; i++){
+    for (var i = 0, result = {}; i < qs.length; i++) {
         qs[i] = qs[i].split('=');
         result[qs[i][0]] = decodeURIComponent(qs[i][1]);
     }
     return result;
+}
+
+function toMonthInIndonesian(monthNumber) {
+    switch (Number(monthNumber)) {
+        case 1:
+            return "Januari"
+            break;
+        case 2:
+            return "Februari"
+            break;
+        case 3:
+            return "Maret"
+            break;
+        case 4:
+            return "April"
+            break;
+        case 5:
+            return "Mei"
+            break;
+        case 6:
+            return "Juni"
+            break;
+        case 7:
+            return "Juli"
+            break;
+        case 8:
+            return "Agustus"
+            break;
+        case 9:
+            return "September"
+            break;
+        case 10:
+            return "Oktober"
+            break;
+        case 11:
+            return "November"
+            break;
+        case 12:
+            return "Desember"
+            break;
+        default:
+            break;
+    }
 }
