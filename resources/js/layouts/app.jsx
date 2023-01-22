@@ -4,6 +4,8 @@ import { Fragment, useEffect } from "react"
 
 const Layout = ({ children }) => {
 
+    const { settings } = usePage().props
+
     useEffect(() => {
         // const navLinks = document.querySelectorAll('.nav-item')
         // const menuToggle = document.getElementById('navbarSupportedContent')
@@ -37,7 +39,7 @@ const Layout = ({ children }) => {
         <Fragment>
             <nav class="navbar navbar-expand-lg bg-white fixed-top shadow-sm">
                 <div class="container" id="navbar-container">
-                    <a class="navbar-brand" id="navbar-brand" href="/frontend/order">Coffee Shop</a>
+                    <a class="navbar-brand" id="navbar-brand" href="/frontend/order">{settings.name}</a>
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>

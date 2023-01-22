@@ -34,7 +34,7 @@
                 </button>
                 <h1 class="navbar-brand navbar-brand-autodark">
                     <a href="/backend/dashboard">
-                        <img src="./static/logo-white.svg" width="110" height="32" alt="Tabler" class="navbar-brand-image">
+                        <img src="{{ url('storage/' . App\Models\Settings::first()->icons) }}" width="110" height="32" alt="" class="navbar-brand-image">
                     </a>
                 </h1>
                 <div class="navbar-nav flex-row d-lg-none">

@@ -2,20 +2,22 @@
 
 namespace App\Http\Controllers\Frontend;
 
-use Inertia\Inertia;
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use App\Models\User;
-use Illuminate\Support\Facades\Response;
+use Inertia\Inertia;
+use App\Models\Settings;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\URL;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\Response;
 
 class ProfileController extends Controller
 {
     public function index()
     {
         return Inertia::render('Profile', [
+            "settings" => Settings::first(),
             "userLoggedIn" => auth()->user()
         ]);
     }

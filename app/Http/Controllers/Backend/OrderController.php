@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Models\Settings;
 use Illuminate\Support\Facades\Response;
 
 class OrderController extends Controller
@@ -134,19 +135,11 @@ class OrderController extends Controller
     {
         $data['title'] = "Invoice";
         $orderID = Order::where('order_number', $orderNumber)->first()->id;
-        $data['company'] = 'Dummy Company';
+        $data['company'] = Settings::first()->name;
         $data['orders'] = OrderedMenu::join('orders', 'orders.id', '=', 'ordered_menus.order_id')->where('ordered_menus.order_id', $orderID)->get();
 
         $data['orders']->order = $data['orders'][0]->order;
-        // dd($data['orders']);
-        // $data['orders']->map(function ($data)
-        // {
-        //     $this->_formatData($data);
-
-        //     return $data;
-        // });
-
-        // return view('guest.invoice', $data);
+        
         $pdf = PDF::loadView('guest.invoice', $data)->setPaper('a6', 'potrait');
         return $pdf->stream();
     }

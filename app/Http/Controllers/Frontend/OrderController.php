@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use App\Models\Menu;
 use Inertia\Inertia;
 use App\Models\Order;
+use App\Models\Settings;
 use App\Models\OrderedMenu;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -20,6 +21,7 @@ class OrderController extends Controller
             $menus = Menu::with('category')->get();
 
             return Inertia::render('Order', [
+                "settings" => Settings::first(),
                 'menus' =>  $menus->map(function ($m) {
                    return [
                     'id' => $m->id,
@@ -39,6 +41,7 @@ class OrderController extends Controller
             $orderedMenus = request('ordered_menus');
 
             return Inertia::render('Order', [
+                "settings" => Settings::first(),
                 'menus' =>  $menus->map(function ($m) {
                    return [
                     'id' => $m->id,
@@ -59,7 +62,7 @@ class OrderController extends Controller
 
     public function historyOrder()
     {
-        return Inertia::render('OrderHistory');
+        return Inertia::render('OrderHistory', ["settings" => Settings::first()]);
     }
 
     public function listOrder()
