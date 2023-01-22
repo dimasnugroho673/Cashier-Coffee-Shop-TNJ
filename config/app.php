@@ -143,6 +143,8 @@ return [
         // 'store'  => 'redis',
     ],
 
+    'version' => env('APP_VERSION', '0.0.1-alpha'),
+
     /*
     |--------------------------------------------------------------------------
     | Autoloaded Service Providers

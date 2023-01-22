@@ -21,6 +21,7 @@ class OrderController extends Controller
             $menus = Menu::with('category')->get();
 
             return Inertia::render('Order', [
+                "title" => "Pesan",
                 "settings" => Settings::first(),
                 'menus' =>  $menus->map(function ($m) {
                    return [
@@ -41,6 +42,7 @@ class OrderController extends Controller
             $orderedMenus = request('ordered_menus');
 
             return Inertia::render('Order', [
+                "title" => "Pesan",
                 "settings" => Settings::first(),
                 'menus' =>  $menus->map(function ($m) {
                    return [
@@ -62,7 +64,10 @@ class OrderController extends Controller
 
     public function historyOrder()
     {
-        return Inertia::render('OrderHistory', ["settings" => Settings::first()]);
+        return Inertia::render('OrderHistory', [
+            "title" => "Riwayat Pesanan", 
+            "settings" => Settings::first()
+        ]);
     }
 
     public function listOrder()

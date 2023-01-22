@@ -10,6 +10,7 @@ import { rupiahFormatter } from "../Utils/Helper";
 
 const OrderHistory = () => {
 
+    const { title, settings } = usePage().props
     // const [dataPerPage, setDataPerPage] = useState(20)
     const [currentPage, setCurrentPage] = useState('')
     const [links, setLinks] = useState([])
@@ -34,6 +35,8 @@ const OrderHistory = () => {
     }
 
     useEffect(() => {
+        document.title = `${settings.name} - ${title}`
+        
         fetchHistoryOrders(20, 1, '', '', '')
 
         var paymentModal = new bootstrap.Modal(document.getElementById('paymentModal'), {
@@ -80,7 +83,7 @@ const OrderHistory = () => {
                 break;
             case 'canceled':
                 return <span className="text-muted">Pesanan dibatalkan
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-wash-dryclean-off ms-2" width="24" height="24" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-wash-dryclean-off ms-2" width="24" height="24" viewBox="0 0 24 24" strokeWidth="3" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
                         <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                         <path d="M20.048 16.033a9 9 0 0 0 -12.094 -12.075m-2.321 1.682a9 9 0 0 0 12.733 12.723"></path>
                         <path d="M3 3l18 18"></path>
@@ -138,13 +141,13 @@ const OrderHistory = () => {
 
         if (order.status_payment == 'complete') {
             document.getElementById('list-status-payment').innerHTML = `
-            <span class="badge text-bg-success">Pembayaran selesai</span>`
+            <span className="badge text-bg-success">Pembayaran selesai</span>`
         } else if (order.status_payment == 'waiting') {
             document.getElementById('list-status-payment').innerHTML = `
-            <span class="badge text-bg-warning">Menunggu pembayaran</span>`
+            <span className="badge text-bg-warning">Menunggu pembayaran</span>`
         } else if (order.status_payment == 'canceled') {
             document.getElementById('list-status-payment').innerHTML = `
-            <span class="badge text-bg-secondary">Pembayaran dibatalkan</span>`
+            <span className="badge text-bg-secondary">Pembayaran dibatalkan</span>`
         }
 
         document.getElementById('list-total-price').textContent = rupiahFormatter(order.total_price)
@@ -174,35 +177,35 @@ const OrderHistory = () => {
                         <div className="row">
                             <div className="col-md-6" style={{ marginTop: '100px' }}>
 
-                                <div class="card shadow-sm">
-                                    <div class="card-header">Fiter data</div>
+                                <div className="card shadow-sm">
+                                    <div className="card-header">Fiter data</div>
                                     <form id="form-filter" onSubmit={(e) => handleFilterForm(e)}>
-                                        <div class="card-body">
-                                            <div class="row">
-                                                <div class="col-md-6">
-                                                    <div class="input-group mb-3">
-                                                        <span class="input-group-text" id="date-from-label">Dari</span>
-                                                        <input type="date" class="form-control" id="date-from" required />
+                                        <div className="card-body">
+                                            <div className="row">
+                                                <div className="col-md-6">
+                                                    <div className="input-group mb-3">
+                                                        <span className="input-group-text" id="date-from-label">Dari</span>
+                                                        <input type="date" className="form-control" id="date-from" required />
                                                     </div>
                                                 </div>
-                                                <div class="col-md-6">
-                                                    <div class="input-group mb-3">
-                                                        <span class="input-group-text" id="date-to-label">Sampai</span>
-                                                        <input type="date" class="form-control" id="date-to" required />
+                                                <div className="col-md-6">
+                                                    <div className="input-group mb-3">
+                                                        <span className="input-group-text" id="date-to-label">Sampai</span>
+                                                        <input type="date" className="form-control" id="date-to" required />
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="card-footer">
-                                            <button type="submit" class="btn btn-outline-primary-custom" id="btn-submit-filter">
-                                                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-filter" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                        <div className="card-footer">
+                                            <button type="submit" className="btn btn-outline-primary-custom" id="btn-submit-filter">
+                                                <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-filter" width="24" height="24" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
                                                     <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                                                     <path d="M5.5 5h13a1 1 0 0 1 .5 1.5l-5 5.5l0 7l-4 -3l0 -4l-5 -5.5a1 1 0 0 1 .5 -1.5"></path>
                                                 </svg>
                                                 Terapkan
                                             </button>
 
-                                            <button type="reset" class="btn btn-outline-warning-custom ms-2" id="btn-filter-reset" onClick={() => resetData()}>Reset</button>
+                                            <button type="reset" className="btn btn-outline-warning-custom ms-2" id="btn-filter-reset" onClick={() => resetData()}>Reset</button>
                                         </div>
                                     </form>
                                 </div>
@@ -211,7 +214,7 @@ const OrderHistory = () => {
                         {/* <div className="row mt-4">
                             <div className="col-2">
                                 <div className="form-group">
-                                    <label htmlFor="">Data per halaman</label>
+                                    <label htmlhtmlFor="">Data per halaman</label>
                                     <br />
                                     <select name="" id="" className="mt-1" onChange={(e) => changeDataPerPage(e)}>
                                         <option value="20">20</option>
@@ -229,7 +232,7 @@ const OrderHistory = () => {
                                     <div className="table-responsive">
                                         <table className="table" id="">
                                             <thead>
-                                                <tr class="text-center">
+                                                <tr className="text-center">
                                                     <th>No. order</th>
                                                     <th>Kasir</th>
                                                     <th>No. customer</th>
@@ -239,7 +242,7 @@ const OrderHistory = () => {
                                                     <th>Aksi</th>
                                                 </tr>
                                             </thead>
-                                            <tbody class="text-center">
+                                            <tbody className="text-center">
                                                 {orders.map((order, index) => (
                                                     <tr key={order.id}>
                                                         <td className={(order.status_payment == 'canceled' ? 'text-muted text-decoration-line-through' : '')}>{order.order_number}</td>
@@ -249,9 +252,9 @@ const OrderHistory = () => {
                                                         <td>{renderStatusPayment(order.status_payment)}</td>
                                                         <td className={(order.status_payment == 'canceled' ? 'text-muted text-decoration-line-through' : '')}>{order.created_at}</td>
                                                         <td>
-                                                            <div class="btn-group btn-group-sm" role="group" aria-label="Basic example">
+                                                            <div className="btn-group btn-group-sm" role="group" aria-label="Basic example">
                                                                 <button type="button" className={"btn btn-outline-dark " + (order.status_payment == 'canceled' ? 'disabled' : '')} data-bs-toggle="modal" data-bs-target="#exampleModal" onClick={() => handleInvoicePreview(order.order_number)}>
-                                                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-file-invoice me-2" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-file-invoice me-2" width="24" height="24" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
                                                                         <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                                                                         <path d="M14 3v4a1 1 0 0 0 1 1h4"></path>
                                                                         <path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z"></path>
@@ -263,7 +266,7 @@ const OrderHistory = () => {
                                                                 </button>
 
                                                                 <button type="button" className={"btn btn-outline-dark"} onClick={() => showPaymentModal(order)}>
-                                                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-credit-card me-2" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-credit-card me-2" width="24" height="24" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
                                                                         <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                                                                         <rect x="3" y="5" width="18" height="14" rx="3"></rect>
                                                                         <line x1="3" y1="10" x2="21" y2="10"></line>
@@ -273,8 +276,8 @@ const OrderHistory = () => {
                                                                     Pembayaran
                                                                 </button>
 
-                                                                <button type="button" class="btn btn-outline-dark" onClick={() => handleDetailOrder(order)}>
-                                                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-list-details me-2" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                                <button type="button" className="btn btn-outline-dark" onClick={() => handleDetailOrder(order)}>
+                                                                    <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-list-details me-2" width="24" height="24" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
                                                                         <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                                                                         <path d="M13 5h8"></path>
                                                                         <path d="M13 9h5"></path>
@@ -297,9 +300,9 @@ const OrderHistory = () => {
                                 <div className="row mt-3">
                                     <div className="col-md-12">
                                         <nav aria-label="...">
-                                            <ul class="pagination">
+                                            <ul className="pagination">
                                                 {links.map((link, index) => (
-                                                    <li class="page-item">
+                                                    <li className="page-item" key={index}>
                                                         <a className={"page-link " + (link.active ? 'active' : '')} href="#" onClick={() => paginate(link.url)}>
                                                             {parse(link.label)}
                                                         </a>
@@ -316,92 +319,92 @@ const OrderHistory = () => {
                     </div>
                 </div>
 
-                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div class="modal-dialog modal-lg modal-dialog-centered">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h1 class="modal-title fs-5" id="exampleModalLabel">Invoice</h1>
+                <div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div className="modal-dialog modal-lg modal-dialog-centered">
+                        <div className="modal-content">
+                            <div className="modal-header">
+                                <h1 className="modal-title fs-5" id="exampleModalLabel">Invoice</h1>
                             </div>
-                            <div class="modal-body">
+                            <div className="modal-body">
                                 <embed type="application/pdf" id="embed-pdf-invoice" src="" width="100%" height="600"></embed>
                             </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                            <div className="modal-footer">
+                                <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="modal fade" id="paymentModal" tabindex="-1">
-                    <div class="modal-dialog modal-dialog-centered">
-                        <div class="modal-content">
+                <div className="modal fade" id="paymentModal" tabIndex="-1">
+                    <div className="modal-dialog modal-dialog-centered">
+                        <div className="modal-content">
                             <form id="form-update-payment" onSubmit={(e) => handleUpdatePayment(e)}>
-                                <div class="modal-header">
-                                    <h5 class="modal-title">Update pembayaran</h5>
+                                <div className="modal-header">
+                                    <h5 className="modal-title">Update pembayaran</h5>
                                 </div>
-                                <div class="modal-body">
-                                    <input type="hidden" id="id_order" class="form-control" readonly />
-                                    <div class="form-group mb-3">
+                                <div className="modal-body">
+                                    <input type="hidden" id="id_order" className="form-control" readOnly />
+                                    <div className="form-group mb-3">
                                         <label className="mb-1">No. Order</label>
-                                        <input type="text" id="order_number" class="form-control" readonly />
+                                        <input type="text" id="order_number" className="form-control" readOnly />
                                     </div>
 
-                                    <div class="form-group">
-                                        <label className="mb-1" for="status_payment">Status pembayaran</label>
-                                        <select name="status_payment" id="status_payment" class="form-select" required>
-                                            <option selected>Pilih status pembayaran</option>
+                                    <div className="form-group">
+                                        <label className="mb-1" htmlFor="status_payment">Status pembayaran</label>
+                                        <select name="status_payment" id="status_payment" className="form-select" required>
+                                            <option defaultValue={true}>Pilih status pembayaran</option>
                                             <option value="complete">Selesai</option>
                                             <option value="waiting">Menunggu</option>
                                             <option value="canceled">Pesanan dibatalkan</option>
                                         </select>
                                     </div>
                                 </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Batal</button>
-                                    <button type="submit" class="btn btn-primary">Update pembayaran</button>
+                                <div className="modal-footer">
+                                    <button type="button" className="btn btn-outline-secondary" data-bs-dismiss="modal">Batal</button>
+                                    <button type="submit" className="btn btn-primary">Update pembayaran</button>
                                 </div>
                             </form>
                         </div>
                     </div>
                 </div>
 
-                <div class="modal fade" id="orderDetailModal" tabindex="-1">
-                    <div class="modal-dialog modal-xl modal-dialog-centered">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title">Detail pesanan</h5>
+                <div className="modal fade" id="orderDetailModal" tabIndex="-1">
+                    <div className="modal-dialog modal-xl modal-dialog-centered">
+                        <div className="modal-content">
+                            <div className="modal-header">
+                                <h5 className="modal-title">Detail pesanan</h5>
                             </div>
-                            <div class="modal-body" id="modal-body-detail-order">
+                            <div className="modal-body" id="modal-body-detail-order">
 
-                                <ol class="list-group list-group">
-                                    <li class="list-group-item d-flex justify-content-between align-items-start">
-                                        <div class="ms-2 me-auto">
-                                            <div class="fw-bold mb-1">No order</div>
-                                            <span id="list-order-number" class="font-monospace text-muted"></span>
+                                <ol className="list-group list-group">
+                                    <li className="list-group-item d-flex justify-content-between align-items-start">
+                                        <div className="ms-2 me-auto">
+                                            <div className="fw-bold mb-1">No order</div>
+                                            <span id="list-order-number" className="font-monospace text-muted"></span>
                                         </div>
                                     </li>
-                                    <li class="list-group-item d-flex justify-content-between align-items-start">
-                                        <div class="ms-2 me-auto">
-                                            <div class="fw-bold mb-1">No Meja</div>
-                                            <span id="list-table-number" class="font-monospace text-muted"></span>
+                                    <li className="list-group-item d-flex justify-content-between align-items-start">
+                                        <div className="ms-2 me-auto">
+                                            <div className="fw-bold mb-1">No Meja</div>
+                                            <span id="list-table-number" className="font-monospace text-muted"></span>
                                         </div>
                                     </li>
-                                    <li class="list-group-item d-flex justify-content-between align-items-start">
-                                        <div class="ms-2 me-auto">
-                                            <div class="fw-bold mb-1">Nama kasir</div>
-                                            <span id="list-cashier-name" class="text-muted"></span>
+                                    <li className="list-group-item d-flex justify-content-between align-items-start">
+                                        <div className="ms-2 me-auto">
+                                            <div className="fw-bold mb-1">Nama kasir</div>
+                                            <span id="list-cashier-name" className="text-muted"></span>
                                         </div>
                                     </li>
-                                    <li class="list-group-item d-flex justify-content-between align-items-start">
-                                        <div class="ms-2 me-auto">
-                                            <div class="fw-bold mb-1">No customer</div>
-                                            <span id="list-customer-number" class="font-monospace text-muted"></span>
+                                    <li className="list-group-item d-flex justify-content-between align-items-start">
+                                        <div className="ms-2 me-auto">
+                                            <div className="fw-bold mb-1">No customer</div>
+                                            <span id="list-customer-number" className="font-monospace text-muted"></span>
                                         </div>
                                     </li>
-                                    <li class="list-group-item d-flex justify-content-between align-items-start">
-                                        <div class="ms-2 me-auto">
-                                            <div class="fw-bold mb-1">Status pembayaran</div>
-                                            <span id="list-status-payment" class="font-monospace text-muted"></span>
+                                    <li className="list-group-item d-flex justify-content-between align-items-start">
+                                        <div className="ms-2 me-auto">
+                                            <div className="fw-bold mb-1">Status pembayaran</div>
+                                            <span id="list-status-payment" className="font-monospace text-muted"></span>
                                         </div>
                                     </li>
                                 </ol>
@@ -425,12 +428,12 @@ const OrderHistory = () => {
                                     </div>
                                 </div>
 
-                                <ol class="list-group list-group mt-3">
-                                    <li class="list-group-item d-flex justify-content-between align-items-start bg-light">
-                                        <div class="ms-2 me-auto">
-                                            <div class="fw-bold mb-2">
+                                <ol className="list-group list-group mt-3">
+                                    <li className="list-group-item d-flex justify-content-between align-items-start bg-light">
+                                        <div className="ms-2 me-auto">
+                                            <div className="fw-bold mb-2">
 
-                                                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-notes me-1" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-notes me-1" width="24" height="24" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
                                                     <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                                                     <rect x="5" y="3" width="14" height="18" rx="2"></rect>
                                                     <line x1="9" y1="7" x2="15" y2="7"></line>
@@ -440,23 +443,23 @@ const OrderHistory = () => {
 
                                                 Catatan tambahan
                                             </div>
-                                            <span id="list-desc" class="text-muted" style={{ fontSize: '15px' }}></span>
+                                            <span id="list-desc" className="text-muted" style={{ fontSize: '15px' }}></span>
                                         </div>
                                     </li>
                                 </ol>
 
-                                <ol class="list-group list-group mt-3">
-                                    <li class="list-group-item d-flex justify-content-between align-items-start bg-light">
-                                        <div class="ms-2 me-auto">
-                                            <div class="fw-bold mb-2">Total harga</div>
-                                            <span id="list-total-price" class="h5 text-primary"></span>
+                                <ol className="list-group list-group mt-3">
+                                    <li className="list-group-item d-flex justify-content-between align-items-start bg-light">
+                                        <div className="ms-2 me-auto">
+                                            <div className="fw-bold mb-2">Total harga</div>
+                                            <span id="list-total-price" className="h5 text-primary"></span>
                                         </div>
                                     </li>
                                 </ol>
 
                             </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" onClick={() => orderDetailModal.hide()}>Tutup</button>
+                            <div className="modal-footer">
+                                <button type="button" className="btn btn-secondary" onClick={() => orderDetailModal.hide()}>Tutup</button>
                             </div>
                         </div>
                     </div>

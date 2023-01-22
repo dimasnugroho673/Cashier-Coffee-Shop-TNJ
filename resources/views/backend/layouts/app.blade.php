@@ -6,7 +6,10 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
+    
     <title>{{ 'Admin - ' . $title ?? 'Cashier App' }}</title>
+
+    <link rel="shortcut icon" href="{{ url('storage/' . App\Models\Settings::first()->icons) }}" type="image/x-icon">
 
     @vite('resources/sass/app.scss')
 

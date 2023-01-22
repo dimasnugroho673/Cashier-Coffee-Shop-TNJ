@@ -6,6 +6,8 @@ import { rupiahFormatter } from "../Utils/Helper";
 
 const Order = (menus) => {
 
+    const { title, settings } = usePage().props
+
     const [menusData, setMenusData] = useState(menus)
     const [filtertedData, setFiltertedData] = useState(menus.menus)
     const [orderMenuModal, setOrderMenuModal] = useState([])
@@ -15,6 +17,8 @@ const Order = (menus) => {
     const [orderedMenus, setOrderedMenus] = useState([])
 
     useEffect(() => {
+        document.title = `${settings.name} - ${title}`
+
         var orderMenuModal = new bootstrap.Modal(document.getElementById('modalQuantity'), {
             keyboard: false
         })
@@ -55,7 +59,7 @@ const Order = (menus) => {
                                     <input class="form-control border rounded-pill border-primary-custom shadow-sm" placeholder="Cari menu apa...?" id="input-search-mobile" />
                                     <span class="input-group-append">
                                         <button class="btn rounded-pill ms-n5" type="button" style={{ width: "50px" }}>
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search text-muted" width="20" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search text-muted" width="20" height="24" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
                                                 <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                                                 <circle cx="10" cy="10" r="7"></circle>
                                                 <line x1="21" y1="21" x2="15" y2="15"></line>
@@ -208,11 +212,11 @@ const Order = (menus) => {
 
                         <div className="row mt-5">
                             <div className="col-md-6 offset-md-3">
-                                <div class="input-group">
-                                    <input class="form-control border rounded-pill border-primary-custom shadow mb-5" placeholder="Cari menu apa...?" id="input-search-desktop" />
-                                    <span class="input-group-append">
-                                        <button class="btn rounded-pill ms-n5" type="button" style={{ width: "50px" }}>
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-search text-muted" width="20" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                <div className="input-group">
+                                    <input className="form-control border rounded-pill border-primary-custom shadow mb-5" placeholder="Cari menu apa...?" id="input-search-desktop" />
+                                    <span className="input-group-append">
+                                        <button className="btn rounded-pill ms-n5" type="button" style={{ width: "50px" }}>
+                                            <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-search text-muted" width="20" height="24" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
                                                 <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                                                 <circle cx="10" cy="10" r="7"></circle>
                                                 <line x1="21" y1="21" x2="15" y2="15"></line>
@@ -224,7 +228,7 @@ const Order = (menus) => {
                         </div>
 
                         <div className="col-md-12">
-                            <table class="table" id="menuFrontendTable" style={{ marginTop: '10px', marginBottom: '50px' }}>
+                            <table className="table" id="menuFrontendTable" style={{ marginTop: '10px', marginBottom: '50px' }}>
                                 <thead>
                                     <tr>
                                         <th>Nama</th>
@@ -241,26 +245,26 @@ const Order = (menus) => {
                                 </tbody>
                             </table>
 
-                            <div id="modalQuantity" class="modal fade" tabindex="-1">
-                                <div class="modal-dialog modal-dialog-centered">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title text-primary-darken-custom" style={{ fontWeight: 600 }}>Modal title</h5>
+                            <div id="modalQuantity" className="modal fade" tabIndex="-1">
+                                <div className="modal-dialog modal-dialog-centered">
+                                    <div className="modal-content">
+                                        <div className="modal-header">
+                                            <h5 className="modal-title text-primary-darken-custom" style={{ fontWeight: 600 }}>Modal title</h5>
                                         </div>
-                                        <div class="modal-body">
+                                        <div className="modal-body">
                                             <div className="form-group">
                                                 <label htmlFor="">Jumlah</label>
-                                                <div class="input-group mt-2 mb-3">
-                                                    <button class="btn btn-outline-secondary" type="button" id="button-addon2" onClick={() => setQuantityCount(quantityCount == 1 ? 1 : quantityCount - 1)}>-</button>
-                                                    <input type="text" class="form-control" value={quantityCount} />
-                                                    <button class="btn btn-outline-secondary" type="button" id="button-addon2" onClick={() => setQuantityCount(quantityCount + 1)}>+</button>
+                                                <div className="input-group mt-2 mb-3">
+                                                    <button className="btn btn-outline-secondary" type="button" id="button-addon2" onClick={() => setQuantityCount(quantityCount == 1 ? 1 : quantityCount - 1)}>-</button>
+                                                    <input type="text" className="form-control" value={quantityCount} />
+                                                    <button className="btn btn-outline-secondary" type="button" id="button-addon2" onClick={() => setQuantityCount(quantityCount + 1)}>+</button>
                                                 </div>
                                             </div>
 
                                         </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-outline-secondary" onClick={() => handleCancelSelectMenu()} >Batal</button>
-                                            <button type="button" class="btn btn-primary btn-primary-custom shadow-sm" onClick={() => addToOrderedMenus()}>Tambahkan</button>
+                                        <div className="modal-footer">
+                                            <button type="button" className="btn btn-outline-secondary" onClick={() => handleCancelSelectMenu()} >Batal</button>
+                                            <button type="button" className="btn btn-primary btn-primary-custom shadow-sm" onClick={() => addToOrderedMenus()}>Tambahkan</button>
                                         </div>
                                     </div>
                                 </div>
@@ -269,12 +273,12 @@ const Order = (menus) => {
                     </div>
                 </div>
 
-                <nav class="navbar navbar-expand-lg navbar-light bg-dark fixed-bottom shadow-lg">
-                    <div class="container">
-                        <a class="navbar-brand modal-title text-white" href="#">Pesanan</a>
+                <nav className="navbar navbar-expand-lg navbar-light bg-dark fixed-bottom shadow-lg">
+                    <div className="container">
+                        <a className="navbar-brand modal-title text-white" href="#">Pesanan</a>
 
                         <button className="btn btn-primary btn-primary-custom shadow-sm" onClick={() => cartModal.show()}>
-                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-shopping-cart me-2" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                            <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-shopping-cart me-2" width="24" height="24" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
                                 <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                                 <circle cx="6" cy="19" r="2"></circle>
                                 <circle cx="17" cy="19" r="2"></circle>
@@ -282,17 +286,17 @@ const Order = (menus) => {
                                 <path d="M6 5l14 1l-1 7h-13"></path>
                             </svg>
 
-                            Keranjang <span class="ms-2 badge text-primary-custom bg-white rounded-pill">{orderedMenus.length}</span>
+                            Keranjang <span className="ms-2 badge text-primary-custom bg-white rounded-pill">{orderedMenus.length}</span>
                         </button>
                     </div>
                 </nav>
 
-                <div id="previewPreCheckoutModal" class="modal" tabindex="-1">
-                    <div class="modal-dialog modal-fullscreen">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title">Keranjang
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-shopping-cart ms-1" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                <div id="previewPreCheckoutModal" className="modal" tabIndex="-1">
+                    <div className="modal-dialog modal-fullscreen">
+                        <div className="modal-content">
+                            <div className="modal-header">
+                                <h5 className="modal-title">Keranjang
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-shopping-cart ms-1" width="24" height="24" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
                                         <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                                         <circle cx="6" cy="19" r="2"></circle>
                                         <circle cx="17" cy="19" r="2"></circle>
@@ -300,23 +304,23 @@ const Order = (menus) => {
                                         <path d="M6 5l14 1l-1 7h-13"></path>
                                     </svg>
                                 </h5>
-                                <button type="button" class="btn-close" onClick={() => cartModal.hide()}></button>
+                                <button type="button" className="btn-close" onClick={() => cartModal.hide()}></button>
                             </div>
-                            <div class="modal-body">
+                            <div className="modal-body">
                                 {orderedMenus.length <= 0 && (
                                     <div className="text-muted text-center" style={{ marginTop: '50px' }}>Keranjang kosong</div>
                                 )}
 
                                 {orderedMenus.map((menu, index) => (
-                                    <div class="card mb-3 shadow-sm">
-                                        <div class="card-body">
+                                    <div className="card mb-3 shadow-sm">
+                                        <div className="card-body">
                                             <div className="row">
                                                 <div className="col-9">
                                                     <p><strong>{menu.menu_name}</strong></p>
                                                     <p className="text-muted" style={{ fontSize: '15px' }}>{rupiahFormatter(menu.price)} x {menu.quantity}  pcs -> {rupiahFormatter(menu.price * menu.quantity)}</p>
                                                 </div>
                                                 <div className="col-3 text-end">
-                                                    <a href="javascript: void(0)" className="btn btn-outline-danger" onClick={() => removeFromOrderedMenus(menu)}><svg xmlns="http://www.w3.org/2000/svg" class="m-0 icon icon-tabler icon-tabler-trash-x" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                                    <a href="javascript: void(0)" className="btn btn-outline-danger" onClick={() => removeFromOrderedMenus(menu)}><svg xmlns="http://www.w3.org/2000/svg" className="m-0 icon icon-tabler icon-tabler-trash-x" width="24" height="24" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
                                                         <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                                                         <path d="M4 7h16"></path>
                                                         <path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12"></path>
@@ -328,21 +332,21 @@ const Order = (menus) => {
 
                                         </div>
                                         <div className="card-footer pt-0 pb-0">
-                                            <div class="input-group mb-3">
-                                                <button class="btn btn-outline-secondary" type="button" id="button-addon2" onClick={() => decreaseQuantityOnOrderedMenu(menu)}>-</button>
-                                                <input type="text" class="form-control" value={menu.quantity} style={{ maxWidth: '65px' }} />
-                                                <button class="btn btn-outline-secondary" type="button" id="button-addon2" onClick={() => increaseQuantityOnOrderedMenu(menu)}>+</button>
+                                            <div className="input-group mb-3">
+                                                <button className="btn btn-outline-secondary" type="button" id="button-addon2" onClick={() => decreaseQuantityOnOrderedMenu(menu)}>-</button>
+                                                <input type="text" className="form-control" value={menu.quantity} style={{ maxWidth: '65px' }} />
+                                                <button className="btn btn-outline-secondary" type="button" id="button-addon2" onClick={() => increaseQuantityOnOrderedMenu(menu)}>+</button>
                                             </div>
                                         </div>
                                     </div>
                                 ))}
                             </div>
-                            <div class="modal-footer bg-body-tertiary shadow border">
+                            <div className="modal-footer bg-body-tertiary shadow border">
 
                                 <h5 className="modal-title me-auto">{calculateTotalPrice()}</h5>
 
-                                {/* <button type="button" class="btn btn-outline-secondary" onClick={() => cartModal.hide()}>
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-circle-chevron-left me-2" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                {/* <button type="button" className="btn btn-outline-secondary" onClick={() => cartModal.hide()}>
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-circle-chevron-left me-2" width="24" height="24" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
                                         <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                                         <path d="M13 15l-3 -3l3 -3"></path>
                                         <path d="M21 12a9 9 0 1 0 -18 0a9 9 0 0 0 18 0z"></path>
@@ -353,7 +357,7 @@ const Order = (menus) => {
 
                                 <Link className={"btn btn-primary btn-primary-custom" + (orderedMenus.length <= 0 ? " disabled" : "")} onClick={() => cartModal.hide()} href={`/frontend/checkout?ordered_menus=${JSON.stringify(orderedMenus)}`}>
                                     Checkout
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-cash ms-2" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-cash ms-2" width="24" height="24" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
                                         <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                                         <rect x="7" y="9" width="14" height="10" rx="2"></rect>
                                         <circle cx="14" cy="14" r="2"></circle>

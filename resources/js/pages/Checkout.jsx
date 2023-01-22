@@ -119,8 +119,6 @@ const Checkout = () => {
             total_price: calculateTotalPrice()
         }
 
-        console.log(dataTotal)
-
         axios.post(`${window.location.origin}/api/order`, dataTotal)
             .then(function (response) {
                 descriptionModal.hide()
@@ -133,10 +131,6 @@ const Checkout = () => {
                 })
 
                 Inertia.visit('/frontend/order', { method: 'get' })
-                // setTimeout(() => {
-
-                // }, 1000)
-
             })
             .catch(function (error) {
                 console.log(error);
@@ -158,11 +152,11 @@ const Checkout = () => {
             <div className="container">
                 <div className="row" style={{ marginTop: '130px' }}>
                     <div className="col-md-12">
-                        {filteredMenus.map((menu) => (
-                            <ol class="list-group mb-3 bg-white shadow-sm" style={{ borderRadius: '12px' }}>
-                                <li class="list-group-item d-flex justify-content-between align-items-start">
-                                    <div class="ms-2 me-auto">
-                                        <div class="fw-bold">{menu.menu_name}</div>
+                        {filteredMenus.map((menu, index) => (
+                            <ol className="list-group mb-3 bg-white shadow-sm" style={{ borderRadius: '12px' }} key={index}>
+                                <li className="list-group-item d-flex justify-content-between align-items-start">
+                                    <div className="ms-2 me-auto">
+                                        <div className="fw-bold">{menu.menu_name}</div>
                                         <ul>
                                             <li>Harga: {menu.price}</li>
                                             <li>Qty: {menu.quantity}</li>
@@ -172,32 +166,32 @@ const Checkout = () => {
                             </ol>
                         ))}
 
-                        <nav class="fixed-bottom bg-light p-2">
-                            <div class="container">
+                        <nav className="fixed-bottom bg-light p-2">
+                            <div className="container">
                                 <div className="row align-items-center mt-1">
                                     <div className="col-md-6 mb-2">
                                         <select name="table_number" id="table_number" className="form-select" disabled={takeaway}>
-                                            <option selected disabled value={''}>Pilih meja</option>
-                                            {tables.map((table) => (
-                                                <option value={table.number}>Meja {table.number}</option>
+                                            <option disabled value={''} defaultValue={true}>Pilih meja</option>
+                                            {tables.map((table, index) => (
+                                                <option value={table.number} key={index}>Meja {table.number}</option>
                                             ))}
                                         </select>
                                     </div>
                                     <div className="col-md-6 mb-2">
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" id="checkbox-takeaway" defaultChecked={takeaway} onChange={() => setTakeAway(takeaway ? false : true)} />
-                                            <label class="form-check-label" for="checkbox-takeaway">
+                                        <div className="form-check">
+                                            <input className="form-check-input" type="checkbox" id="checkbox-takeaway" defaultChecked={takeaway} onChange={() => setTakeAway(takeaway ? false : true)} />
+                                            <label className="form-check-label" htmlFor="checkbox-takeaway">
                                                 Bawa pulang?
                                             </label>
                                         </div>
                                     </div>
                                 </div>
 
-                                <div class="row align-items-center">
-                                    <div class="col-6 text-start">
-                                        <a class="navbar-brand modal-title" href="#">{rupiahFormatter(calculateTotalPrice())}</a>
+                                <div className="row align-items-center">
+                                    <div className="col-6 text-start">
+                                        <a className="navbar-brand modal-title" href="#">{rupiahFormatter(calculateTotalPrice())}</a>
                                     </div>
-                                    <div class="col-6 text-end">
+                                    <div className="col-6 text-end">
                                         <button className="btn btn-primary btn-primary-custom shadow" onClick={() => document.getElementById('table_number').value == '' && document.getElementById('checkbox-takeaway').checked == false ? Swal.fire({
                                             icon: 'error',
                                             title: 'Oops...',
@@ -206,7 +200,7 @@ const Checkout = () => {
                                         }) : descriptionModal.show()}>
                                             Lanjut
 
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-chevron-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                            <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-chevron-right" width="24" height="24" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
                                                 <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                                                 <polyline points="9 6 15 12 9 18"></polyline>
                                             </svg>
@@ -222,22 +216,22 @@ const Checkout = () => {
                 </div>
             </div>
 
-            <div class="modal fade" id="descriptionModal" tabindex="-1">
-                <div class="modal-dialog modal-dialog-centered">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title">Tambahkan deskripsi</h5>
+            <div className="modal fade" id="descriptionModal" tabIndex="-1">
+                <div className="modal-dialog modal-dialog-centered">
+                    <div className="modal-content">
+                        <div className="modal-header">
+                            <h5 className="modal-title">Tambahkan deskripsi</h5>
                         </div>
-                        <div class="modal-body">
+                        <div className="modal-body">
                             <div className="form-group">
                                 <label htmlFor="desc" className='mb-2'>Catatan menu <sup>(opsional)</sup></label>
                                 <textarea name="desc" id="desc" cols="30" rows="10" className="form-control" style={{ resize: 'none' }} placeholder="Cth. Teh obeng es sedikit"></textarea>
                             </div>
                         </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-outline-secondary" onClick={() => descriptionModal.hide()}>Batal</button>
-                            <button type="button" class="btn btn-primary" onClick={() => attemptOrderToPaymentData()}>
-                                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-shopping-cart me-2" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                        <div className="modal-footer">
+                            <button type="button" className="btn btn-outline-secondary" onClick={() => descriptionModal.hide()}>Batal</button>
+                            <button type="button" className="btn btn-primary" onClick={() => attemptOrderToPaymentData()}>
+                                <svg xmlns="http://www.w3.org/2000/svg" className="icon icon-tabler icon-tabler-shopping-cart me-2" width="24" height="24" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" fill="none" strokeLinecap="round" strokeLinejoin="round">
                                     <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
                                     <circle cx="6" cy="19" r="2"></circle>
                                     <circle cx="17" cy="19" r="2"></circle>

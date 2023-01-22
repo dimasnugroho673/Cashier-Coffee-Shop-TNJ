@@ -12,6 +12,7 @@ class CheckoutController extends Controller
     public function index()
     {
         return Inertia::render('Checkout', [
+            "title" => "Checkout",
             "settings" => Settings::first(),
             "orderedMenus" => request('ordered_menus'),
             "userLoggedIn" => auth()->user(),

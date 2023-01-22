@@ -17,6 +17,7 @@ class ProfileController extends Controller
     public function index()
     {
         return Inertia::render('Profile', [
+            "title" => "Profil",
             "settings" => Settings::first(),
             "userLoggedIn" => auth()->user()
         ]);
