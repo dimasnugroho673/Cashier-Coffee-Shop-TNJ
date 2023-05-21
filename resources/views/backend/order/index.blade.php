@@ -51,22 +51,24 @@
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-body">
-                            <table class="table table-responsive" id="ordersTable" width="100%" cellspacing="0">
-                                <thead>
-                                    <tr>
-                                        <th>{{ __('No.') }}</th>
-                                        <th>{{ __('No. order') }}</th>
-                                        <th>{{ __('Kasir') }}</th>
-                                        <th>{{ __('No. customer') }}</th>
-                                        <th>{{ __('Total harga') }}</th>
-                                        <th>{{ __('Status pembayaran') }}</th>
-                                        <th>{{ __('Tanggal') }}</th>
-                                        <th>{{ __('Aksi') }}</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                </tbody>
-                            </table>
+                            <div class="table-responsive">
+                                <table class="table " id="ordersTable" width="100%" cellspacing="0">
+                                    <thead>
+                                        <tr>
+                                            <th>{{ __('No.') }}</th>
+                                            <th>{{ __('No. order') }}</th>
+                                            <th>{{ __('Kasir') }}</th>
+                                            <th>{{ __('No. customer') }}</th>
+                                            <th>{{ __('Total harga') }}</th>
+                                            <th>{{ __('Status pembayaran') }}</th>
+                                            <th>{{ __('Tanggal') }}</th>
+                                            <th>{{ __('Aksi') }}</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
