@@ -3,7 +3,7 @@ import { InertiaLink, usePage, Link } from '@inertiajs/inertia-react';
 import React, { Fragment, useState, useEffect } from "react";
 import Layout from "../layouts/app";
 import axios from "axios";
-import Pagination from '@/Components/Pagination';
+import Pagination from '../components/Pagination';
 import parse from 'html-react-parser';
 import Toast from "../components/Toast";
 import { rupiahFormatter } from "../Utils/Helper";

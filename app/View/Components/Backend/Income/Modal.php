@@ -1,12 +1,13 @@
 <?php
 
-namespace App\View\Components\backend\menu;
+namespace App\View\Components\Backend\Income;
 
-use App\Models\Categories;
+use App\Models\TypeIncome;
 use Illuminate\View\Component;
 
 class Modal extends Component
 {
+    public $typeincome;
     /**
      * Create a new component instance.
      *
@@ -14,7 +15,7 @@ class Modal extends Component
      */
     public function __construct()
     {
-        //
+        $this->typeincome = TypeIncome::all();
     }
 
     /**
@@ -24,7 +25,6 @@ class Modal extends Component
      */
     public function render()
     {
-        $category = Categories::all();
-        return view('components..backend.menu.modal',compact('category'));
+        return view('components..backend.income.modal');
     }
 }
